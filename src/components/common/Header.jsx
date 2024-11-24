@@ -1,72 +1,59 @@
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Box,
-  Button,
-  Autocomplete,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import "../../styles/Header.css";// فایل استایل برای تنظیمات CSS
+import Button from "../shared/Button"; // کامپوننت دکمه
+import SearchIcon from "../../assets/icons/search.svg"; // آیکون جستجو
+import LocationIcon from "../../assets/icons/location.svg"; // آیکون لوکیشن
+import UserIcon from "../../assets/icons/user-square.svg"; // آیکون کاربر
+import LoginIcon from '../../assets/icons/login.svg'
 
-const Header = () => {
+const Header = ({ isLoggedIn, username, city }) => {
   return (
-    <AppBar position="static" sx={{ bgcolor: "lightsurfacelevel-1" }}>
-      <Toolbar sx={{ justifyContent: "space-between", px: 8, py: 2 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<img src="/trailing-icon.svg" alt="icon" />}
-          >
-            ورود / ثبت نام
-          </Button>
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-          <Button color="primary">درباره ما</Button>
-          <Button color="primary">رویدادها</Button>
-          <Button color="secondary">صفحه اصلی</Button>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Autocomplete
-              options={[]}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="جستجوی شهر"
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              )}
+    <header className="header">
+      <div className="header__container">
+        {/* لوگو */}
+        <div className="header__logo">یکی کمه</div>
+
+        {/* بخش جستجو */}
+        <div className="header__search">
+          <div className="header__search-city">
+            <input
+              type="text"
+              placeholder="جستجوی شهر"
+              value={city}
+              readOnly
             />
-            <Autocomplete
-              options={[]}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="جستجوی رویداد"
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              )}
+            <img src={LocationIcon} alt="Location" className="icon" />
+          </div>
+          <div className="header__search-event">
+            <input type="text" placeholder="جستجوی رویداد" />
+            <img src={SearchIcon} alt="Search" className="icon" />
+          </div>
+        </div>
+
+        {/* منو */}
+        <nav className="header__menu">
+          <a href="/" className="header__link">صفحه اصلی</a>
+          <a href="/about" className="header__link">درباره ما</a>
+          <a href="/events" className="header__link">رویدادها</a>
+        </nav>
+
+        {/* دکمه‌ها */}
+        <div className="header__actions">
+          {isLoggedIn ? (
+            <>
+              <Button className="header__btn" text="ثبت رویداد" />
+              <Button className="header__btn header__btn--secondary" text="پنل من" icon={UserIcon} />
+            </>
+          ) : (
+            <Button
+              className="header__btn header__btn--primary"
+              text="ورود / ثبت نام"
+              icon={LoginIcon}
             />
-          </Box>
-          <img src="/logo.svg" alt="Logo" width={120} height={48} />
-        </Box>
-      </Toolbar>
-    </AppBar>
+          )}
+        </div>
+      </div>
+    </header>
   );
 };
 

@@ -1,8 +1,5 @@
 import React from "react";
-import { Box, Container, Grid, Typography, Divider, Button, TextField } from "@mui/material";
 import Header from "../components/common/Header";
-import Footer from "../components/common/Footer";
-import EventCard from "../components/events/EventCard";
 
 const HomePage = () => {
   const events = [
@@ -11,41 +8,8 @@ const HomePage = () => {
     { id: 3, image: "/picture-3.png", title: "رویداد ۳", time: "۱۲:۳۰ چهارشنبه", participants: "۳۴ نفر", location: "مکان ۳", category: "دسته‌بندی ۳" },
     { id: 4, image: "/picture-4.png", title: "رویداد ۴", time: "۱۴:۳۰ پنج‌شنبه", participants: "۴۵ نفر", location: "مکان ۴", category: "دسته‌بندی ۴" },
   ];
-
   return (
-    <Box>
       <Header />
-
-      {/* Hero Section */}
-      <Box
-        sx={{
-          height: 600,
-          backgroundImage: "url(/hero-section.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          position: "relative",
-        }}
-      >
-        {/* Content */}
-      </Box>
-
-      {/* Latest Events */}
-      <Container sx={{ py: 8 }}>
-        <Typography variant="h3" color="primary.dark" align="center">
-          آخرین رویدادها
-        </Typography>
-        <Grid container spacing={4} sx={{ mt: 4 }}>
-          {events.map((event) => (
-            <Grid item key={event.id} xs={12} sm={6} md={3}>
-              <EventCard {...event} />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-
-      {/* Footer */}
-      <Footer />
-    </Box>
   );
 };
 
