@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../components/common/Header";
+import Footer from '../components/common/Footer';
 
 const HomePage = () => {
   const events = [
@@ -9,7 +10,11 @@ const HomePage = () => {
     { id: 4, image: "/picture-4.png", title: "رویداد ۴", time: "۱۴:۳۰ پنج‌شنبه", participants: "۴۵ نفر", location: "مکان ۴", category: "دسته‌بندی ۴" },
   ];
   return (
+    <div>
       <Header />
+      <Footer />
+
+    </div>
   );
 };
 
