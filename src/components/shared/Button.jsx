@@ -25,8 +25,8 @@ const Button = ({
       disabled={disabled}
       onClick={onClick}
     >
-      {icon && <span className="button__icon">{icon}</span>}
-      {text && <span className="button__text">{text}</span>}
+      {icon && <span className="button__icon">{icon}</span>} {/* نمایش آیکون */}
+      {text && <span className="button__text">{text}</span>} {/* نمایش متن */}
     </button>
   );
 };

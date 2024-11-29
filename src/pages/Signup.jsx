@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Signup.css";
+import Button from "../components/shared/Button";
 
 const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -17,80 +18,43 @@ const SignUp = () => {
   };
 
   return (
-    <div className="signup-page">
-      <header className="signup-header">
-        <h1>یکی کمه</h1>
-        <nav>
-          <a href="/">صفحه اصلی</a>
-          <a href="/events">رویدادها</a>
-          <a href="/about">درباره ما</a>
-        </nav>
-      </header>
-
-      <div className="signup-container">
-        {/* تصویر سمت چپ */}
-        <div className="signup-image">
-          <img src="../assets/images/signupimage.jpg" alt="Sign Up" />
-        </div>
-
-        {/* فرم ثبت‌نام */}
-        <div className="signup-form">
-          <h2 className="signup-title">ثبت نام در یکی کمه</h2>
-          <p className="signup-subtitle">
-            خوشحالیم که می‌خواهی به کمپین یکی کمه بپیوندی :)
-          </p>
-
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="phoneNumber">شماره همراه</label>
-              <div className="input-wrapper">
-                <span className="input-prefix">+98</span>
-                <input
-                  type="tel"
-                  id="phoneNumber"
-                  placeholder="شماره تلفن خود را وارد کنید"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">لطفا رمز عبور خود را انتخاب نمایید:</label>
-              <input
-                type="password"
-                id="password"
-                placeholder="رمز عبور"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="confirmPassword">تکرار رمز عبور</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                placeholder="تکرار رمز عبور"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            <p className="terms">
-              شرایط استفاده از خدمات و حریم خصوصی یکی کمه را می‌پذیرم.
-            </p>
-
-            <button type="submit" className="btn btn-primary">
-              تایید و دریافت کد
-            </button>
-          </form>
-        </div>
-      </div>
+    <>
+    <div className="singup-full">
+<div className="singup-right">
+<div className="formpos">
+    <div className="textup">
+<span className="texthead">ثبت نام در یکی کمه</span>
+<span className="textdown">خوش‌حالیم که می‌خواهی به کمپین یکی کمه بپیوندی :)</span>
     </div>
+<div className="formm">
+<form action="#">
+  <label htmlFor="#"> لطفاً برای ثبت نام،‌ شماره تلفن همراه خود را وارد کنید:</label>
+  <div className="">
+<input type="number" className="inputsdesgin" placeholder="شماره همراه"  />
+  </div>
+  <label htmlFor="#">لطفاً رمز عبور خود را انتخاب نمائید:</label>
+  <div className="">
+<input type="text" className="inputsdesgin" placeholder="رمز عبور"  />
+  </div>
+  <div className="dalam">
+<input type="text" className="inputsdesgin" placeholder="تکرار رمز عبور "  />
+  </div>
+  <span> شرایط استفاده از خدمات و حریم خصوصی یکی کمه را می‌پذیرم.</span>
+  <div>
+    <Button
+      text='تأیید و دریافت کد'
+      className='btn-primary'
+      onClick={()=>console.log("دکمه کلیک شد")}
+    />
+  </div>
+</form>
+</div>
+</div>
+</div>
+<div className="singup-left">
+</div>
+    </div>
+    </>
   );
 };
 

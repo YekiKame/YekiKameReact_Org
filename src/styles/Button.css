@@ -77,11 +77,18 @@
 }
 
 /* آیکون */
+/* استایل‌های آیکون */
 .button__icon {
   margin-right: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+.button__icon img,
+.button__icon svg {
+  width: 20px; /* تنظیم اندازه آیکون */
+  height: 20px;
 }
 
 .button__text {

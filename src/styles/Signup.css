@@ -1,4 +1,5 @@
-/* ساختار اصلی */
+
+/* /* ساختار اصلی
 .signup-page {
     font-family: "Arial", sans-serif;
     color: #333;
@@ -124,10 +125,63 @@
   }
   
   /* شرایط و لینک‌ها */
+  .formpos{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    line-height: 50px;
+  }
   .terms {
     font-size: 12px;
     margin: 10px 0;
     color: #777;
     text-align: center;
   }
-  
+
+
+
+
+
+
+
+  .singup-full {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: space-between;
+  }
+  .singup-left {
+    width: 50%;
+    background: #e65a00;
+    background: url(../assets//images/signupimage.jpg);
+    background-size: cover;
+  }
+  .singup-right {
+    width: 50%;
+    
+  }
+.textup{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.texthead{
+  font-size: 32px;
+  line-height: 70px;
+  font-weight: 400;
+}
+.textdown {
+font-weight: 100;
+font-size: 12px;
+}
+.inputsdesgin{
+  height: 50px;
+  width: 334px;
+  padding: 6px;
+  border: 1px solid #e65a00 ;
+}
+.dalam {
+  margin-top: 20px;
+}

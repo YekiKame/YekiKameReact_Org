@@ -10,10 +10,9 @@ const HomePage = () => {
     { id: 4, image: "/picture-4.png", title: "رویداد ۴", time: "۱۴:۳۰ پنج‌شنبه", participants: "۴۵ نفر", location: "مکان ۴", category: "دسته‌بندی ۴" },
   ];
   return (
-    <div>
-      <Header />
-      <Footer />
-    </div>
+    <>
+    
+    </>
   );
 };
 

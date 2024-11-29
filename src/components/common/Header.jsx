@@ -21,20 +21,10 @@ const Header = ({ isLoggedIn, city = "تهران" }) => {
         {/* لوگو */}
         <div className="header__logo">
           <img src={Logo} alt="Logo" />
-          <span>یکی کمه</span>
         </div>
 
         {/* بخش جستجو */}
         <div className="header__search">
-          <div className="header__search-city">
-            <input
-              type="text"
-              placeholder="جستجوی شهر"
-              value={city}
-              readOnly
-              className="header__input"
-            />
-            <img src={LocationIcon} alt="Location" className="header__icon" />
           </div>
           <div className="header__search-event">
             <input
@@ -44,6 +34,15 @@ const Header = ({ isLoggedIn, city = "تهران" }) => {
             />
             <img src={SearchIcon} alt="Search" className="header__icon" />
           </div>
+          <div className="header__search-city">
+            <input
+              type="text"
+              placeholder="جستجوی شهر"
+              value={city}
+              readOnly
+              className="header__input"
+            />
+            <img src={LocationIcon} alt="Location" className="header__icon" />
         </div>
 
         {/* منو */}
@@ -74,7 +73,6 @@ const Header = ({ isLoggedIn, city = "تهران" }) => {
             <Button
               className="header__btn header__btn--primary"
               text="ورود / ثبت نام"
-              icon={LoginIcon}
               onClick={openModal}
             />
           )}
