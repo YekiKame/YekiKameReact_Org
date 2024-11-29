@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import "../../styles/Header.css"; // فایل استایل برای تنظیمات CSS
 import Button from "../shared/Button"; // کامپوننت دکمه
 import SearchIcon from "../../assets/icons/search.svg"; // آیکون جستجو
@@ -6,8 +7,14 @@ import LocationIcon from "../../assets/icons/location.svg"; // آیکون لوک
 import UserIcon from "../../assets/icons/user-square.svg"; // آیکون کاربر
 import LoginIcon from "../../assets/icons/login.svg";
 import Logo from "../../assets/icons/logo.svg";
+import LoginModal from "../modals/LoginModal";
 
 const Header = ({ isLoggedIn, city = "تهران" }) => {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <header className="header">
       <div className="header__container">
@@ -68,10 +75,12 @@ const Header = ({ isLoggedIn, city = "تهران" }) => {
               className="header__btn header__btn--primary"
               text="ورود / ثبت نام"
               icon={LoginIcon}
+              onClick={openModal}
             />
           )}
         </div>
       </div>
+      {isModalOpen && <LoginModal onClose={closeModal} />}
     </header>
   );
 };
