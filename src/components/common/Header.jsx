@@ -71,10 +71,13 @@ const Header = ({ isLoggedIn, city = "تهران" }) => {
             </>
           ) : (
             <Button
-              className="header__btn header__btn--primary"
-              text="ورود / ثبت نام"
-              onClick={openModal}
-            />
+            className="header__btn header__btn--primary"
+            text="ورود / ثبت نام"
+            onClick={openModal}
+          >
+            <img src={LoginIcon} alt="Login" className="header__icon" />
+          </Button>
+          
           )}
         </div>
       </div>

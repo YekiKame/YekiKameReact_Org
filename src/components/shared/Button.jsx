@@ -36,7 +36,7 @@ Button.propTypes = {
   variant: PropTypes.oneOf(["primary", "secondary", "outline"]),
   color: PropTypes.oneOf(["orange", "blue", "gray"]),
   size: PropTypes.oneOf(["small", "medium", "large"]),
-  icon: PropTypes.node,
+  icon: PropTypes.node, // اینجا به عنوان node تعریف شد
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
 };

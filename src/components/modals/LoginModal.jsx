@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import "../../styles/LoginModal.css"; // فایل استایل
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginModal = ({ onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const navigate = useNavigate(); // استفاده از useNavigate برای هدایت
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Phone number submitted:", phoneNumber);
     // ارسال شماره به سرور یا نمایش مرحله بعد
+  };
+
+  const handleSignUp = () => {
+    onClose(); // بسته شدن مودال
+    navigate("/signup"); // روت به صفحه ثبت‌نام
   };
 
   return (
@@ -51,7 +58,9 @@ const LoginModal = ({ onClose }) => {
           ورود از طریق <span className="link">رمز عبور</span>
         </p>
         <p className="register__link">
-          ثبت نام نکرده‌اید؟ <span className="link">ثبت نام</span>
+          <span className="link" onClick={handleSignUp}>
+            ثبت نام نکرده‌اید؟ ثبت نام
+          </span>
         </p>
       </div>
     </div>
