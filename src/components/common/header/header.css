@@ -107,4 +107,23 @@
   .header__btn--secondary:hover {
     background-color: #ddd;
   }
+
+  
+  .header__link {
+    color: #ff6600;
+    text-decoration: none;
+    padding: 10px;
+    margin: 0 15px;
+  }
+  
+  .header__link:hover {
+    color: #007bff;
+  }
+  
+  .header__link.active {
+    color: #007bff; /* Active link color */
+  }
+  .header__link.active:hover{
+    color: #ff6600;
+  }
   

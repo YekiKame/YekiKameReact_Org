@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/LoginModal.css"; // فایل استایل
+import "./loginmodal.css"; // فایل استایل
 import { Link, useNavigate } from "react-router-dom";
 
 const LoginModal = ({ onClose }) => {

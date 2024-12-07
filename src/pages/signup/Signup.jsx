@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../styles/Signup.css";
-import Button from "../components/shared/Button";
+import "./signup.css";
+import Button from "../../components/shared/button/Button";
 
 const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");

@@ -155,7 +155,7 @@
   .singup-left {
     width: 50%;
     background: #e65a00;
-    background: url(../assets//images/signupimage.jpg);
+    background: url(../../assets/images/signupimage.jpg);
     background-size: cover;
   }
   .singup-right {
