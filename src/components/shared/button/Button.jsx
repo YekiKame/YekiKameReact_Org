@@ -11,12 +11,14 @@ const Button = ({
   disabled = false,
   onClick,
 }) => {
+  // تولید کلاس‌های دکمه بر اساس ویژگی‌های مختلف
   const classes = `
     button
     button--${variant}
     button--${color}
     button--${size}
     ${disabled ? "button--disabled" : ""}
+    button--elevation-${variant}-${size}-${disabled ? 'disabled' : 'normal'}
   `;
 
   return (
