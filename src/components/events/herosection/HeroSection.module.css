@@ -1,7 +1,7 @@
 /* HeroSection.module.css */
 
 .heroSection {
-    background-image: url('/public/assets/images/HeroSection.jpg'); /* تصویر پس‌زمینه را تنظیم کنید */
+    background-image: url('/assets/images/HeroSection.jpg'); /* تصویر پس‌زمینه را تنظیم کنید */
     background-size: cover;
     background-position: center;
     padding: 100px 20px;
