@@ -3,10 +3,19 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Button from "../../components/shared/button/Button";
+import OTPModal from "../../components/modals/OTPModal/OTPModal";
 import styles from "./SignUp.module.css";
 
 const SignUp = () => {
   const [message, setMessage] = useState("");
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleModalClose = () => setModalOpen(false);
+  const handleModalSubmit = (otp) => {
+    console.log("کد OTP وارد شده:", otp);
+    setModalOpen(false);
+    // ارسال OTP به سرور برای احراز هویت
+  };
 
   const handleSignup = async (values, { setSubmitting }) => {
     setSubmitting(true);
@@ -33,6 +42,7 @@ const SignUp = () => {
       const data = response.data;
       if (data?.data?.registerUser?.success) {
         setMessage("ثبت‌نام موفقیت‌آمیز بود! لطفاً کد تأیید را وارد کنید.");
+        setModalOpen(true); // باز کردن مودال
       } else {
         setMessage("خطایی رخ داده است. لطفاً دوباره تلاش کنید.");
       }
@@ -122,22 +132,42 @@ const SignUp = () => {
 
                 <div>
                   <span className="form-subtitle">شرایط استفاده از </span>
-                  <span className="form-sublink">خدمات و حریم خصوصی یکی کمه</span>
+                  <span
+                    className="form-sublink"
+                    style={{ cursor: "pointer", color: "blue" }}
+                    onClick={() => (window.location.href = "/privacy-policy")}
+                  >
+                    خدمات و حریم خصوصی یکی کمه
+                  </span>
                   <span className="form-subtitle"> را می‌پذیرم.</span>
                 </div>
-                <div>
-                  <Button
-                    text="ثبت‌نام"
-                    className={styles["signup-button"]}
-                    disabled={isSubmitting}
-                  />
-                </div>
+
+                <Button
+                  text="تأیید و دریافت کد"
+                  className={styles["signup-button"]}
+                  disabled={isSubmitting}
+                  onClick={() => setModalOpen(true)}
+                  style={{
+                    width: "100%",
+                    height: "56px",
+                    fontSize: "18px",
+                    padding: "12px",
+                  }}
+                />
+                <div style={{ height: "56px" }}></div>
                 {message && <p className={styles["message"]}>{message}</p>}
               </Form>
             )}
           </Formik>
         </div>
       </div>
+
+      {/* فراخوانی کامپوننت OTPModal */}
+      <OTPModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSubmit={handleModalSubmit}
+      />
     </div>
   );
 };
