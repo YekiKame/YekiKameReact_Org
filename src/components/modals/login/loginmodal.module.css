@@ -1,0 +1,95 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.modal-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.modal-subtitle {
+  text-align: center;
+  color: #ff6600;
+}
+
+.modal-description {
+  text-align: center;
+  color: #555;
+}
+
+.form-group {
+  margin: 20px 0;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ff6600;
+  border-radius: 8px;
+}
+
+.input-prefix {
+  background-color: #ff6600;
+  color: #fff;
+  padding: 10px;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #ff6600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #e65a00;
+}
+
+.terms,
+.alternate-login,
+.register-link {
+  text-align: center;
+  margin-top: 10px;
+  color: #777;
+}
+
+.link {
+  color: #ff6600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link-red {
+  color: red;
+  cursor: pointer;
+}
