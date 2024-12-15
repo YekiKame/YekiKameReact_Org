@@ -9,12 +9,13 @@ import styles from "./SignUp.module.css";
 const SignUp = () => {
   const [message, setMessage] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
+  const [userPhoneNumber, setUserPhoneNumber] = useState(""); // ذخیره شماره تلفن
 
   const handleModalClose = () => setModalOpen(false);
+
   const handleModalSubmit = (otp) => {
     console.log("کد OTP وارد شده:", otp);
     setModalOpen(false);
-    // ارسال OTP به سرور برای احراز هویت
   };
 
   const handleSignup = async (values, { setSubmitting }) => {
@@ -41,7 +42,8 @@ const SignUp = () => {
 
       const data = response.data;
       if (data?.data?.registerUser?.success) {
-        setMessage("ثبت‌نام موفقیت‌آمیز بود! لطفاً کد تأیید را وارد کنید.");
+        setMessage("ثبت نام با موفقیت انجام شد!");
+        setUserPhoneNumber(values.phoneNumber); // شماره تلفن ذخیره شود
         setModalOpen(true); // باز کردن مودال
       } else {
         setMessage("خطایی رخ داده است. لطفاً دوباره تلاش کنید.");
@@ -146,7 +148,6 @@ const SignUp = () => {
                   text="تأیید و دریافت کد"
                   className={styles["signup-button"]}
                   disabled={isSubmitting}
-                  onClick={() => setModalOpen(true)}
                   style={{
                     width: "100%",
                     height: "56px",
@@ -154,19 +155,19 @@ const SignUp = () => {
                     padding: "12px",
                   }}
                 />
-                <div style={{ height: "56px" }}></div>
                 {message && <p className={styles["message"]}>{message}</p>}
+                <div style={{ height: "64px" }}></div>
               </Form>
             )}
           </Formik>
         </div>
       </div>
 
-      {/* فراخوانی کامپوننت OTPModal */}
       <OTPModal
         isOpen={isModalOpen}
         onClose={handleModalClose}
         onSubmit={handleModalSubmit}
+        phoneNumber={userPhoneNumber}
       />
     </div>
   );
