@@ -39,6 +39,7 @@
   line-height: 70px;
   font-weight: 400;
   color: var(--black);
+  align-self: center;
 }
 
 .textdown {
@@ -60,15 +61,18 @@
   border: 1.4px solid var(--lightprimaryorigin);
   border-radius: 4px;
   margin-bottom: 16px;
+  direction: ltr;
+}
+.inputs::placeholder {
+  direction: rtl; 
+  text-align: right;
+  font-size: 14px;
+  color: #aaa; 
 }
 
 .error {
   color: var(--lightsemanticerrorlight);
   font-size: 14px;
-}
-
-.signup-button {
-  width: 100%;
 }
 
 .message {

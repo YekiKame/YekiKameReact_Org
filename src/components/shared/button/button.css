@@ -101,7 +101,6 @@
   cursor: pointer;
   transition: box-shadow 0.3s ease-in-out;
   font-weight: 500;
-  box-shadow: var(--button-elevation-default-medium-normal); /* پیش‌فرض برای سایه */
 }
 
 .button__icon {
@@ -112,16 +111,19 @@
 .button--small {
   padding: 8px 16px;
   font-size: 14px;
+  min-height: 24px;
 }
 
 .button--medium {
   padding: 12px 24px;
   font-size: 16px;
+  min-height: 32px;
 }
 
 .button--large {
   padding: 16px 32px;
   font-size: 18px;
+  min-height: 40px;
 }
 
 /* استایل‌های مختلف برای رنگ‌ها */
@@ -147,14 +149,14 @@
 }
 
 .button--secondary {
-  background-color: #1337EC;
+  background-color: var(--lightsecondaryorigin);
   color: white;
 }
 
 .button--outline {
   background-color: transparent;
-  border: 2px solid #1337EC;
-  color: #1337EC;
+  border: 2px solid var(--lightprimaryorigin);
+  color: var(--lightprimaryorigin);
 }
 
 /* حالت‌های غیرفعال */
@@ -252,11 +254,4 @@
   display: inline-block;
   margin-right: 8px; /* فاصله بین آیکون و متن */
   font-size: 18px;
-}
-
-/* استایل برای سایه‌ها */
-:root {
-  --orange-color: #FF5722;
-  --blue-color: #2196F3;
-  --gray-color: #9E9E9E;
 }

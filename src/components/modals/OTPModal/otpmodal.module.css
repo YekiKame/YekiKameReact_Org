@@ -1,0 +1,95 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    width: 400px;
+    text-align: center;
+  }
+  
+  .modal-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .modal-subtitle {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #666;
+  }
+  
+  .edit-phone-link {
+    color: #007aff;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .otp-input-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    direction: ltr; /* جهت کلی چپ به راست */
+  }
+  
+  .otp-input {
+    width: 40px;
+    height: 48px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid #ff9500;
+    border-radius: 8px;
+    outline: none;
+  }
+  
+  .otp-input:focus {
+    border-color: #ffa500;
+    box-shadow: 0 0 4px rgba(255, 149, 0, 0.5);
+  }
+  
+  .resend-container {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  
+  .timer {
+    color: #ff3b30;
+    font-weight: bold;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .submit-button {
+    width: 100%;
+    background-color: #ff9500;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #e08900;
+  }
+  

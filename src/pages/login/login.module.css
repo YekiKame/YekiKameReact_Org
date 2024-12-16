@@ -14,31 +14,49 @@
     background-size: cover;
   }
   .form-container {
-    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+  }
+  .form-wrapper{
+    min-width: 400px;
   }
   .input-design {
+    height: 56px;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #e65a00;
-    border-radius: 8px;
+    padding: 6px;
+    border: 1.4px solid var(--lightprimaryorigin);
+    border-radius: 4px;
+    margin-bottom: 16px;
+    direction: ltr;
   }
-  .btn-primary {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+  .input-design::placeholder{
+    direction: rtl; 
+    text-align: right;
+    font-size: 14px;
+    color: #aaa; 
+  }
+  .button-container{
     width: 100%;
-    padding: 10px;
-    background: #ff6600;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
+
   .message {
     color: #333;
     margin-top: 10px;
+  }
+  .error-message{
+      color: var(--lightsemanticerrorlight);
+      font-size: 14px;
   }
   
