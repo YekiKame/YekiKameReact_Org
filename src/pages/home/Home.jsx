@@ -1,12 +1,15 @@
 import React from "react";
-import HeroSection from '../../components/events/herosection/HeroSection'
+import HeroSection from "../../components/events/herosection/HeroSection";
+import EventSection from "../../components/pageComponents/main/evnetSection/createEvent";
+import FeatureSection from "../../components/pageComponents/main/featureSection/featureSection";
 
 const HomePage = () => {
-
   return (
-    <>
-    <HeroSection/> 
-    </>
+    <div>
+      <HeroSection />
+      <EventSection />
+      <FeatureSection />
+    </div>
   );
 };
 
