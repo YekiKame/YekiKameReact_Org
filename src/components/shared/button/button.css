@@ -101,7 +101,6 @@
   cursor: pointer;
   transition: box-shadow 0.3s ease-in-out;
   font-weight: 500;
-  box-shadow: var(--button-elevation-default-medium-normal); /* پیش‌فرض برای سایه */
 }
 
 .button__icon {
@@ -150,14 +149,14 @@
 }
 
 .button--secondary {
-  background-color: #1337EC;
+  background-color: var(--lightsecondaryorigin);
   color: white;
 }
 
 .button--outline {
   background-color: transparent;
-  border: 2px solid #1337EC;
-  color: #1337EC;
+  border: 2px solid var(--lightprimaryorigin);
+  color: var(--lightprimaryorigin);
 }
 
 /* حالت‌های غیرفعال */
