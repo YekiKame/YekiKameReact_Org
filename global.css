@@ -67,6 +67,7 @@
 }
 
 html {
+  
   /* Percentage of user's browser font-size setting */
   font-size: 62.5%;
   overflow-x: hidden;
@@ -84,7 +85,7 @@ h1 {
   font-family: IransansX;
   font-size: 5.6rem;
   font-weight: 500;
-  line-height: 7 2rem;
+  line-height: 7. 2rem;
 }
 h2 {
   font-family: IransansX;
@@ -144,7 +145,6 @@ button {
 .grid--2-cols {
   grid-template-columns: repeat(2, 1fr);
 }
-
 .grid--2-cols-3fr-5fr {
   grid-template-columns: 2fr 1fr;
   grid-template-rows: 1fr;
@@ -159,7 +159,4 @@ button {
 }
 .grid--center-v {
   align-items: center;
-}
-.grid--2-rows {
-  grid-template-rows: repeat(2, 1fr);
 }

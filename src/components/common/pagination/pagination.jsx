@@ -11,7 +11,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   return (
     <div className="pagination">
-      {/* First button is now the Previous Page button */}
       <button className="btn" onClick={() => handlePageChange(currentPage - 1)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +23,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            d="M9 5l7 7-7 7"
+            d="M15 19l-7-7 7-7"
           />
         </svg>
       </button>
@@ -43,7 +42,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           {index + 1}
         </a>
       ))}
-      {/* Second button is now the Next Page button */}
       <button className="btn" onClick={() => handlePageChange(currentPage + 1)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +54,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            d="M15 19l-7-7 7-7"
+            d="M9 5l7 7-7 7"
           />
         </svg>
       </button>
@@ -69,5 +67,4 @@ Pagination.propTypes = {
   totalPages: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
 };
-
 export default Pagination;

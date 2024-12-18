@@ -1,3 +1,4 @@
+// src/Accordion.jsx
 import React, { useState } from "react";
 import "./accordion.css";
 import PropTypes from "prop-types";
@@ -36,13 +37,13 @@ const AccordionItem = ({ number, title, answer }) => {
   );
 };
 
-const Accordion = ({ faqs, startNumber }) => {
+const Accordion = ({ faqs }) => {
   return (
     <div className="accordion">
       {faqs.map((faq, index) => (
         <AccordionItem
           key={index}
-          number={startNumber + index} // Adjusted to ensure continuous numbering
+          number={index + 1}
           title={faq.questionTitle}
           answer={faq.questionAnswer}
         />
@@ -50,21 +51,18 @@ const Accordion = ({ faqs, startNumber }) => {
     </div>
   );
 };
-
 AccordionItem.propTypes = {
   number: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   answer: PropTypes.string.isRequired,
 };
-
 Accordion.propTypes = {
   faqs: PropTypes.arrayOf(
     PropTypes.shape({
-      questionTitle: PropTypes.string.isRequired,
-      questionAnswer: PropTypes.string.isRequired,
+      questionTitle: PropTypes.string.isRequired, // Each FAQ must have a questionTitle (string)
+      questionAnswer: PropTypes.string.isRequired, // Each FAQ must have a questionAnswer (string)
     })
-  ).isRequired,
-  startNumber: PropTypes.number.isRequired, // Added startNumber prop
+  ).isRequired, // The faqs array is required
 };
 
 export default Accordion;
