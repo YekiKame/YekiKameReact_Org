@@ -37,25 +37,28 @@ export const HeroSection = () => {
     return (
         <section className={styles.heroSection}>
             <div className={styles.container}>
-                <h1 className={styles.title}>فقط یکی کمه</h1>
-
+                <div className={styles.title}><h1>{"فقط یکی کمه"}</h1></div>
                 <p className={styles.description}>
-                    اگه تیمت برای تشکیل یک رویداد، کامل نیست و دنبال یک نفر می‌گردی که
-                    تیمتو تکمیل کنی جای درستی اومدی :)
+                    {"اگه تیمت برای تشکیل یک رویداد، کامل نیست و دنبال یک نفر می‌گردی که تیمتو تکمیل کنی جای درستی اومدی :)"}
                 </p>
 
                 <form className={styles.searchForm} onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="جستجوی شهر یا رویداد"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className={styles.searchInput}
-                    />
-                    <button type="submit" className={styles.searchButton}>
-                        جستجو
-                    </button>
+                    <div className={styles.searchContainer}>
+                        <img
+                            src="/src/assets/icons/search.svg"
+                            alt="search icon"
+                            className={styles.searchIcon}
+                        />
+                        <input
+                            type="text"
+                            placeholder="جستجوی شهر یا رویداد"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className={styles.searchInput}
+                        />
+                    </div>
                 </form>
+
 
                 <div className={styles.citiesSection}>
                     <h2 className={styles.citiesTitle}>شهرهای پربازدید</h2>
@@ -66,7 +69,9 @@ export const HeroSection = () => {
                                 className={styles.cityButton}
                                 onClick={() => handleCityClick(city)}
                             >
-                                {city}
+                                <div className={styles.buttonContent}>
+                                    <div className={styles.cityName}>{city}</div>
+                                </div>
                             </button>
                         ))}
                     </div>
