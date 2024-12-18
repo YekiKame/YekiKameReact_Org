@@ -1,16 +1,8 @@
-.container {
-  font-family: "Inter", sans-serif;
-  color: #343a40;
-  line-height: 1;
-  display: flex;
-  justify-content: center;
-}
-
 .pagination {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 200px;
+  margin-top: 3.2rem;
 }
 
 .btn {

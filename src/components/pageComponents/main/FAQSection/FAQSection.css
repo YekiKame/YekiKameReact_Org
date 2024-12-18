@@ -1,0 +1,16 @@
+.FAQ-section-container {
+  display: grid;
+  grid-template-rows: auto auto; /* Two rows: one for Accordion, one for Pagination */
+  justify-items: center; /* Center content horizontally */
+  gap: 20px; /* Add spacing between rows */
+  padding: 9.6rem 0;
+}
+.FAQ-accordion {
+  width: 100%;
+  transition: opacity 0.3s ease-in-out; /* Smooth fade-in effect */
+  opacity: 0; /* Initially hidden */
+}
+
+.FAQ-accordion.fade-in {
+  opacity: 1; /* Fully visible when fade-in class is added */
+}
