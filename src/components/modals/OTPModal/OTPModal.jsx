@@ -48,21 +48,27 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
     }
 
     const query = `
-      mutation {
-        verifyLoginOtp(phone: "${phoneNumber}", otp: ${otpValue}) {
+      mutation VerifyOtp($phone: String!, $otp: Int!) {
+        verifyLoginOtp(phone: $phone, otp: $otp) {
           success
         }
       }
     `;
 
+    const variables = {
+      phone: phoneNumber,
+      otp: parseInt(otpValue, 10),
+    };
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/graphql/",
-        { query },
+        { query, variables },
         { headers: { "Content-Type": "application/json" } }
       );
 
       const success = response.data?.data?.verifyLoginOtp?.success;
+      console.log("GraphQL Response: ", response.data);
 
       if (success) {
         alert("شما وارد شدید.");
@@ -98,17 +104,21 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
     setResendEnabled(false);
 
     const query = `
-      mutation {
-        requestLoginOtp(phone: "${phoneNumber}") {
+      mutation RequestOtp($phone: String!) {
+        requestLoginOtp(phone: $phone) {
           success
         }
       }
     `;
 
+    const variables = {
+      phone: phoneNumber,
+    };
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/graphql/",
-        { query },
+        { query, variables },
         { headers: { "Content-Type": "application/json" } }
       );
 
