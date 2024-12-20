@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./OTPModal.module.css";
+import Button from "../../shared/button/Button"
 
 const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
   const [otp, setOtp] = useState(["", "", "", "", ""]);
@@ -142,7 +143,7 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
       >
         <h2 className={styles["modal-title"]}>کد تأیید</h2>
         <p className={styles["modal-subtitle"]}>
-          کد ارسال‌شده به {phoneNumber} را وارد کنید
+          کد ارسال‌شده به {phoneNumber} را وارد کنید:
         </p>
         <button
           className={styles["edit-phone-link"]}
@@ -178,17 +179,18 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
               ارسال مجدد کد
             </button>
           ) : (
-            <span>تا دریافت مجدد کد: {formatTimer()}</span>
+            <span className="timerOTP">تا دریافت مجدد کد: {formatTimer()}</span>
           )}
         </div>
-
         {/* نمایش خطا */}
         {error && <div className={styles["error-message"]}>{error}</div>}
-
         {/* دکمه تأیید */}
-        <button className={styles["submit-button"]} onClick={handleVerifyOtp}>
-          تأیید
-        </button>
+        <Button
+          text={"تأیید"}
+          size="large"
+          onClick={handleVerifyOtp}
+          customStyles={{width:"100%"}}
+        />
       </div>
     </div>
   );
