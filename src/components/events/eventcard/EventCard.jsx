@@ -73,7 +73,7 @@ const EventCard = ({ title, eventCategory, subscriberCount, startDate, neighborh
         <Button
           text={"عضو شدن"}
           customStyles={{width:"100%"}}
-          icon={<img src={LeadingIcon} alt="آیکون عضویت" style={{ width:"2.4rem", height: "2.4rem",paddingLeft:"0.8rem"}} />}
+          icon={<img src={LeadingIcon} alt="آیکون عضویت" style={{ width:"4.8rem", height: "2.4rem",}} />}
         />
       </div>
     </div>
