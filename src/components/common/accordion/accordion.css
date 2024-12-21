@@ -2,8 +2,8 @@
   font-family: "Inter", sans-serif;
   color: #343a40;
   line-height: 1;
-  width: 700px;
-  margin: 100px auto;
+  width: 70rem;
+  margin: 0 auto;
 
   display: flex;
   flex-direction: column;
@@ -26,7 +26,6 @@
 .text {
   font-size: 24px;
   font-weight: 500;
-  /* color: #ff8c00; */
 }
 
 .number {
@@ -36,7 +35,11 @@
 .icon {
   width: 24px;
   height: 24px;
-  /* stroke: #ff8c00; */
+  transition: transform 0.3s ease;
+}
+
+.icon.rotate {
+  transform: rotate(180deg);
 }
 
 .hidden-box {
@@ -71,7 +74,4 @@
 .open .text,
 .open .icon {
   color: #ff8c00;
-}
-.open .item {
-  border: none !important;
 }

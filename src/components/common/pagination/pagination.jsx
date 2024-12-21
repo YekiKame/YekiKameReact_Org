@@ -23,7 +23,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            d="M15 19l-7-7 7-7"
+            d="M9 5l7 7-7 7"
           />
         </svg>
       </button>
@@ -54,7 +54,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            d="M9 5l7 7-7 7"
+            d="M15 19l-7-7 7-7"
           />
         </svg>
       </button>
@@ -67,4 +67,5 @@ Pagination.propTypes = {
   totalPages: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
 };
+
 export default Pagination;

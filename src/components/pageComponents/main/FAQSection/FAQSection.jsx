@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import Accordion from "../../../common/accordion/accordion";
 import Pagination from "../../../common/pagination/pagination";
+import "./FAQSection.css";
+
 const GET_FAQS = gql`
   query {
     allFaqs {
@@ -32,8 +34,11 @@ const FAQSection = () => {
   );
 
   return (
-    <div>
-      <Accordion faqs={currentFaqs} />
+    <div className="FAQ-section-container">
+      <Accordion
+        faqs={currentFaqs}
+        startNumber={(currentPage - 1) * faqsPerPage + 1} // Adjusted startNumber
+      />
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
