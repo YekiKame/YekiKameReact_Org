@@ -18,8 +18,8 @@ const FAQSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [faqsPerPage] = useState(10);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <p></p>;
+  if (error) return <p></p>;
 
   const faqs = data.allFaqs;
   const totalPages = Math.ceil(faqs.length / faqsPerPage);

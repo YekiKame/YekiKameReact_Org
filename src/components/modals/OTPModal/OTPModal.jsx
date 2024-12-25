@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./OTPModal.module.css";
+import Button from "../../shared/button/Button"
 
 const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
   const [otp, setOtp] = useState(["", "", "", "", ""]);
@@ -48,21 +49,27 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
     }
 
     const query = `
-      mutation {
-        verifyLoginOtp(phone: "${phoneNumber}", otp: ${otpValue}) {
+      mutation VerifyOtp($phone: String!, $otp: Int!) {
+        verifyLoginOtp(phone: $phone, otp: $otp) {
           success
         }
       }
     `;
 
+    const variables = {
+      phone: phoneNumber,
+      otp: parseInt(otpValue, 10),
+    };
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/graphql/",
-        { query },
+        { query, variables },
         { headers: { "Content-Type": "application/json" } }
       );
 
       const success = response.data?.data?.verifyLoginOtp?.success;
+      console.log("GraphQL Response: ", response.data);
 
       if (success) {
         alert("شما وارد شدید.");
@@ -98,17 +105,21 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
     setResendEnabled(false);
 
     const query = `
-      mutation {
-        requestLoginOtp(phone: "${phoneNumber}") {
+      mutation RequestOtp($phone: String!) {
+        requestLoginOtp(phone: $phone) {
           success
         }
       }
     `;
 
+    const variables = {
+      phone: phoneNumber,
+    };
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/graphql/",
-        { query },
+        { query, variables },
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -132,7 +143,7 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
       >
         <h2 className={styles["modal-title"]}>کد تأیید</h2>
         <p className={styles["modal-subtitle"]}>
-          کد ارسال‌شده به {phoneNumber} را وارد کنید
+          کد ارسال‌شده به {phoneNumber} را وارد کنید:
         </p>
         <button
           className={styles["edit-phone-link"]}
@@ -168,17 +179,18 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
               ارسال مجدد کد
             </button>
           ) : (
-            <span>تا دریافت مجدد کد: {formatTimer()}</span>
+            <span className="timerOTP">تا دریافت مجدد کد: {formatTimer()}</span>
           )}
         </div>
-
         {/* نمایش خطا */}
         {error && <div className={styles["error-message"]}>{error}</div>}
-
         {/* دکمه تأیید */}
-        <button className={styles["submit-button"]} onClick={handleVerifyOtp}>
-          تأیید
-        </button>
+        <Button
+          text={"تأیید"}
+          size="large"
+          onClick={handleVerifyOtp}
+          customStyles={{width:"100%"}}
+        />
       </div>
     </div>
   );

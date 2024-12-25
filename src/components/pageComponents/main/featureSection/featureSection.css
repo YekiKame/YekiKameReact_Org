@@ -50,8 +50,10 @@
   margin: 0 0 1.6rem 0;
   padding: 0;
 }
-
-.features-button {
+p.features-subtitle {
+  line-height: normal;
+}
+p.fea .features-button {
   padding: 0.8rem 2rem;
   font-size: 1.4rem;
   color: #fff;

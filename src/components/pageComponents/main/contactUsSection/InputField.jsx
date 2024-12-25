@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import "./ContactForm.css";
 
-const InputField = ({ label, name, placeholder, value, onChange }) => {
+const InputField = ({ label, name, placeholder, value, onChange, error }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <div className="input-field">
       <label htmlFor={name} className="input-label">
@@ -14,8 +17,11 @@ const InputField = ({ label, name, placeholder, value, onChange }) => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="input"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        className={`input ${isFocused ? "input-focused" : ""}`}
       />
+      {error && <span className="error-message">{error}</span>}
     </div>
   );
 };
@@ -26,6 +32,7 @@ InputField.propTypes = {
   placeholder: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  error: PropTypes.string,
 };
 
 export default InputField;

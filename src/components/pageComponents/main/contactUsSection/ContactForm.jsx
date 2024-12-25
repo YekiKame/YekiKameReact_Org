@@ -1,70 +1,162 @@
 import React, { useState } from "react";
-import InputField from "./InputField";
-import TextAreaField from "./TextAreaField";
-import "./ContactForm.css";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import Button from "../../../shared/button/Button";
+import styles from "./ContactUs.module.css";
 
-const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+const ContactUs = () => {
+  const [message, setMessage] = useState("");
+
+  const handleContactSubmit = async (values, { setSubmitting }) => {
+    setSubmitting(true);
+
+    const query = `
+      mutation {
+        createContactUs(
+          fullName: "${values.fullName}",
+          email: "${values.email}",
+          subject: "${values.subject}",
+          message: "${values.message}"
+        ) {
+          contact {
+            fullName
+            email
+            subject
+            message
+            createdAt
+          }
+        }
+      }
+    `;
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/graphql/",
+        { query },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = response.data;
+      if (data?.data?.createContactUs?.contact) {
+        setMessage("پیام شما با موفقیت ارسال شد!");
+      } else {
+        setMessage("خطایی رخ داده است. لطفاً دوباره تلاش کنید.");
+      }
+    } catch (error) {
+      console.error("Error during contact submission:", error);
+      setMessage("خطایی در ارتباط با سرور رخ داده است.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const validationSchema = Yup.object({
+    fullName: Yup.string().required("نام و نام خانوادگی ضروری است."),
+    email: Yup.string().email("ایمیل معتبر نیست.").required("ایمیل ضروری است."),
+    subject: Yup.string().required("عنوان ضروری است."),
+    message: Yup.string().required("پیام ضروری است."),
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add form submission logic here
-  };
-
   return (
-    <div className="contact-form-container">
-      <h1 className="form-title">تماس با ما</h1>
-      <p className="form-subtitle">
+    <div className={styles["contactus-page"]}>
+      <h1 className={styles["header"]}>تماس با ما</h1>
+      <p className={styles["description"]}>
         شما در این قسمت می‌توانید برای ما پیام بگذارید:
       </p>
-      <form onSubmit={handleSubmit} className="contact-form">
-        <div className="form-row">
-          <InputField
-            label="نام و نام خانوادگی"
-            name="name"
-            placeholder="مثال: کوروش همایونی"
-            value={formData.name}
-            onChange={handleInputChange}
-          />
-          <InputField
-            label="ایمیل"
-            name="email"
-            placeholder="persian@gmail.com"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-        </div>
-        <InputField
-          label="عنوان"
-          name="subject"
-          placeholder="مثال: سوال در مورد رویداد ورزشی"
-          value={formData.subject}
-          onChange={handleInputChange}
-        />
-        <TextAreaField
-          label="پیام"
-          name="message"
-          placeholder="پیام‌های خود را در اینجا بنویسید"
-          value={formData.message}
-          onChange={handleInputChange}
-        />
-        <button type="submit" className="submit-button">
-          ثبت
-        </button>
-      </form>
+      <Formik
+        initialValues={{
+          fullName: "",
+          email: "",
+          subject: "",
+          message: "",
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleContactSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form className={styles["form"]}>
+            <div className={styles["form-group"]}>
+              <label className={styles["form-label"]}>نام و نام خانوادگی</label>
+              <Field
+                type="text"
+                name="fullName"
+                className={styles["input"]}
+                placeholder="مثال: کوروش همایونی"
+              />
+              <ErrorMessage
+                name="fullName"
+                component="div"
+                className={styles["error"]}
+              />
+            </div>
+
+            <div className={styles["form-group"]}>
+              <label className={styles["form-label"]}>ایمیل</label>
+              <Field
+                type="email"
+                name="email"
+                className={styles["input"]}
+                placeholder="persian@gmail.com"
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className={styles["error"]}
+              />
+            </div>
+
+            <div className={styles["form-group"]}>
+              <label className={styles["form-label"]}>عنوان</label>
+              <Field
+                type="text"
+                name="subject"
+                className={styles["input"]}
+                placeholder="مثال: سوال در مورد رویداد ورزشی"
+              />
+              <ErrorMessage
+                name="subject"
+                component="div"
+                className={styles["error"]}
+              />
+            </div>
+
+            <div className={styles["form-group"]}>
+              <label className={styles["form-label"]}>پیام</label>
+              <Field
+                as="textarea"
+                name="message"
+                className={styles["textarea"]}
+                placeholder="پیام‌های خود را در اینجا بنویسید"
+              />
+              <ErrorMessage
+                name="message"
+                component="div"
+                className={styles["error"]}
+              />
+            </div>
+
+            <Button
+              text="ثبت"
+              className={styles["submit-button"]}
+              disabled={isSubmitting}
+              customStyles={{
+                width: "100%",
+                height: "56px",
+                fontSize: "18px",
+                padding: "12px",
+              }}
+            />
+            {message && <p className={styles["message"]}>{message}</p>}
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };
 
-export default ContactForm;
+export default ContactUs;

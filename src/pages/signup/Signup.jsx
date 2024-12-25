@@ -148,7 +148,7 @@ const SignUp = () => {
                   text="تأیید و دریافت کد"
                   className={styles["signup-button"]}
                   disabled={isSubmitting}
-                  style={{
+                  customStyles={{
                     width: "100%",
                     height: "56px",
                     fontSize: "18px",
