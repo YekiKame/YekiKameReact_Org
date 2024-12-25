@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import OTPModal from "../OTPModal/OTPModal"; // مسیر مودال OTP
 import styles from "./loginmodal.module.css"; // ماژول CSS
+import Button from "../../shared/button/Button";
 
 const LoginModal = ({ onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -25,18 +26,18 @@ const LoginModal = ({ onClose }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/graphql/", // آدرس API
+        "http://127.0.0.1:8000/graphql/",
         { query },
         { headers: { "Content-Type": "application/json" } }
       );
 
-      const success = response.data?.data?.requestLoginOtp?.success;
+      const { success, message } = response.data?.data?.requestLoginOtp || {};
 
       if (success) {
         // باز کردن مودال OTP
         setIsOtpModalOpen(true);
       } else {
-        setError("ارسال کد تأیید با مشکل مواجه شد. لطفاً دوباره تلاش کنید.");
+        setError(message || "ارسال کد تأیید با مشکل مواجه شد. لطفاً دوباره تلاش کنید.");
       }
     } catch (err) {
       console.error("Error during API call:", err);
@@ -46,7 +47,7 @@ const LoginModal = ({ onClose }) => {
 
   // هدایت به صفحه ورود با رمز عبور
   const handleLoginWithPassword = () => {
-    navigate("/login"); // مسیر صفحه لاگین
+    navigate("/login");
     onClose();
   };
 
@@ -62,24 +63,23 @@ const LoginModal = ({ onClose }) => {
         className={styles["modal-content"]}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className={styles["modal-title"]}>ورود به حساب کاربری</h2>
-        <p className={styles["modal-subtitle"]}>به یکی کمه خوش آمدید</p>
-        <p className={styles["modal-description"]}>
-          لطفاً برای ورود شماره تلفن همراه خود را وارد کنید:
-        </p>
+        <div className={styles["modal-text"]}>
+          <h3 className={styles["modal-title"]}>ورود به حساب کاربری</h3>
+          <p className={styles["modal-subtitle"]}>به یکی کمه خوش آمدید.</p>
+          <p className={styles["modal-description"]}>
+            لطفاً برای ورود شماره تلفن همراه خود را وارد کنید:
+          </p>
+        </div>
 
         {/* فرم شماره تلفن */}
-        <form onSubmit={handleSubmit}>
+        <form className={styles["form"]} onSubmit={handleSubmit}>
           <div className={styles["form-group"]}>
-            <label htmlFor="phoneNumber" className={styles["form-label"]}>
-              شماره همراه
-            </label>
             <div className={styles["input-wrapper"]}>
-              <span className={styles["input-prefix"]}>+98</span>
+              <span className={styles["input-prefix"]}>{"۹۸+"}</span>
               <input
                 type="tel"
                 id="phoneNumber"
-                placeholder="شماره تلفن خود را وارد کنید"
+                placeholder="شماره تلفن همراه"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 required
@@ -89,16 +89,29 @@ const LoginModal = ({ onClose }) => {
           </div>
 
           {/* شرایط استفاده */}
-          <p className={styles["terms"]}>
-            <span className={styles["link"]}>شرایط استفاده از خدمات و حریم خصوصی یکی کمه</span>{" "}
-            را می‌پذیرم.
-          </p>
+          <div>
+            <span className="form-subtitle">شرایط استفاده از </span>
+            <span
+              className="form-sublink"
+              style={{ cursor: "pointer", color: "blue" }}
+              onClick={() => (window.location.href = "/privacy-policy")}
+            >
+              خدمات و حریم خصوصی یکی کمه
+            </span>
+            <span className="form-subtitle"> را می‌پذیرم.</span>
+          </div>
 
-          {/* دکمه تأیید */}
-          <button type="submit" className={styles["btn-primary"]}>
-            تایید و دریافت کد
-          </button>
+          {/* دکمه تایید */}
+          <Button
+          text={"تأیید و دریافت کد"}
+          size="large"
+          customStyles={{width:"100%"}}
+          onClick={handleSubmit}
+          ></Button>
+
         </form>
+        {/* نمایش پیام خطا */}
+        {error && <p className={styles["error-message"]}>{error}</p>}
 
         {/* لینک ورود با رمز عبور */}
         <p className={styles["alternate-login"]}>
@@ -114,19 +127,31 @@ const LoginModal = ({ onClose }) => {
         {/* لینک ثبت نام */}
         <p className={styles["register-link"]}>
           ثبت نام نکرده‌اید؟{" "}
-          <span className={styles["link"]} onClick={handleSignUp}>
-            ثبت نام
-          </span>
         </p>
+        <Button
+          text={"ثبت نام"}
+          variant="outline"
+          size="large"
+          customStyles={{width:"100%"}}
+          onClick={handleSignUp}
+        ></Button>
       </div>
 
       {/* نمایش مودال OTP */}
       {isOtpModalOpen && (
         <OTPModal
           isOpen={isOtpModalOpen}
-          onClose={() => setIsOtpModalOpen(false)}
-          onSubmit={() => console.log("OTP تایید شد")}
+          onClose={() => {
+            setIsOtpModalOpen(false);
+            onClose();
+          }}
+          onSubmit={() => {
+            setIsOtpModalOpen(false);
+            navigate("/dashboard");
+            onClose();
+          }}
           phoneNumber={phoneNumber}
+          mode="login" // حالت مودال را مشخص کنید
         />
       )}
     </div>
