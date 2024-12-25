@@ -1,0 +1,75 @@
+.contactus-page {
+  direction: rtl;
+  text-align: right;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.header {
+  font-size: 24px;
+  color: #ff7a00;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.input,
+.textarea {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.textarea {
+  height: 100px;
+  resize: none;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.submit-button {
+  background-color: #ff7a00;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.submit-button:hover {
+  background-color: #e66a00;
+}
+
+.message {
+  font-size: 14px;
+  color: green;
+  text-align: center;
+  margin-top: 10px;
+}

@@ -1,0 +1,129 @@
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  .header__logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgba(255, 136, 0, 1);
+  }
+  
+  .header__search {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .header__search-city,
+  .header__search-event {
+    display: flex;
+    align-items: center;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .header__search-city input,
+  .header__search-event input {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 5px;
+    font-size: 14px;
+    flex: 1;
+  }
+  
+  .icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+  }
+  
+  .header__menu {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .header__link {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  
+  .header__link:hover {
+    color: rgba(255, 136, 0, 1);
+  }
+  
+  .header__actions {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .header__btn {
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .header__btn--primary {
+    background-color:rgba(255, 136, 0, 1);
+    color: #fff;
+  }
+  
+  .header__btn--primary:hover {
+    background-color: rgba(229, 164, 83, 1);
+  }
+  
+  .header__btn--secondary {
+    background-color: #f8f8f8;
+    color: #333;
+    border: 1px solid #ddd;
+  }
+  
+  .header__btn--secondary:hover {
+    background-color: #ddd;
+  }
+
+  
+  .header__link {
+    color: #ff6600;
+    text-decoration: none;
+    padding: 10px;
+    margin: 0 15px;
+  }
+  
+  .header__link:hover {
+    color: #007bff;
+  }
+  
+  .header__link.active {
+    color: #007bff; /* Active link color */
+  }
+  .header__link.active:hover{
+    color: #ff6600;
+  }
+  

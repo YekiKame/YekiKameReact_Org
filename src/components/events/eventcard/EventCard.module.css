@@ -1,0 +1,71 @@
+.eventCard {
+    width: 29.8rem;
+    background-color:var(--white);
+    border-radius: 0.8rem;
+    box-shadow: 0 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    color:var(--black);
+  }
+  
+  .picture img {
+    width: 100%;
+    height: 16rem;
+    object-fit: cover;
+  }
+  
+  .content {
+    padding: 1.6rem;
+    gap:1.2rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .eventName {
+    font-size: 2rem;
+    line-height: 3.6rem;
+    direction: rtl;
+    text-align: right;
+    font-weight: bold;
+  }
+  
+  .eventTime {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    flex-direction: row;
+    gap: 0.8rem;
+  }
+  
+  .eventTime .icon {
+    width: 2.4rem;
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    gap:0.6rem;
+    margin-bottom: 1.6rem;
+  }
+  
+  .infoItem {
+    display: flex;
+    flex-direction: row;
+    gap:0.4rem;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+  }
+  
+  .infoItem .icon {
+    width: 2.4rem;
+  }
+  
+  .loading,
+  .error {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #777;
+  }
+  

@@ -1,0 +1,64 @@
+.event-section {
+  padding: 9.6rem 0;
+}
+
+.event-container {
+}
+
+.event-image {
+  flex: 1;
+}
+
+.event-image {
+  width: 100%;
+  border-radius: 11px;
+}
+
+.event-text {
+  flex: 1;
+  text-align: right;
+  direction: rtl;
+}
+
+.event-title {
+  font-size: 3.6rem;
+  font-family: IRANSansX;
+  font-weight: 700;
+  color: #ff8c00;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.event-description {
+  font-size: 1.6rem;
+  font-family: IRANSans, IRANSansX;
+  font-weight: 400;
+  color: #000;
+  line-height: 2;
+  margin-bottom: 3.6rem;
+}
+
+.event-button {
+  padding: 0.8rem 2rem;
+  font-size: 1.4rem;
+  color: #fff;
+  background-color: #ff8c00;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 11rem;
+  height: 4.8rem;
+  padding: 0.4rem 1.6rem;
+}
+
+.event-button:hover {
+  background-color: #e67e00;
+}
+.event-blue-border {
+  height: 0.3rem;
+  background-color: #6d82ee;
+  width: 60%;
+  margin: 3.6rem 0;
+}

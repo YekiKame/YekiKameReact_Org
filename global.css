@@ -1,0 +1,162 @@
+@font-face {
+  font-family: IransansX;
+  src: url(/src/assets/fonts/IRANSansX-Medium.ttf);
+  src: url(/src/assets/fonts/IRANSansX-Regular.ttf);
+}
+
+* {
+  padding: 0%;
+  margin: 0%;
+  box-sizing: border-box;
+  --black: rgba(0, 0, 0, 1);
+  --blacka-24: rgba(0, 0, 0, 0.24);
+  --blacka-32: rgba(0, 0, 0, 0.32);
+  --blacka-56: rgba(0, 0, 0, 0.56);
+  --blacka-87: rgba(0, 0, 0, 0.87);
+  --lightprimarya-12: rgba(255, 148, 26, 0.12);
+  --lightprimarya-16: rgba(255, 148, 26, 0.16);
+  --lightprimarya-24: rgba(255, 148, 26, 0.24);
+  --lightprimarya-32: rgba(255, 148, 26, 0.32);
+  --lightprimarya-4: rgba(236, 19, 95, 0.04);
+  --lightprimarya-56: rgba(255, 148, 26, 0.56);
+  --lightprimarya-8: rgba(255, 148, 26, 0.08);
+  --lightprimarydark: rgba(204, 109, 0, 1);
+  --lightprimarylight: rgba(255, 172, 77, 1);
+  --lightprimaryorigin: rgba(255, 136, 0, 1);
+  --lightsecondarya-12: rgba(19, 55, 236, 0.12);
+  --lightsecondarya-16: rgba(19, 55, 236, 0.16);
+  --lightsecondarya-24: rgba(19, 55, 236, 0.24);
+  --lightsecondarya-32: rgba(19, 55, 236, 0.32);
+  --lightsecondarya-4: rgba(19, 55, 236, 0.04);
+  --lightsecondarya-56: rgba(19, 55, 236, 0.56);
+  --lightsecondarya-8: rgba(19, 55, 236, 0.08);
+  --lightsecondarydark: rgba(17, 46, 192, 1);
+  --lightsecondarylight: rgba(109, 130, 238, 1);
+  --lightsecondaryorigin: rgba(19, 55, 236, 1);
+  --lightsemanticerrora-12: rgba(236, 19, 19, 0.12);
+  --lightsemanticerrora-24: rgba(236, 19, 19, 0.24);
+  --lightsemanticerrora-8: rgba(236, 19, 19, 0.08);
+  --lightsemanticerrordark: rgba(192, 17, 17, 1);
+  --lightsemanticerrorlight: rgba(238, 63, 63, 1);
+  --lightsemanticerrororigin: rgba(236, 19, 19, 1);
+  --lightsemanticinfoa-12: rgba(17, 111, 192, 0.12);
+  --lightsemanticinfoa-24: rgba(17, 111, 192, 0.24);
+  --lightsemanticinfoa-8: rgba(17, 111, 192, 0.08);
+  --lightsemanticinfodark: rgba(17, 86, 146, 1);
+  --lightsemanticinfolight: rgba(19, 135, 236, 1);
+  --lightsemanticinfoorigin: rgba(17, 111, 192, 1);
+  --lightsemanticsuccessa-12: rgba(17, 146, 41, 0.12);
+  --lightsemanticsuccessa-24: rgba(17, 146, 41, 0.24);
+  --lightsemanticsuccessa-8: rgba(17, 146, 41, 0.08);
+  --lightsemanticsuccessdark: rgba(16, 101, 32, 1);
+  --lightsemanticsuccesslight: rgba(17, 192, 49, 1);
+  --lightsemanticsuccessorigin: rgba(17, 146, 41, 1);
+  --lightsemanticwarninga-12: rgba(236, 106, 19, 0.12);
+  --lightsemanticwarninga-24: rgba(236, 106, 19, 0.24);
+  --lightsemanticwarninga-8: rgba(236, 106, 19, 0.08);
+  --lightsemanticwarningdark: rgba(192, 87, 17, 1);
+  --lightsemanticwarninglight: rgba(238, 133, 63, 1);
+  --lightsemanticwarningorigin: rgba(236, 106, 19, 1);
+  --lightsurfacelevel-0: rgba(255, 255, 255, 1);
+  --lightsurfacelevel-1: rgba(250, 250, 250, 1);
+  --lightsurfacelevel-2: rgba(235, 235, 235, 1);
+  --transparent: rgba(255, 255, 255, 0);
+  --white: rgba(255, 255, 255, 1);
+  --whitea-10: rgba(255, 255, 255, 0.1);
+  font-family: Iransansx;
+}
+
+html {
+  /* Percentage of user's browser font-size setting */
+  font-size: 62.5%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+body {
+  overflow-x: hidden;
+  font-family: IransansX;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 2.6rem;
+  background-color: #fafafa;
+}
+
+h1 {
+  font-family: IransansX;
+  font-size: 5.6rem;
+  font-weight: 500;
+  line-height: 7 2rem;
+}
+h2 {
+  font-family: IransansX;
+  font-size: 4.8rem;
+  font-weight: 500;
+  line-height: 6.4rem;
+}
+h3 {
+  font-family: IransansX;
+  font-size: 3.2rem;
+  font-weight: 500;
+  line-height: 4.8rem;
+}
+h4 {
+  font-family: IransansX;
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 4rem;
+}
+h5 {
+  font-family: IransansX;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 3.6rem;
+}
+h6 {
+  font-family: IransansX;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 3.2rem;
+}
+
+::placeholder,
+button {
+  font-family: IransansX;
+  font-weight: 400;
+  line-height: 2.6rem;
+}
+
+/**************************/
+/* GENRAL REUSABLE COMPONENTS */
+/**************************/
+.container {
+  /* 1140px */
+  max-width: 120rem;
+  padding: 0 3.2rem;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  column-gap: 6.4rem;
+  row-gap: 9.6rem;
+
+  /* margin-bottom: 9.6rem; */
+}
+.grid--2-cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid--2-cols-3fr-5fr {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+.grid--3-cols {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--4-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+.grid--center-v {
+  align-items: center;
+}
