@@ -12,84 +12,89 @@
 }
 
 .modal-content {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 20px;
+  background-color: var(--lightsurfacelevel-0);
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.6rem;
+  gap: 2.4rem;
+  padding: 2.4rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 60rem;
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.15);
+}
+.modal-text{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
 }
 
 .modal-title {
   text-align: center;
-  font-size: 24px;
-  font-weight: bold;
+  color: var(--black);
 }
 
 .modal-subtitle {
   text-align: center;
-  color: #ff6600;
+  color: var(--lightprimarydark);
+  font-size: 1.6rem;
+  line-height: 4.4rem;
+  margin-top: 1.6rem;
 }
 
 .modal-description {
   text-align: center;
-  color: #555;
+  color:var(--black);
+  font-size: 1.4rem;
+  line-height: 3.2rem;
 }
-
-.form-group {
-  margin: 20px 0;
+.form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap:2.4rem;
 }
-
 .input-wrapper {
   display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
   align-items: center;
-  border: 1px solid #ff6600;
-  border-radius: 8px;
+  border: 0.14rem solid var(--lightprimaryorigin);
+  border-radius: .4rem;
+  padding: 8px 12px;
 }
 
 .input-prefix {
-  background-color: #ff6600;
-  color: #fff;
-  padding: 10px;
+  color:var(--lightprimaryorigin);
+  font-size: 1.4rem;
+  padding-left: 0.8rem;
 }
 
 .input {
   flex: 1;
   border: none;
-  padding: 10px;
+  font-size: 14px;
+  padding: 8px;
   outline: none;
 }
-
-.btn-primary {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  background-color: #ff6600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.input::placeholder{
+  direction: rtl;
+  position: absolute;
+  left:38rem;
+}
+.error-message{
+  color:var(--lightsemanticerrororigin);
 }
 
-.btn-primary:hover {
-  background-color: #e65a00;
-}
-
-.terms,
 .alternate-login,
 .register-link {
   text-align: center;
-  margin-top: 10px;
-  color: #777;
+  font-size: 1.4rem;
+  color:var(--black);
 }
 
-.link {
-  color: #ff6600;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.link-red {
-  color: red;
+.alternate-login .link-red {
+  color: var(--lightsemanticerrorlight);
   cursor: pointer;
 }

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styles from "./OTPModal.module.css";
-import Button from "../../shared/button/Button"
+import Button from "../../shared/button/Button";
 
-const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
+const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
   const [otp, setOtp] = useState(["", "", "", "", ""]);
   const [error, setError] = useState("");
-  const [timer, setTimer] = useState(119); // شروع تایمر از 1:59
+  const [timer, setTimer] = useState(119); // 1:59 minutes timer
   const [resendEnabled, setResendEnabled] = useState(false);
+  const navigate = useNavigate();
 
-  // مدیریت تغییر مقدار هر خانه OTP
+  // Handle OTP input change
   const handleChange = (e, index) => {
     const value = e.target.value;
     if (/^\d?$/.test(value)) {
@@ -17,13 +19,14 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
       newOtp[index] = value;
       setOtp(newOtp);
 
+      // Move to the next input automatically
       if (value && index < otp.length - 1) {
         document.getElementById(`otp-input-${index + 1}`).focus();
       }
     }
   };
 
-  // مدیریت کلید Backspace
+  // Handle backspace functionality
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace") {
       const newOtp = [...otp];
@@ -38,7 +41,14 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
     }
   };
 
-  // تأیید کد OTP
+  // Format timer display
+  const formatTimer = () => {
+    const minutes = Math.floor(timer / 60);
+    const seconds = timer % 60;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  // Handle OTP verification
   const handleVerifyOtp = async () => {
     const otpValue = otp.join("");
     setError("");
@@ -49,31 +59,39 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
     }
 
     const query = `
-      mutation VerifyOtp($phone: String!, $otp: Int!) {
-        verifyLoginOtp(phone: $phone, otp: $otp) {
+      mutation {
+        ${mode === "login" ? "verifyLoginOtp" : "verifyOtp"}(
+          phone: "${phoneNumber}", 
+          otp: ${otpValue}
+        ) {
           success
+          ${mode === "login" ? "token" : ""}
         }
       }
     `;
 
-    const variables = {
-      phone: phoneNumber,
-      otp: parseInt(otpValue, 10),
-    };
-
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/graphql/",
-        { query, variables },
+        { query },
         { headers: { "Content-Type": "application/json" } }
       );
 
-      const success = response.data?.data?.verifyLoginOtp?.success;
-      console.log("GraphQL Response: ", response.data);
+      const result =
+        mode === "login"
+          ? response.data?.data?.verifyLoginOtp
+          : response.data?.data?.verifyOtp;
 
-      if (success) {
-        alert("شما وارد شدید.");
-        onSubmit(otpValue);
+      if (result?.success) {
+        if (mode === "login" && result.token) {
+          sessionStorage.setItem("sessionToken", result.token); // Save token
+          navigate("/dashboard");// Navigate to dashboard
+          onClose(); 
+        } else if (mode === "signup") {
+          alert("شماره شما با موفقیت تأیید شد.");
+          onSubmit(otpValue);
+          onClose();
+        }
       } else {
         setError("کد تأیید نادرست است. لطفاً دوباره تلاش کنید.");
       }
@@ -82,7 +100,36 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
     }
   };
 
-  // تایمر برای دریافت مجدد کد
+  // Handle OTP resend
+  const handleResendCode = async () => {
+    setError("");
+    setTimer(119); // Reset timer
+    setResendEnabled(false);
+
+    const query = `
+      mutation {
+        ${mode === "login" ? "requestLoginOtp" : "requestOtp"}(phone: "${phoneNumber}") {
+          success
+        }
+      }
+    `;
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/graphql/",
+        { query },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (!response.data?.data?.requestLoginOtp?.success) {
+        setError("ارسال مجدد کد با مشکل مواجه شد.");
+      }
+    } catch (err) {
+      setError("مشکلی در ارتباط با سرور رخ داد.");
+    }
+  };
+
+  // Timer countdown logic
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
@@ -91,47 +138,6 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
       setResendEnabled(true);
     }
   }, [timer]);
-
-  const formatTimer = () => {
-    const minutes = Math.floor(timer / 60);
-    const seconds = timer % 60;
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
-
-  // ارسال مجدد کد OTP
-  const handleResendCode = async () => {
-    setError("");
-    setTimer(119); // ریست تایمر
-    setResendEnabled(false);
-
-    const query = `
-      mutation RequestOtp($phone: String!) {
-        requestLoginOtp(phone: $phone) {
-          success
-        }
-      }
-    `;
-
-    const variables = {
-      phone: phoneNumber,
-    };
-
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/graphql/",
-        { query, variables },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      const success = response.data?.data?.requestLoginOtp?.success;
-
-      if (!success) {
-        setError("ارسال مجدد کد با مشکل مواجه شد.");
-      }
-    } catch (err) {
-      setError("مشکلی در ارتباط با سرور رخ داد.");
-    }
-  };
 
   if (!isOpen) return null;
 
@@ -145,14 +151,10 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
         <p className={styles["modal-subtitle"]}>
           کد ارسال‌شده به {phoneNumber} را وارد کنید:
         </p>
-        <button
-          className={styles["edit-phone-link"]}
-          onClick={onClose}
-        >
+        <button className={styles["edit-phone-link"]} onClick={onClose}>
           ویرایش شماره موبایل
         </button>
 
-        {/* ورودی OTP */}
         <div className={styles["otp-input-container"]}>
           {otp.map((digit, index) => (
             <input
@@ -169,27 +171,25 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber }) => {
           ))}
         </div>
 
-        {/* تایمر و ارسال مجدد */}
         <div className={styles["resend-container"]}>
           {resendEnabled ? (
-            <button
-              onClick={handleResendCode}
-              className={styles["resend-button"]}
-            >
+            <button onClick={handleResendCode} className={styles["resend-button"]}>
               ارسال مجدد کد
             </button>
           ) : (
-            <span className="timerOTP">تا دریافت مجدد کد: {formatTimer()}</span>
+            <span className={styles["timer-text"]}>
+              تا دریافت مجدد کد: {formatTimer()}
+            </span>
           )}
         </div>
-        {/* نمایش خطا */}
+
         {error && <div className={styles["error-message"]}>{error}</div>}
-        {/* دکمه تأیید */}
+
         <Button
           text={"تأیید"}
           size="large"
           onClick={handleVerifyOtp}
-          customStyles={{width:"100%"}}
+          customStyles={{ width: "100%" }}
         />
       </div>
     </div>

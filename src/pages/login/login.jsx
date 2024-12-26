@@ -32,6 +32,7 @@ const Login = () => {
             mutation {
               loginUser(phone: "${values.phoneNumber}", password: "${values.password}") {
                 success
+                token
               }
             }
           `,
@@ -40,6 +41,8 @@ const Login = () => {
 
       const data = await response.json();
       if (data?.data?.loginUser?.success) {
+        const token = data.data.loginUser.token;
+        sessionStorage.setItem("sessionToken", token); // ذخیره توکن در سشن
         setMessage("ورود موفقیت‌آمیز بود!");
         setTimeout(() => navigate("/dashboard"), 1000); // هدایت به پنل کاربری
       } else {

@@ -10,11 +10,46 @@ const SignUp = () => {
   const [message, setMessage] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
   const [userPhoneNumber, setUserPhoneNumber] = useState(""); // ذخیره شماره تلفن
+  const [sessionToken, setSessionToken] = useState(""); // ذخیره توکن نشست
 
   const handleModalClose = () => setModalOpen(false);
 
-  const handleModalSubmit = (otp) => {
+  const handleModalSubmit = async (otp) => {
     console.log("کد OTP وارد شده:", otp);
+
+    const query = `
+      mutation {
+        verifyOtp(phone: "${userPhoneNumber}", otp: ${otp}) {
+          success
+          token
+        }
+      }
+    `;
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/graphql/",
+        { query },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = response.data;
+      if (data?.data?.verifyOtp?.success) {
+        setMessage("کد تأیید با موفقیت ثبت شد!");
+        setSessionToken(data.data.verifyOtp.token); // ذخیره توکن
+        console.log("توکن دریافت‌شده:", data.data.verifyOtp.token);
+        setModalOpen(false); // Close OTP Modal
+      } else {
+        setMessage("کد تأیید نادرست است. لطفاً دوباره تلاش کنید.");
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      setMessage("خطایی در تأیید کد رخ داده است.");
+    }
     setModalOpen(false);
   };
 
