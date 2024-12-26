@@ -13,37 +13,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # Set up Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '16'
 
+    # Install dependencies
     - name: Install dependencies
       run: npm ci
 
+    # Build React app
     - name: Build React app
       run: npm run build
 
-    - name: Deploy to VPS via SCP
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-        VPS_HOST: ${{ secrets.VPS_HOST }}
-        VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
+    # Configure SSH
+    - name: Configure SSH
       run: |
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "sudo apt-get update && sudo apt-get install -y nodejs npm nginx"
-        scp -r ./dist $VPS_USERNAME@$VPS_HOST:$VPS_DEPLOY_PATH
-
-    - name: Restart Nginx on VPS
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    # Deploy files to VPS
+    - name: Deploy to VPS
+      env:
         VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
         VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
       run: |
-        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "sudo systemctl restart nginx"
+        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "mkdir -p $VPS_DEPLOY_PATH"
+        scp -r ./dist $VPS_USERNAME@$VPS_HOST:$VPS_DEPLOY_PATH
+
+    # Reload Nginx
+    - name: Reload Nginx on VPS
+      run: |
+        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "
+          sudo nginx -t && sudo systemctl reload nginx
+        "
+      env:
+        VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
