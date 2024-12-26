@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import styles from "./Login.module.css";
+import styles from "./login.module.css";
 import Button from "../../components/shared/button/Button";
 import LoginModal from "../../components/modals/Login/LoginModal"; // مودال ارسال کد
 
