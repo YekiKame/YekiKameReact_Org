@@ -1,73 +1,57 @@
-name: React CI/CD
+name: Docker CI/CD for React App
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - main        # Trigger the workflow on push to the 'main' branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout repository
+    # Step 1: Check out the repository
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
-    # Step 2: Set up Node.js
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    # Step 2: Set up Docker Buildx for multi-platform builds
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Step 3: Log in to Docker Hub
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
       with:
-        node-version: '16'
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # Step 3: Install dependencies
-    - name: Install dependencies
-      run: npm ci
-
-    # Step 4: Build React app
-    - name: Build React app
-      run: npm run build
-
-    # Step 5: Configure SSH and Debug Key Setup
-    - name: Configure SSH and Debug Key
+    # Step 4: Build and push Docker image
+    - name: Build and push Docker image
       run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        echo "=== First few lines of the private key ==="
-        head -n 5 ~/.ssh/id_rsa
-        echo "=== End of debug ==="
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        docker build -t fivegunners/yekikame-react:latest .
+        docker push fivegunners/yekikame-react:latest
 
-    # Step 6: Debug SSH Connection
-    - name: Test SSH Connection
-      run: |
-        ssh -v -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "echo 'SSH connection successful'"
-      env:
-        VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-        VPS_HOST: ${{ secrets.VPS_HOST }}
-
-    # Step 7: Deploy files to VPS
-    - name: Deploy React App to VPS
-      env:
-        VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-        VPS_HOST: ${{ secrets.VPS_HOST }}
-        VPS_DEPLOY_PATH: ${{ secrets.VPS_DEPLOY_PATH }}
-      run: |
-        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "mkdir -p $VPS_DEPLOY_PATH"
-        scp -r ./dist $VPS_USERNAME@$VPS_HOST:$VPS_DEPLOY_PATH
-
-    # Step 8: Reload Nginx
-    - name: Reload Nginx on VPS
-      run: |
-        ssh -o StrictHostKeyChecking=no $VPS_USERNAME@$VPS_HOST "
-          sudo nginx -t && sudo systemctl reload nginx
-        "
-      env:
-        VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-        VPS_HOST: ${{ secrets.VPS_HOST }}
-
+    # Step 5: Deploy to VPS
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          cd /var/www/YekiKameReact_Org
+          if [ -d "YekiKameReact_Org" ]; then
+            echo "Project exists. Pulling latest changes..."
+            cd YekiKameReact_Org
+            git reset --hard  # Reset any local changes
+            git pull origin main  # Pull the latest code
+          else
+            echo "Project does not exist. Cloning repository..."
+            git clone https://github.com/YekiKame/YekiKameReact_Org.git YekiKameReact_Org
+            cd YekiKameReact_Org
+          fi
+          
+          # Deploy with Docker Compose
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d --force-recreate
