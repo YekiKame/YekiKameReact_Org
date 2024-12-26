@@ -31,12 +31,15 @@ jobs:
     - name: Build React app
       run: npm run build
 
-    # Step 5: Configure SSH
-    - name: Configure SSH
+    # Step 5: Configure SSH and Debug Key Setup
+    - name: Configure SSH and Debug Key
       run: |
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
+        echo "=== First few lines of the private key ==="
+        head -n 5 ~/.ssh/id_rsa
+        echo "=== End of debug ==="
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
@@ -67,3 +70,4 @@ jobs:
       env:
         VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
         VPS_HOST: ${{ secrets.VPS_HOST }}
+
