@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./userDashboard.module.css";
+import styles from "./userdashboard.module.css";
 import EditProfileTab from "../../components/userdashboard/editprofile/EditProfileTab";
 import MyEventsTab from "../../components/userdashboard/myevents/MyEventsTab";
 import CreateEventTab from "../../components/userdashboard/createevent/CreateEvent";
