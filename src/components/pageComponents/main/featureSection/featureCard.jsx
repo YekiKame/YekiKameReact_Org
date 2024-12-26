@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "./featureCard.module.css";
+import styles from "./featurecard.module.css";
 import "/global.css";
 
 const FeatureCard = ({ Icon, title, description }) => {

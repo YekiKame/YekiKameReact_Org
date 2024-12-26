@@ -37,7 +37,9 @@ const LoginModal = ({ onClose }) => {
         // باز کردن مودال OTP
         setIsOtpModalOpen(true);
       } else {
-        setError(message || "ارسال کد تأیید با مشکل مواجه شد. لطفاً دوباره تلاش کنید.");
+        setError(
+          message || "ارسال کد تأیید با مشکل مواجه شد. لطفاً دوباره تلاش کنید."
+        );
       }
     } catch (err) {
       console.error("Error during API call:", err);
@@ -103,12 +105,11 @@ const LoginModal = ({ onClose }) => {
 
           {/* دکمه تایید */}
           <Button
-          text={"تأیید و دریافت کد"}
-          size="large"
-          customStyles={{width:"100%"}}
-          onClick={handleSubmit}
+            text={"تأیید و دریافت کد"}
+            size="large"
+            customStyles={{ width: "100%" }}
+            onClick={handleSubmit}
           ></Button>
-
         </form>
         {/* نمایش پیام خطا */}
         {error && <p className={styles["error-message"]}>{error}</p>}
@@ -125,14 +126,12 @@ const LoginModal = ({ onClose }) => {
         </p>
 
         {/* لینک ثبت نام */}
-        <p className={styles["register-link"]}>
-          ثبت نام نکرده‌اید؟{" "}
-        </p>
+        <p className={styles["register-link"]}>ثبت نام نکرده‌اید؟ </p>
         <Button
           text={"ثبت نام"}
           variant="outline"
           size="large"
-          customStyles={{width:"100%"}}
+          customStyles={{ width: "100%" }}
           onClick={handleSignUp}
         ></Button>
       </div>

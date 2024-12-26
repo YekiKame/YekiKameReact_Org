@@ -1,7 +1,7 @@
 // HeroSection.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./heroSection.module.css";
+import styles from "./herosection.module.css";
 
 export const HeroSection = () => {
   const [searchTerm, setSearchTerm] = useState("");

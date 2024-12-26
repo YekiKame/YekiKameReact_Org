@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./createEvent.module.css";
+import styles from "./createevent.module.css";
 
 const EventSection = () => {
   return (

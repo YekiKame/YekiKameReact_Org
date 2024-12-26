@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./EditprofileTab.module.css";
+import styles from "./editprofiletab.module.css";
 
 const EditProfileTab = () => {
   const [formData, setFormData] = useState({

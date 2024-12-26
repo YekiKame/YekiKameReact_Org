@@ -1,6 +1,6 @@
 import React from "react";
 import "/global.css";
-import styles from "./featureSection.module.css";
+import styles from "./featuresection.module.css";
 import FeatureCard from "./featureCard.jsx";
 
 import ClockIcon from "../../../../assets/icons/ClockIcon.svg";

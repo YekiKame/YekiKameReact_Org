@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import styles from "./OTPModal.module.css";
+import styles from "./otpmodal.module.css";
 import Button from "../../shared/button/Button";
 
 const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
@@ -85,8 +85,8 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
       if (result?.success) {
         if (mode === "login" && result.token) {
           sessionStorage.setItem("sessionToken", result.token); // Save token
-          navigate("/dashboard");// Navigate to dashboard
-          onClose(); 
+          navigate("/dashboard"); // Navigate to dashboard
+          onClose();
         } else if (mode === "signup") {
           alert("شماره شما با موفقیت تأیید شد.");
           onSubmit(otpValue);
@@ -108,7 +108,9 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
 
     const query = `
       mutation {
-        ${mode === "login" ? "requestLoginOtp" : "requestOtp"}(phone: "${phoneNumber}") {
+        ${
+          mode === "login" ? "requestLoginOtp" : "requestOtp"
+        }(phone: "${phoneNumber}") {
           success
         }
       }
@@ -173,7 +175,10 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
 
         <div className={styles["resend-container"]}>
           {resendEnabled ? (
-            <button onClick={handleResendCode} className={styles["resend-button"]}>
+            <button
+              onClick={handleResendCode}
+              className={styles["resend-button"]}
+            >
               ارسال مجدد کد
             </button>
           ) : (
