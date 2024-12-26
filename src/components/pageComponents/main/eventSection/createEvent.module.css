@@ -54,11 +54,43 @@
 }
 
 .event-button:hover {
-  background-color: #e67e00;
+  background-color: #ffac4d;
 }
 .event-blue-border {
   height: 0.3rem;
   background-color: #6d82ee;
   width: 60%;
   margin: 3.6rem 0;
+}
+.container {
+  /* 1140px */
+  max-width: 120rem;
+  padding: 0 3.2rem;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  column-gap: 6.4rem;
+  row-gap: 9.6rem;
+
+  /* margin-bottom: 9.6rem; */
+}
+.grid--2-cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid--2-cols-3fr-5fr {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+.grid--3-cols {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--4-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+.grid--center-v {
+  align-items: center;
 }

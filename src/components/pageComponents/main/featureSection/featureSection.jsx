@@ -1,6 +1,6 @@
 import React from "react";
 import "/global.css";
-import "./featureSection.css";
+import styles from "./featuresection.module.css";
 import FeatureCard from "./featureCard.jsx";
 
 import ClockIcon from "../../../../assets/icons/ClockIcon.svg";
@@ -10,34 +10,44 @@ import FreeIcon from "../../../../assets/icons/FreeIcon.svg";
 
 const FeaturesSection = () => {
   return (
-    <div className="feature-section">
-      <div className="container feature-container grid grid--2-cols-3fr-5fr grid--center-v">
-        <div className="features-section">
-          <div className="features-header"></div>
-          <div className="features-grid">
+    <div className={styles["feature-section"]}>
+      <div
+        className={`${styles["container"]} ${styles["feature-container"]} ${styles["grid"]} ${styles["grid--2-cols-3fr-5fr"]} ${styles["grid--center-v"]}`}
+      >
+        <div className={styles["features-section"]}>
+          <div className={styles["features-header"]}></div>
+          <div className={styles["features-grid"]}>
             {/* second card */}
-            <div className="feature-card">
-              <div className="feature-icon">
-                <img src={LinkIcon} alt="Link Icon" className="svg-icon" />
+            <div className={styles["feature-card"]}>
+              <div className={styles["feature-icon"]}>
+                <img
+                  src={LinkIcon}
+                  alt="Link Icon"
+                  className={styles["svg-icon"]}
+                />
               </div>
-              <h3 className="feature-title">
+              <h3 className={styles["feature-title"]}>
                 ارتباط آسان و مستقیم با شرکت‌کنندگان
               </h3>
-              <p className="feature-description">
+              <p className={styles["feature-description"]}>
                 با ابزارهای ارتباطی می‌توانی به راحتی با اعضای تیم و
                 شرکت‌کنندگان گفتگو کنی و هماهنگی‌ها را انجام دهی.
               </p>
             </div>
             {/* end of the second card */}
             {/* first card */}
-            <div className="feature-card">
-              <div className="feature-icon">
-                <img src={ClockIcon} alt="clock Icon" className="svg-icon" />
+            <div className={styles["feature-card"]}>
+              <div className={styles["feature-icon"]}>
+                <img
+                  src={ClockIcon}
+                  alt="clock Icon"
+                  className={styles["svg-icon"]}
+                />
               </div>
-              <h3 className="feature-title">
+              <h3 className={styles["feature-title"]}>
                 پیدا کردن افراد مناسب در کمترین زمان
               </h3>
-              <p className="feature-description">
+              <p className={styles["feature-description"]}>
                 در چند دقیقه، افراد مورد نظر برای رویدادت را پیدا کن و وقتت را
                 کامل کن! نیازی به جستجوی طولانی نیست، ما اینجا هستیم تا کار را
                 برایت ساده کنیم.
@@ -46,24 +56,36 @@ const FeaturesSection = () => {
             {/* end of the first card */}
 
             {/* fourth card */}
-            <div className="feature-card">
-              <div className="feature-icon">
-                <img src={FreeIcon} alt="divercity Icon" className="svg-icon" />
+            <div className={styles["feature-card"]}>
+              <div className={styles["feature-icon"]}>
+                <img
+                  src={FreeIcon}
+                  alt="divercity Icon"
+                  className={styles["svg-icon"]}
+                />
               </div>
-              <h3 className="feature-title">کاملاً رایگان و بدون پیچیدگی</h3>
-              <p className="feature-description">
+              <h3 className={styles["feature-title"]}>
+                کاملاً رایگان و بدون پیچیدگی
+              </h3>
+              <p className={styles["feature-description"]}>
                 رویدادت را بدون هیچ هزینه‌ای ایجاد کن و از امکانات ساده و
                 کاربردی ما استفاده کن.
               </p>
             </div>
             {/* end of the fourth card */}
             {/* third card */}
-            <div className="feature-card">
-              <div className="feature-icon">
-                <img src={StarIcon} alt="divercity Icon" className="svg-icon" />
+            <div className={styles["feature-card"]}>
+              <div className={styles["feature-icon"]}>
+                <img
+                  src={StarIcon}
+                  alt="divercity Icon"
+                  className={styles["svg-icon"]}
+                />
               </div>
-              <h3 className="feature-title">مناسب برای هر نوع رویداد</h3>
-              <p className="feature-description">
+              <h3 className={styles["feature-title"]}>
+                مناسب برای هر نوع رویداد
+              </h3>
+              <p className={styles["feature-description"]}>
                 چه به دنبال یک تیم فوتبال باشی، چه گروه مطالعه، یا هر چیز دیگر،
                 'یکی کمه' با امکانات متنوع خود در خدمت توست.
               </p>
@@ -72,11 +94,11 @@ const FeaturesSection = () => {
           </div>
         </div>
         <div>
-          <h2 className="features-title">ویژگی‌های یکی کمه</h2>
-          <p className="features-subtitle">
+          <h2 className={styles["features-title"]}>ویژگی‌های یکی کمه</h2>
+          <p className={styles["features-subtitle"]}>
             ما تمام سعی خود را می‌کنیم تا بهترین خدمات را به مشتریان ارائه دهیم.
           </p>
-          <button className="features-button">مشاهده بیشتر</button>
+          <button className={styles["features-button"]}>مشاهده بیشتر</button>
         </div>
       </div>
     </div>

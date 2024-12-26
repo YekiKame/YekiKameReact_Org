@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./accordion.css";
+import styles from "./accordion.module.css";
 import PropTypes from "prop-types";
 
 const AccordionItem = ({ number, title, answer }) => {
@@ -10,12 +10,15 @@ const AccordionItem = ({ number, title, answer }) => {
   };
 
   return (
-    <div className={`item ${isOpen ? "open" : ""}`} onClick={toggleAccordion}>
-      <p className="number">{number}</p>
-      <p className="text">{title}</p>
+    <div
+      className={`${styles["item"]} ${isOpen ? styles["open"] : ""}`}
+      onClick={toggleAccordion}
+    >
+      <p className={styles["number"]}>{number}</p>
+      <p className={styles["text"]}>{title}</p>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className={`icon ${isOpen ? "rotate" : ""}`}
+        className={`${styles["icon"]} ${isOpen ? styles["rotate"] : ""}`}
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -28,7 +31,7 @@ const AccordionItem = ({ number, title, answer }) => {
         />
       </svg>
       {isOpen && (
-        <div className="hidden-box">
+        <div className={styles["hidden-box"]}>
           <p>{answer}</p>
         </div>
       )}
@@ -38,7 +41,7 @@ const AccordionItem = ({ number, title, answer }) => {
 
 const Accordion = ({ faqs, startNumber }) => {
   return (
-    <div className="accordion">
+    <div className={styles["accordion"]}>
       {faqs.map((faq, index) => (
         <AccordionItem
           key={index}

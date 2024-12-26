@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Button from "../../shared/button/Button"
-import styles from "./EventCard.module.css";
+import Button from "../../shared/button/Button";
+import styles from "./eventcard.module.css";
 
 // آیکون‌ها
 import TimerIcon from "../../../assets/icons/timer.svg";
@@ -13,8 +13,14 @@ import sportIcon from "../../../assets/icons/sport.svg";
 import cultureIcon from "../../../assets/icons/art.svg";
 import educationIcon from "../../../assets/icons/education.svg";
 
-const EventCard = ({ title, eventCategory, subscriberCount, startDate, neighborhood, image }) => {
-
+const EventCard = ({
+  title,
+  eventCategory,
+  subscriberCount,
+  startDate,
+  neighborhood,
+  image,
+}) => {
   const categoryIcons = {
     تفریحی: leisureIcon,
     ورزشی: sportIcon,
@@ -60,7 +66,7 @@ const EventCard = ({ title, eventCategory, subscriberCount, startDate, neighborh
             <span>{neighborhood}</span>
           </div>
           <div className={styles.infoItem}>
-          <img
+            <img
               src={categoryIcons[eventCategory]} // انتخاب آیکون بر اساس دسته‌بندی
               alt={eventCategory}
               className={styles.icon}
@@ -72,8 +78,14 @@ const EventCard = ({ title, eventCategory, subscriberCount, startDate, neighborh
         {/* دکمه عضویت */}
         <Button
           text={"عضو شدن"}
-          customStyles={{width:"100%"}}
-          icon={<img src={LeadingIcon} alt="آیکون عضویت" style={{ width:"4.8rem", height: "2.4rem",}} />}
+          customStyles={{ width: "100%" }}
+          icon={
+            <img
+              src={LeadingIcon}
+              alt="آیکون عضویت"
+              style={{ width: "4.8rem", height: "2.4rem" }}
+            />
+          }
         />
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import Accordion from "../../../common/accordion/accordion";
 import Pagination from "../../../common/pagination/pagination";
-import "./FAQSection.css";
+import styles from "./FAQsection.module.css";
 
 const GET_FAQS = gql`
   query {
@@ -34,7 +34,10 @@ const FAQSection = () => {
   );
 
   return (
-    <div className="FAQ-section-container">
+    <div className={styles["FAQ-section-container"]}>
+      <div>
+        <h3 className={styles["FAQ-header"]}>سوالات متدوال</h3>
+      </div>
       <Accordion
         faqs={currentFaqs}
         startNumber={(currentPage - 1) * faqsPerPage + 1} // Adjusted startNumber

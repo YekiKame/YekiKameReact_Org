@@ -1,16 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./featureCard.css";
+import styles from "./featurecard.module.css";
 import "/global.css";
 
 const FeatureCard = ({ Icon, title, description }) => {
   return (
-    <div className="feature-card">
-      <div className="feature-icon">
-        <Icon className="svg-icon" />
+    <div className={styles["feature-card"]}>
+      <div className={styles["feature-icon"]}>
+        <Icon className={styles["svg-icon"]} />
       </div>
-      <h3 className="feature-title">{title}</h3>
-      <p className="feature-description">{description}</p>
+      <h3 className={styles["feature-title"]}>{title}</h3>
+      <p className={styles["feature-description"]}>{description}</p>
     </div>
   );
 };

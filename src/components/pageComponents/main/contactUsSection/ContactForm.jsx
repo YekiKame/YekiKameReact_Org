@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Button from "../../../shared/button/Button";
-import styles from "./ContactUs.module.css";
+import styles from "./contactus.module.css";
 
 const ContactUs = () => {
   const [message, setMessage] = useState("");
