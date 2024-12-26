@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import Button from "../../components/shared/button/Button";
 import OTPModal from "../../components/modals/OTPModal/OTPModal";
-import styles from "./SignUp.module.css";
+import styles from "./signup.module.css";
 
 const SignUp = () => {
   const [message, setMessage] = useState("");
