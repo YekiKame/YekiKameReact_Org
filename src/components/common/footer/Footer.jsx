@@ -2,7 +2,7 @@ import React from "react";
 import "./footer.css"; 
 import SamandehiLogo from "../../../assets/icons/samandehi.svg"; // لوگوی ساماندهی
 import TelegramIcon from "../../../assets/icons/telegram.svg"; // آیکون تلگرام
-import InstagramIcon from "../../../assets/icons/instagram.svg"; // آیکون اینستاگرام
+import InstagramIcon from "../../../assets/icons/Instagram.svg"; // آیکون اینستاگرام
 import TwitterIcon from "../../../assets/icons/twitter.svg"; // آیکون توییتر
 
 const Footer = () => {
