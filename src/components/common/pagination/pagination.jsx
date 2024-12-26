@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./pagination.css";
+import styles from "./pagination.module.css";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const handlePageChange = (page) => {
@@ -10,11 +10,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="pagination">
-      <button className="btn" onClick={() => handlePageChange(currentPage - 1)}>
+    <div className={styles["pagination"]}>
+      <button
+        className={styles["btn"]}
+        onClick={() => handlePageChange(currentPage - 1)}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="btn-icon"
+          className={styles["btn-icon"]}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -31,8 +34,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <a
           key={index}
           href="#"
-          className={`page-link ${
-            currentPage === index + 1 ? "page-link--current" : ""
+          className={`${styles["page-link"]} ${
+            currentPage === index + 1 ? styles["page-link--current"] : ""
           }`}
           onClick={(e) => {
             e.preventDefault();
@@ -42,10 +45,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           {index + 1}
         </a>
       ))}
-      <button className="btn" onClick={() => handlePageChange(currentPage + 1)}>
+      <button
+        className={styles["btn"]}
+        onClick={() => handlePageChange(currentPage + 1)}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="btn-icon"
+          className={styles["btn-icon"]}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

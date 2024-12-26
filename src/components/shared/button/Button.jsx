@@ -19,7 +19,13 @@ const Button = ({
     ${styles[`button--${color}`]}
     ${styles[`button--${size}`]}
     ${disabled ? styles["button--disabled"] : ""}
-    ${styles[`button--elevation-${variant}-${size}-${disabled ? "disabled" : "normal"}`]}
+    ${
+      styles[
+        `button--elevation-${variant}-${size}-${
+          disabled ? "disabled" : "normal"
+        }`
+      ]
+    }
   `;
 
   return (
@@ -29,8 +35,10 @@ const Button = ({
       onClick={onClick}
       style={customStyles} // اعمال استایل‌های دلخواه به صورت inline
     >
-      {icon && <span className={styles["button__icon"]}>{icon}</span>} {/* نمایش آیکون */}
-      {text && <span className={styles["button__text"]}>{text}</span>} {/* نمایش متن */}
+      {icon && <span className={styles["button__icon"]}>{icon}</span>}{" "}
+      {/* نمایش آیکون */}
+      {text && <span className={styles["button__text"]}>{text}</span>}{" "}
+      {/* نمایش متن */}
     </button>
   );
 };

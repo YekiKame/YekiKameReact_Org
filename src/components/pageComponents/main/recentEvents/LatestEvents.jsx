@@ -1,103 +1,103 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EventCard from "../../../events/eventcard/EventCard";
-import styles from "./LatestEvents.module.css";
+import styles from "./latestEvents.module.css";
 import LeftArrow from "../../../../assets/icons/leftarrow.svg";
 import RightArrow from "../../../../assets/icons/rightarrow.svg";
 
 // داده‌های فیک برای نمایش ۵ کارت رویداد
 const dummyEvents = [
-    {
-      id: 1,
-      title: "پیاده‌روی گروهی",
-      eventCategory: "تفریحی",
-      subscriberCount: 23,
-      startDate: "2024-12-01T10:30:00",
-      neighborhood: "پارک ملت",
-      image: "/assets/images/Card.jpg",
-    },
-    {
-      id: 2,
-      title: "مسابقه دوچرخه‌سواری",
-      eventCategory: "ورزشی",
-      subscriberCount: 18,
-      startDate: "2024-12-02T11:00:00",
-      neighborhood: "ورزشگاه آزادی",
-      image: "/assets/images/card2.jpg",
-    },
-    {
-      id: 3,
-      title: "نمایشگاه کتاب",
-      eventCategory: "فرهنگی",
-      subscriberCount: 30,
-      startDate: "2024-12-03T14:00:00",
-      neighborhood: "نمایشگاه بین‌المللی",
-      image: "/assets/images/card3.jpg",
-    },
-    {
-      id: 4,
-      title: "مسابقه فوتبال محلی",
-      eventCategory: "ورزشی",
-      subscriberCount: 40,
-      startDate: "2024-12-04T16:30:00",
-      neighborhood: "زمین چمن محله",
-      image: "/assets/images/card4.jpg",
-    },
-    {
-      id: 5,
-      title: "کلاس آموزشی نقاشی",
-      eventCategory: "آموزشی",
-      subscriberCount: 15,
-      startDate: "2024-12-05T09:00:00",
-      neighborhood: "فرهنگسرای هنر",
-      image: "/assets/images/card5.jpg",
-    },
-    {
-      id: 6,
-      title: "پیاده‌روی گروهی",
-      eventCategory: "تفریحی",
-      subscriberCount: 23,
-      startDate: "2024-12-01T10:30:00",
-      neighborhood: "پارک ملت",
-      image: "/assets/images/Card.jpg",
-    },
-    {
-      id: 7,
-      title: "مسابقه دوچرخه‌سواری",
-      eventCategory: "ورزشی",
-      subscriberCount: 18,
-      startDate: "2024-12-02T11:00:00",
-      neighborhood: "ورزشگاه آزادی",
-      image: "/assets/images/card2.jpg",
-    },
-    {
-      id: 8,
-      title: "نمایشگاه کتاب",
-      eventCategory: "فرهنگی",
-      subscriberCount: 30,
-      startDate: "2024-12-03T14:00:00",
-      neighborhood: "نمایشگاه بین‌المللی",
-      image: "/assets/images/card3.jpg",
-    },
-    {
-      id: 9,
-      title: "مسابقه فوتبال محلی",
-      eventCategory: "ورزشی",
-      subscriberCount: 40,
-      startDate: "2024-12-04T16:30:00",
-      neighborhood: "زمین چمن محله",
-      image: "/assets/images/card4.jpg",
-    },
-    {
-      id: 10,
-      title: "کلاس آموزشی نقاشی",
-      eventCategory: "آموزشی",
-      subscriberCount: 15,
-      startDate: "2024-12-05T09:00:00",
-      neighborhood: "فرهنگسرای هنر",
-      image: "/assets/images/card5.jpg",
-    },
-  ];
+  {
+    id: 1,
+    title: "پیاده‌روی گروهی",
+    eventCategory: "تفریحی",
+    subscriberCount: 23,
+    startDate: "2024-12-01T10:30:00",
+    neighborhood: "پارک ملت",
+    image: "/assets/images/Card.jpg",
+  },
+  {
+    id: 2,
+    title: "مسابقه دوچرخه‌سواری",
+    eventCategory: "ورزشی",
+    subscriberCount: 18,
+    startDate: "2024-12-02T11:00:00",
+    neighborhood: "ورزشگاه آزادی",
+    image: "/assets/images/card2.jpg",
+  },
+  {
+    id: 3,
+    title: "نمایشگاه کتاب",
+    eventCategory: "فرهنگی",
+    subscriberCount: 30,
+    startDate: "2024-12-03T14:00:00",
+    neighborhood: "نمایشگاه بین‌المللی",
+    image: "/assets/images/card3.jpg",
+  },
+  {
+    id: 4,
+    title: "مسابقه فوتبال محلی",
+    eventCategory: "ورزشی",
+    subscriberCount: 40,
+    startDate: "2024-12-04T16:30:00",
+    neighborhood: "زمین چمن محله",
+    image: "/assets/images/card4.jpg",
+  },
+  {
+    id: 5,
+    title: "کلاس آموزشی نقاشی",
+    eventCategory: "آموزشی",
+    subscriberCount: 15,
+    startDate: "2024-12-05T09:00:00",
+    neighborhood: "فرهنگسرای هنر",
+    image: "/assets/images/card5.jpg",
+  },
+  {
+    id: 6,
+    title: "پیاده‌روی گروهی",
+    eventCategory: "تفریحی",
+    subscriberCount: 23,
+    startDate: "2024-12-01T10:30:00",
+    neighborhood: "پارک ملت",
+    image: "/assets/images/Card.jpg",
+  },
+  {
+    id: 7,
+    title: "مسابقه دوچرخه‌سواری",
+    eventCategory: "ورزشی",
+    subscriberCount: 18,
+    startDate: "2024-12-02T11:00:00",
+    neighborhood: "ورزشگاه آزادی",
+    image: "/assets/images/card2.jpg",
+  },
+  {
+    id: 8,
+    title: "نمایشگاه کتاب",
+    eventCategory: "فرهنگی",
+    subscriberCount: 30,
+    startDate: "2024-12-03T14:00:00",
+    neighborhood: "نمایشگاه بین‌المللی",
+    image: "/assets/images/card3.jpg",
+  },
+  {
+    id: 9,
+    title: "مسابقه فوتبال محلی",
+    eventCategory: "ورزشی",
+    subscriberCount: 40,
+    startDate: "2024-12-04T16:30:00",
+    neighborhood: "زمین چمن محله",
+    image: "/assets/images/card4.jpg",
+  },
+  {
+    id: 10,
+    title: "کلاس آموزشی نقاشی",
+    eventCategory: "آموزشی",
+    subscriberCount: 15,
+    startDate: "2024-12-05T09:00:00",
+    neighborhood: "فرهنگسرای هنر",
+    image: "/assets/images/card5.jpg",
+  },
+];
 //   const [events, setEvents] = useState([]);
 //   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -165,7 +165,7 @@ const LatestEvents = () => {
           <div
             className={styles.cardsContainer}
             style={{
-              transform: `translateX(${currentIndex * (36)}%)`, // حرکت به راست برای کارت‌های بعدی
+              transform: `translateX(${currentIndex * 36}%)`, // حرکت به راست برای کارت‌های بعدی
             }}
           >
             {dummyEvents.map((event, index) => (
@@ -190,8 +190,3 @@ const LatestEvents = () => {
 };
 
 export default LatestEvents;
-
-
-
-
-

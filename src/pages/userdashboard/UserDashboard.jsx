@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./UserDashboard.module.css";
+import styles from "./userDashboard.module.css";
 import EditProfileTab from "../../components/userdashboard/editprofile/EditProfileTab";
 import MyEventsTab from "../../components/userdashboard/myevents/MyEventsTab";
 import CreateEventTab from "../../components/userdashboard/createevent/CreateEvent";
@@ -38,60 +38,72 @@ const UserDashboard = () => {
     <div className={styles.dashboardcontainer}>
       <div className={styles["profile-menu"]}>
         {/* پروفایل */}
-          <div className={styles.profile}>
-            <div className={styles.name}>
-              <img
-                className={styles["vuesax-bold-profile"]}
-                alt="Profile Icon"
-                src={profileCircle}
-              />
-              <div className={styles.text}>
-                <div className={styles["text-wrapper"]}>نام کاربر</div>
-              </div>
+        <div className={styles.profile}>
+          <div className={styles.name}>
+            <img
+              className={styles["vuesax-bold-profile"]}
+              alt="Profile Icon"
+              src={profileCircle}
+            />
+            <div className={styles.text}>
+              <div className={styles["text-wrapper"]}>نام کاربر</div>
             </div>
           </div>
+        </div>
 
         {/* آیتم‌های منو */}
-          <div className={styles["menu-items"]}>
-            <div className={styles.items}>
-              {[
-                { id: "editProfile", label: "ویرایش اطلاعات", icon: editIcon },
-                { id: "myEvents", label: "رویدادهای من", icon: myEventsIcon },
-                { id: "createEvent", label: "ثبت رویداد جدید", icon: addEventIcon },
-                { id: "myComments", label: "نظرات و کامنت‌ها", icon: commentsIcon },
-                { id: "notifications", label: "اطلاعیه‌ها", icon: notificationsIcon },
-              ].map((tab) => (
-                <div
-                  key={tab.id}
-                  className={`${styles["profile-data"]} ${
-                    activeTab === tab.id ? styles.active : ""
-                  }`}
-                  onClick={() => setActiveTab(tab.id)}
-                >
-                  <img
-                    src={tab.icon}
-                    className={styles["icon-instance-node"]}
-                    alt={tab.label}
-                  />
-                  <div className={styles.div}>{tab.label}</div>
-                </div>
-              ))}
-
+        <div className={styles["menu-items"]}>
+          <div className={styles.items}>
+            {[
+              { id: "editProfile", label: "ویرایش اطلاعات", icon: editIcon },
+              { id: "myEvents", label: "رویدادهای من", icon: myEventsIcon },
+              {
+                id: "createEvent",
+                label: "ثبت رویداد جدید",
+                icon: addEventIcon,
+              },
+              {
+                id: "myComments",
+                label: "نظرات و کامنت‌ها",
+                icon: commentsIcon,
+              },
+              {
+                id: "notifications",
+                label: "اطلاعیه‌ها",
+                icon: notificationsIcon,
+              },
+            ].map((tab) => (
               <div
-                className={styles["profile-data-3"]}
-                onClick={() => alert("خروج از حساب")}
+                key={tab.id}
+                className={`${styles["profile-data"]} ${
+                  activeTab === tab.id ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab(tab.id)}
               >
                 <img
-                  src={logoutIcon}
+                  src={tab.icon}
                   className={styles["icon-instance-node"]}
-                  alt="خروج"
+                  alt={tab.label}
                 />
-                <div className={styles["text-wrapper-3"]}>خروج</div>
+                <div className={styles.div}>{tab.label}</div>
               </div>
+            ))}
+
+            <div
+              className={styles["profile-data-3"]}
+              onClick={() => alert("خروج از حساب")}
+            >
+              <img
+                src={logoutIcon}
+                className={styles["icon-instance-node"]}
+                alt="خروج"
+              />
+              <div className={styles["text-wrapper-3"]}>خروج</div>
             </div>
-         </div>
-    </div>
-        {/* محتوای اصلی */}
+          </div>
+        </div>
+      </div>
+      {/* محتوای اصلی */}
       <main className={styles["main-content"]}>{renderContent()}</main>
     </div>
   );

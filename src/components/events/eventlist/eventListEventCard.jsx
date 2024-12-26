@@ -1,5 +1,5 @@
 import React from "react";
-import "./EventListEventCard.css";
+import "./eventListEventCard.css";
 
 const EventListEventCard = () => {
   return (
