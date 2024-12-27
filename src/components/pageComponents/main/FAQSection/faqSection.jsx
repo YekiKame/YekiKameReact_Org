@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import Accordion from "../../../common/accordion/accordion.jsx";
 import Pagination from "../../../common/pagination/pagination.jsx";
-import styles from "./FAQsection.module.css";
+import styles from "./faqsection.module.css";
 
 const GET_FAQS = gql`
   query {
