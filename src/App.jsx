@@ -1,12 +1,12 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/home/Home";
-import UserDashboard from "./pages/userdashboard/UserDashboard";
-import SignUp from "./pages/signup/Signup";
-import Header from "./components/common/header/Header";
-import Notfound from "./pages/notfound/Notfound";
-import Footer from "./components/common/footer/Footer";
-import Login from "./pages/login/login";
+import Home from "./pages/home/home.jsx";
+import UserDashboard from "./pages/userdashboard/userDashboard.jsx";
+import SignUp from "./pages/signup/signUp.jsx";
+import Header from "./components/common/header/header.jsx";
+import Notfound from "./pages/notfound/notFound.jsx";
+import Footer from "./components/common/footer/footer.jsx";
+import Login from "./pages/login/login.jsx";
 
 import EventDetail from "./pages/eventDetail/eventDetail";
 

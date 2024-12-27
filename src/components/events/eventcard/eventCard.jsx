@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Button from "../../shared/button/Button";
+import Button from "../../shared/button/button";
 import styles from "./eventcard.module.css";
 
 // آیکون‌ها
