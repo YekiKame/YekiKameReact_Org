@@ -9,11 +9,12 @@ import styles from "./signup.module.css";
 const SignUp = () => {
   const [message, setMessage] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
-  const [userPhoneNumber, setUserPhoneNumber] = useState(""); // ذخیره شماره تلفن
-  const [sessionToken, setSessionToken] = useState(""); // ذخیره توکن نشست
+  const [userPhoneNumber, setUserPhoneNumber] = useState(""); 
+  const [sessionToken, setSessionToken] = useState(""); 
 
   const handleModalClose = () => setModalOpen(false);
 
+  // این تابع بعد از کلیک روی دکمه "تأیید" در OTPModal فراخوانی می‌شود
   const handleModalSubmit = async (otp) => {
     console.log("کد OTP وارد شده:", otp);
 
@@ -39,10 +40,11 @@ const SignUp = () => {
 
       const data = response.data;
       if (data?.data?.verifyOtp?.success) {
-        setMessage("کد تأیید با موفقیت ثبت شد!");
-        setSessionToken(data.data.verifyOtp.token); // ذخیره توکن
+        // کد OTP درست است
+        setMessage("ثبت نام شما با موفقیت انجام شد!");
+        setSessionToken(data.data.verifyOtp.token);
         console.log("توکن دریافت‌شده:", data.data.verifyOtp.token);
-        setModalOpen(false); // Close OTP Modal
+        setModalOpen(false); // بستن مودال OTP
       } else {
         setMessage("کد تأیید نادرست است. لطفاً دوباره تلاش کنید.");
       }
@@ -50,7 +52,9 @@ const SignUp = () => {
       console.error("Error verifying OTP:", error);
       setMessage("خطایی در تأیید کد رخ داده است.");
     }
-    setModalOpen(false);
+
+    // *** این فراخوانی را حذف کردیم تا اگر OTP غلط بود، مودال بسته نشود
+    // setModalOpen(false);
   };
 
   const handleSignup = async (values, { setSubmitting }) => {
@@ -76,10 +80,14 @@ const SignUp = () => {
       );
 
       const data = response.data;
+
       if (data?.data?.registerUser?.success) {
-        setMessage("ثبت نام با موفقیت انجام شد!");
-        setUserPhoneNumber(values.phoneNumber); // شماره تلفن ذخیره شود
-        setModalOpen(true); // باز کردن مودال
+        // در اینجا دیگر پیام موفقیت ثبت‌نام را ست نمی‌کنیم
+        // تا زمانی که کاربر OTP را درست وارد کند.
+        // setMessage("ثبت نام با موفقیت انجام شد!");
+
+        setUserPhoneNumber(values.phoneNumber); // ذخیره شماره تلفن
+        setModalOpen(true); // باز کردن مودال OTP
       } else {
         setMessage("خطایی رخ داده است. لطفاً دوباره تلاش کنید.");
       }
@@ -198,11 +206,13 @@ const SignUp = () => {
         </div>
       </div>
 
+      {/* حتماً حالت mode="signup" را پاس بدهید که در otpModal تشخیص داده شود */}
       <OTPModal
         isOpen={isModalOpen}
         onClose={handleModalClose}
         onSubmit={handleModalSubmit}
         phoneNumber={userPhoneNumber}
+        mode="signup"
       />
     </div>
   );
