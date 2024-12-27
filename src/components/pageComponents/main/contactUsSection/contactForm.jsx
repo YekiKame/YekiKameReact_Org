@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import Button from "../../../shared/button/button";
+import Button from "../../../shared/button/button.jsx";
 import styles from "./contactus.module.css";
 
 const ContactUs = () => {

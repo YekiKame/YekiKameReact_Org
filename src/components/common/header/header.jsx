@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./header.css"; // فایل استایل برای تنظیمات CSS
-import Button from "../../shared/button/button"; // کامپوننت دکمه
+import Button from "../../shared/button/button.jsx"; // کامپوننت دکمه
 import SearchIcon from "../../../assets/icons/search.svg"; // آیکون جستجو
 import LocationIcon from "../../../assets/icons/location.svg"; // آیکون لوکیشن
 import UserIcon from "../../../assets/icons/user-square.svg"; // آیکون کاربر
 import LoginIcon from "../../../assets/icons/login.svg";
 import Logo from "../../../assets/icons/logo.svg";
-import LoginModal from "../../modals/login/loginModal";
+import LoginModal from "../../modals/login/loginModal.jsx";
 
 const Header = ({ isLoggedIn, city = "تهران", pageState = "home" }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -7,8 +7,7 @@ import Header from "./components/common/header/header.jsx";
 import Notfound from "./pages/notfound/notFound.jsx";
 import Footer from "./components/common/footer/footer.jsx";
 import Login from "./pages/login/login.jsx";
-
-import EventDetail from "./pages/eventDetail/eventDetail";
+import EventDetail from "./pages/eventDetail/eventDetail.jsx";
 
 const App = () => {
   return (
