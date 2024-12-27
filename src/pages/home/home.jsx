@@ -5,7 +5,7 @@ import EventSection from "../../components/pageComponents/main/eventSection/crea
 import FeatureSection from "../../components/pageComponents/main/featureSection/featureSection.jsx";
 import FAQSection from "../../components/pageComponents/main/FAQSection/faqSection.jsx";
 import ContactForm from "../../components/pageComponents/main/contactUsSection/contactForm.jsx";
-import LatestEvents from "../../components/pageComponents/main/latestEvents/latestEvents.jsx";
+import LatestEvents from "../../components/pageComponents/main/latestevents/latestEvents.jsx";
 
 const HomePage = () => {
   return (

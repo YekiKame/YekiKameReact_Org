@@ -3,6 +3,7 @@ import styles from "./userdashboard.module.css";
 import EditProfileTab from "../../components/userdashboard/editprofile/editProfileTab.jsx";
 import MyEventsTab from "../../components/userdashboard/myevents/myEventsTab.jsx";
 import CreateEventTab from "../../components/userdashboard/createevent/createEvent.jsx";
+import Comments from "../../components/userdashboard/comments/comments.jsx";
 import Notifications from "../../components/userdashboard/notifications/notifications.jsx";
 
 import profileCircle from "../../assets/icons/profile-circle.svg";
