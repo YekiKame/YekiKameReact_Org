@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import Button from "../../components/shared/button/Button";
-import OTPModal from "../../components/modals/OTPModal/OTPModal";
+import Button from "../../components/shared/button/button.jsx";
+import OTPModal from "../../components/modals/OTPModal/otpModal.jsx";
 import styles from "./signup.module.css";
 
 const SignUp = () => {

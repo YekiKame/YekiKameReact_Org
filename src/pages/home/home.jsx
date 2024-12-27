@@ -1,11 +1,11 @@
 import React from "react";
 
-import HeroSection from "../../components/events/herosection/HeroSection";
-import EventSection from "../../components/pageComponents/main/eventSection/createEvent";
-import FeatureSection from "../../components/pageComponents/main/featureSection/featureSection";
-import FAQSection from "../../components/pageComponents/main/FAQSection/FAQSection";
-import ContactForm from "../../components/pageComponents/main/contactUsSection/ContactForm";
-import LatestEvents from "../../components/pageComponents/main/recentEvents/LatestEvents";
+import HeroSection from "../../components/events/herosection/heroSection.jsx";
+import EventSection from "../../components/pageComponents/main/eventSection/createEvent.jsx";
+import FeatureSection from "../../components/pageComponents/main/featureSection/featureSection.jsx";
+import FAQSection from "../../components/pageComponents/main/FAQSection/faqSection.jsx";
+import ContactForm from "../../components/pageComponents/main/contactUsSection/contactForm.jsx";
+import LatestEvents from "../../components/pageComponents/main/latestevents/latestEvents.jsx";
 
 const HomePage = () => {
   return (

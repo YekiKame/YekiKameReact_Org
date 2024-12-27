@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from "./otpmodal.module.css";
-import Button from "../../shared/button/Button";
+import Button from "../../shared/button/button.jsx";
 
 const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
   const [otp, setOtp] = useState(["", "", "", "", ""]);

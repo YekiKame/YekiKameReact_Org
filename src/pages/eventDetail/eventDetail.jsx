@@ -1,7 +1,7 @@
 import React from "react";
 
 // import EventCard from "../../components/events/eventcard/EventCard";
-import SideBar from "../../components/pageComponents/eventDetail/sidebar/eventSidebar";
+import SideBar from "../../components/pageComponents/eventDetail/sidebar/eventSidebar.jsx";
 
 const EventDetail = () => {
   return (

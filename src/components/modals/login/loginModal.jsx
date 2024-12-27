@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import OTPModal from "../OTPModal/OTPModal"; // مسیر مودال OTP
+import OTPModal from "../OTPModal/otpModal.jsx" // مسیر مودال OTP
 import styles from "./loginmodal.module.css"; // ماژول CSS
-import Button from "../../shared/button/Button";
+import Button from "../../shared/button/button.jsx";
 
 const LoginModal = ({ onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
