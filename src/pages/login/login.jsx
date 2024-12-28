@@ -3,8 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
-import Button from "../../components/shared/button/Button";
-import LoginModal from "../../components/modals/login/LoginModal.jsx"; // مودال ارسال کد
+import Button from "../../components/shared/button/button.jsx";
+import LoginModal from "../../components/modals/login/loginModal.jsx"; // مودال ارسال کد
 
 const Login = () => {
   const [message, setMessage] = useState("");

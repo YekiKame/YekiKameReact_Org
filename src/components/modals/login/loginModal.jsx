@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import OTPModal from "../OTPModal/OTPModal"; // مسیر مودال OTP
-import styles from "./loginmodal.module.css"; // ماژول CSS
-import Button from "../../shared/button/Button";
+
+import OTPModal from "../OTPModal/otpModal.jsx";
+import styles from "./loginmodal.module.css";
+ 
+
+import Button from "../../shared/button/button.jsx";
 
 const LoginModal = ({ onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false); // وضعیت باز بودن OTP
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -111,6 +114,7 @@ const LoginModal = ({ onClose }) => {
             onClick={handleSubmit}
           ></Button>
         </form>
+
         {/* نمایش پیام خطا */}
         {error && <p className={styles["error-message"]}>{error}</p>}
 
@@ -136,7 +140,7 @@ const LoginModal = ({ onClose }) => {
         ></Button>
       </div>
 
-      {/* نمایش مودال OTP */}
+      {/* نمایش مودال OTP - با حالت login */}
       {isOtpModalOpen && (
         <OTPModal
           isOpen={isOtpModalOpen}
@@ -145,12 +149,13 @@ const LoginModal = ({ onClose }) => {
             onClose();
           }}
           onSubmit={() => {
+            // پس از تأیید موفقیت‌آمیز کد OTP، این تابع اجرا می‌شود
             setIsOtpModalOpen(false);
             navigate("/dashboard");
             onClose();
           }}
           phoneNumber={phoneNumber}
-          mode="login" // حالت مودال را مشخص کنید
+          mode="login"
         />
       )}
     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from "./otpmodal.module.css";
-import Button from "../../shared/button/Button";
+import Button from "../../shared/button/button.jsx";
 
 const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
   const [otp, setOtp] = useState(["", "", "", "", ""]);
@@ -84,12 +84,18 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
 
       if (result?.success) {
         if (mode === "login" && result.token) {
-          sessionStorage.setItem("sessionToken", result.token); // Save token
-          navigate("/dashboard"); // Navigate to dashboard
+          // ذخیره توکن و هدایت به داشبورد
+          sessionStorage.setItem("sessionToken", result.token);
+          navigate("/dashboard");
           onClose();
         } else if (mode === "signup") {
+          // این پیام صرفاً اطلاع‌رسانی است
           alert("شماره شما با موفقیت تأیید شد.");
+          // والد (SignUp) خودش دوباره verifyOtp را هم صدا می‌زند (onSubmit)
+          // یا می‌توانید این خط را نگه دارید تا والدش هم لاجیک دیگری انجام دهد
           onSubmit(otpValue);
+
+          // بستن مودال
           onClose();
         }
       } else {
@@ -123,7 +129,12 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      if (!response.data?.data?.requestLoginOtp?.success) {
+      const requestResult =
+        mode === "login"
+          ? response.data?.data?.requestLoginOtp
+          : response.data?.data?.requestOtp;
+
+      if (!requestResult?.success) {
         setError("ارسال مجدد کد با مشکل مواجه شد.");
       }
     } catch (err) {

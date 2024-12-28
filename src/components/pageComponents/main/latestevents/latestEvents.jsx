@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EventCard from "../../../events/eventcard/EventCard";
+import EventCard from "../../../events/eventcard/eventCard.jsx";
 import styles from "./latestevents.module.css";
 import LeftArrow from "../../../../assets/icons/leftarrow.svg";
 import RightArrow from "../../../../assets/icons/rightarrow.svg";
