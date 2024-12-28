@@ -8,7 +8,8 @@ import Notfound from "./pages/notfound/Notfound";
 import Footer from "./components/common/footer/Footer";
 import Login from "./pages/login/login";
 
-import EventDetail from "./pages/eventDetail/eventDetail";
+import EventDetail from "./pages/eventDetail/eventdetail.jsx";
+import EventList from "./pages/eventList/eventlist.jsx";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/eventDetail" element={<EventDetail />} />
+        <Route path="/eventList" element={<EventList />} />
       </Routes>
       <Footer />
     </>

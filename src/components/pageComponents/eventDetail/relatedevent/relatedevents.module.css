@@ -1,0 +1,53 @@
+.latestEvents {
+  text-align: center;
+}
+
+.title {
+  color: var(--lightprimarydark);
+  font-size: 3.2rem;
+  font-weight: bold;
+  margin-top: 3.2rem;
+  line-height: 4.8rem;
+  margin-bottom: 4.8rem;
+  direction: rtl; /* اضافه کردن جهت راست به چپ */
+}
+
+.carousel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  margin: 0 10.8rem;
+  /* اضافه کردن جهت RTL */
+}
+
+.arrowButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 1;
+}
+
+.arrowButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cardsWrapper {
+  overflow: hidden;
+  width: 100%;
+}
+
+.cardsContainer {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card {
+  flex: 0 0 22%; /* عرض هر کارت */
+  box-sizing: border-box;
+  padding: 2.4rem;
+}

@@ -1,0 +1,44 @@
+/* .event-detail-container {
+  grid-template-columns: 750px 500px;
+  direction: ltr;
+  gap: 50px;
+  padding: 9.6rem 0;
+  margin: auto;
+}
+.grid {
+  display: grid;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+} 
+  */
+/*
+.event-detail-container {
+  display: grid;
+  grid-template-columns: 1000px 500px; 
+  gap: 50px;
+  margin: 100px auto;
+  width: fit-content; 
+  direction: ltr;
+  align-items: start;
+}
+*/
+.event-detail-container {
+  display: grid;
+  grid-template-columns: 1000px 500px; /* Main: 1000px, Sidebar: 500px */
+  gap: 50px; /* فاصله بین Main و Sidebar */
+  margin: 100px auto; /* فاصله از بالا و پایین */
+  width: fit-content; /* عرض متناسب با محتوای داخلی */
+  direction: ltr;
+  align-items: start; /* آیتم‌ها از بالا هم‌تراز می‌شوند */
+}
+.grid {
+  display: grid;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}

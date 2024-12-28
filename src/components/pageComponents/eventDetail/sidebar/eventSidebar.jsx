@@ -1,41 +1,60 @@
 import React from "react";
-import "./eventsideBar.module.css";
+import styles from "./eventsidebar.module.css";
 import sportIcon from "../../../../assets/icons/sport.svg";
 import TimerIcon from "../../../../assets/icons/timer.svg";
+import LocationIcon from "../../../../assets/icons/location2.svg";
 
 const SideBar = () => {
   return (
-    <div className="event-card">
-      <h1 className="event-title">بازی تنیس</h1>
-
-      <div className="event-details">
-        <div className="event-detail">
-          <span className="event-icon">
-            <img src={sportIcon}></img>
+    <div className={styles["event-card"]}>
+      <h1 className={styles["event-title"]}>بازی تنیس</h1>
+      <p className={styles["event-short-des"]}>
+        بازی تنیس مهیجی که ما برگزار میکنیم.
+      </p>
+      <div className={styles["event-details"]}>
+        <div className={styles["event-detail"]}>
+          <span className={styles["event-icon"]}>
+            <img
+              src={sportIcon}
+              alt="Sport Icon"
+              className={styles["event-image"]}
+            ></img>
           </span>
-          <span className="event-text">ورزشی</span>
+          <span className={styles["event-text"]}>ورزشی</span>
         </div>
 
-        <div className="event-detail">
-          <span className="event-icon">
-            <img src={TimerIcon}></img>
+        <div className={styles["event-detail"]}>
+          <span className={styles["event-icon"]}>
+            <img
+              src={TimerIcon}
+              alt="Timer Icon"
+              className={styles["event-image"]}
+            ></img>
           </span>
-          <span className="event-text">دوشنبه ۲۲ بهمن ۱۴۰۳ - ساعت ۲۲:۳۰</span>
+          <span className={styles["event-text"]}>
+            دوشنبه ۲۲ بهمن ۱۴۰۳ - ساعت ۲۲:۳۰
+          </span>
         </div>
-        {/* <a href="#" className="add-to-calendar">
+        {/* <a href="#" className={styles["add-to-calendar"]}>
           اضافه به تقویم
         </a> */}
 
-        <div className="event-detail">
-          <span className="event-icon">📍</span>
-          <span className="event-text">
+        <div className={styles["event-detail"]}>
+          <span className={styles["event-icon"]}>
+            <img
+              src={LocationIcon}
+              alt="Location Icon"
+              className={styles["event-image"]}
+            ></img>
+          </span>
+          <span className={styles["event-text"]}>
             تهران میدان رسالت خیابان هنگام خیابان دانشگاه علم و صنعت پلاک ۳۵
             واحد ۳
           </span>
         </div>
       </div>
 
-      <button className="event-button">شرکت در رویداد</button>
+      <button className={styles["event-button"]}>شرکت در رویداد</button>
     </div>
   );
 };
