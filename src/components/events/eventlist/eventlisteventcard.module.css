@@ -1,0 +1,21 @@
+.event-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: red;
+}
+.event-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  background-color: blue;
+}
+.event-info-image {
+}
+.event-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: yellow;
+}

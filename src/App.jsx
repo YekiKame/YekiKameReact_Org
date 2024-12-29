@@ -8,8 +8,8 @@ import Notfound from "./pages/notfound/Notfound";
 import Footer from "./components/common/footer/Footer";
 import Login from "./pages/login/login";
 
-import EventDetail from "./pages/eventDetail/eventdetail.jsx";
-import EventList from "./pages/eventList/eventlist.jsx";
+import EventDetail from "./pages/eventDetail/eventDetail.jsx";
+import EventList from "./pages/eventList/eventList.jsx";
 
 const App = () => {
   return (

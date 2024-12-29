@@ -12,9 +12,10 @@ import cultureIcon from "../../../../assets/icons/art.svg";
 import educationIcon from "../../../../assets/icons/education.svg";
 
 const Filter = () => {
+  // تنظیم حالت پیش‌فرض سوئیچ تاگل به روشن
   const [activeCategory, setActiveCategory] = useState(null);
   const [location, setLocation] = useState("");
-  const [hasImage, setHasImage] = useState(false); // State for toggle
+  const [hasImage, setHasImage] = useState(true); // حالت پیش‌فرض روشن
 
   const categories = [
     { id: 1, name: "ورزشی", icon: sportIcon },
@@ -29,76 +30,80 @@ const Filter = () => {
 
   const locations = ["تهران", "اصفهان", "شیراز", "مشهد", "تبریز"];
 
+  // فیلتر کردن مکان‌ها بر اساس ورودی کاربر
+  const filteredLocations = locations.filter((loc) => loc.startsWith(location));
+
   const handleToggleChange = () => {
     setHasImage((prev) => !prev);
   };
 
   return (
     <div className={styles["filter-container"]}>
-      {/* Categories Section */}
-      <div className={styles["categories"]}>
-        {categories.map((category) => (
-          <div
-            key={category.id}
-            className={`${styles["category-item"]} ${
-              activeCategory === category.id ? styles["active"] : ""
-            }`}
-            onClick={() => handleCategoryClick(category.id)}
-          >
-            <span className={styles["icon"]}>
-              <img src={category.icon} alt={`${category.name} icon`} />
-            </span>
-            <span className={styles["category-name"]}>{category.name}</span>
-          </div>
-        ))}
+      {/* فیلتر دسته‌ها */}
+      <div className={styles["filter-section"]}>
+        <h3 className={styles["section-title"]}>دسته</h3>
+        <div className={styles["categories"]}>
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              className={`${styles["category-item"]} ${
+                activeCategory === category.id ? styles["active"] : ""
+              }`}
+              onClick={() => handleCategoryClick(category.id)}
+            >
+              <span className={styles["icon"]}>
+                <img src={category.icon} alt={`${category.name} icon`} />
+              </span>
+              <span className={styles["category-name"]}>{category.name}</span>
+            </button>
+          ))}
+        </div>
+        <div className={styles["seperator-line"]}></div>
       </div>
 
-      {/* Location Section */}
-      <div className={styles["location"]}>
-        
-        <label htmlFor="location-input" className={styles["label"]}>
-          محل
-        </label>
-        <div className={styles["location-input-wrapper"]}>
+      {/* فیلتر محل */}
+      <div className={styles["filter-section"]}>
+        <h3 className={styles["section-title"]}>محل</h3>
+        <div className={styles["location-wrapper"]}>
           <img
             src={LocationIcon}
             alt="Location Icon"
-            className={styles["input-icon"]}
+            className={styles["location-icon"]}
           />
           <input
             type="text"
-            id="location-input"
-            list="locations"
+            list="filtered-locations"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="تعیین محل"
             className={styles["location-input"]}
+            id="location-input"
+            autoComplete="off"
           />
-          <datalist id="locations">
-            {locations.map((loc, index) => (
-              <option key={index} value={loc} />
-            ))}
-          </datalist>
         </div>
+        <datalist id="filtered-locations">
+          {filteredLocations.map((loc, index) => (
+            <option key={index} value={loc} />
+          ))}
+        </datalist>
+        <div className={styles["seperator-line"]}></div>
       </div>
 
-      {/* Event Status Toggle */}
-      <div className={styles["event-status"]}>
-        <label htmlFor="hasImage" className={styles["label"]}>
-          وضعیت رویداد
-        </label>
-        <div className={styles["toggle"]}>
-          <input
-            type="checkbox"
-            id="hasImage"
-            checked={hasImage}
-            onChange={handleToggleChange}
-            className={styles["toggle-input"]}
-          />
-          <label htmlFor="hasImage" className={styles["toggle-label"]}>
-            <span className={styles["slider"]}></span>
-          </label>
+      {/* فیلتر وضعیت رویداد */}
+      <div className={styles["filter-section"]}>
+        <h3 className={styles["section-title"]}>وضعیت رویداد</h3>
+        <div className={styles["toggle-wrapper"]}>
           <span className={styles["toggle-text"]}>عکس دار</span>
+          <label className={styles["toggle-label"]}>
+            <input
+              type="checkbox"
+              id="hasImage"
+              checked={hasImage}
+              onChange={handleToggleChange}
+              className={styles["toggle-input"]}
+            />
+            <span className={styles["toggle-switch"]}></span>
+          </label>
         </div>
       </div>
     </div>

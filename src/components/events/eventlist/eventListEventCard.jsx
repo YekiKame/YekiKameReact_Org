@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Button from "../../shared/button/button.jsx";
-import styles from "./eventlisteventcard.css";
+import styles from "./eventlisteventcard.module.css";
 
 // آیکون‌ها
 import TimerIcon from "../../../assets/icons/timer.svg";
@@ -28,56 +28,22 @@ const EventListEventCard = ({
   });
 
   return (
-    <div className={styles.eventCard}>
-      {/* تصویر */}
-      <div className={styles.picture}>
-        <img src={image} alt="Event" className={styles.image} />
+    <div className={styles["event-card"]}>
+      <div className={styles["event-info"]}>
+        <div className="event-info-text"></div>
+        <div className="event-info-image"></div>
       </div>
-
-      {/* محتوای کارت */}
-      <div className={styles.content}>
-        {/* نام رویداد */}
-        <div className={styles.eventName}>{title}</div>
-
-        {/* زمان و روز */}
-        <div className={styles.eventTime}>
-          <img src={TimerIcon} alt="زمان" className={styles.icon} />
-          <span>{`${formattedDate} ساعت ${formattedTime}`}</span>
-        </div>
-
-        {/* اطلاعات رویداد */}
-        <div className={styles.info}>
-          <div className={styles.infoItem}>
-            <img src={UserIcon} alt="اعضا" className={styles.icon} />
-            <span>{`${subscriberCount} نفر`}</span>
-          </div>
-          <div className={styles.infoItem}>
-            <img src={LocationIcon} alt="مکان" className={styles.icon} />
-            <span>{neighborhood}</span>
-          </div>
-          <div className={styles.infoItem}>
-            <img
-              src={eventCategory.icon}
-              alt={eventCategory.name}
-              className={styles.icon}
-            />
-            <span>{eventCategory.name}</span>
-          </div>
-        </div>
-
-        {/* دکمه عضویت */}
-        <Button
-          text={"عضو شدن"}
-          customStyles={{ width: "100%" }}
-          icon={
-            <img
-              src={LeadingIcon}
-              alt="آیکون عضویت"
-              style={{ width: "4.8rem", height: "2.4rem" }}
-            />
-          }
-        />
-      </div>
+      <Button
+        text={"عضو شدن"}
+        customStyles={{ width: "100%" }}
+        icon={
+          <img
+            src={LeadingIcon}
+            alt="آیکون عضویت"
+            style={{ width: "4.8rem", height: "2.4rem" }}
+          />
+        }
+      />
     </div>
   );
 };
