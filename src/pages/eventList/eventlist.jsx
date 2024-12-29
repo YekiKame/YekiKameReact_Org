@@ -7,6 +7,7 @@ import Main from "../../components/pageComponents/eventList/main/main.jsx";
 const EventDetail = () => {
   return (
     <div className={`${styles["grid"]} ${styles["event-detail-container"]}`}>
+      <Main />
       <Filter />
     </div>
   );
