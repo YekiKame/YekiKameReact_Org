@@ -3,21 +3,27 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: red;
+  /* background-color: red; */
   direction: rtl;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  max-height: 316px;
 }
 .event-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
-  background-color: blue;
+  /* background-color: blue; */
 }
 
 .event-info-text {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  background-color: yellow;
+  /* background-color: yellow; */
+}
+.event-info-image {
+  /* background-color: green; */
 }
 .enent-card-title {
   font-size: 2rem;
@@ -55,9 +61,10 @@
   width: 2.4rem;
 }
 .event-info-image img {
-  width: 100%;
-  height: 16rem;
+  width: 20rem;
+  height: 20rem;
   object-fit: cover;
+  border-radius: 8px;
 }
 .event-card-info-subinfo {
   display: flex;

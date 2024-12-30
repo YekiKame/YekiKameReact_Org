@@ -196,7 +196,7 @@ const dummyEvents = [
 ];
 const Main = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const EVENTS_PER_PAGE = 20;
+  const EVENTS_PER_PAGE = 10;
   const totalPages = Math.ceil(dummyEvents.length / EVENTS_PER_PAGE);
 
   const handlePageChange = (page) => {

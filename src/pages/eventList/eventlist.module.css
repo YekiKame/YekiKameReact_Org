@@ -1,12 +1,13 @@
 .event-detail-container {
   display: grid;
-  grid-template-columns: 1000px 400px;
+  grid-template-columns: 1fr 400px;
   gap: 50px;
   margin: 100px auto;
   width: fit-content;
   direction: ltr;
   align-items: start;
 }
+
 .grid {
   display: grid;
 }
