@@ -10,7 +10,7 @@
 
 .eventsContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(29.8rem, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   width: 100%;
   max-width: 120rem;
