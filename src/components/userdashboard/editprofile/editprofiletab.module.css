@@ -31,6 +31,14 @@
     width: 100%;
     border-radius: 0.4rem;
     border: 0.1rem solid var(--blacka-24);
+    padding: 1.2rem;
+}
+.input:focus,
+textarea:focus{
+  border-color: var(--lightprimaryorigin);
+  outline: none; /* حذف outline پیش‌فرض مرورگر */
+  outline: none; /* حذف outline پیش‌فرض مرورگر */
+  box-shadow: 0 0 4px rgba(255, 165, 0, 0.8); /* افکت سایه نارنجی (اختیاری) */
 }
 
 .input::placeholder {
