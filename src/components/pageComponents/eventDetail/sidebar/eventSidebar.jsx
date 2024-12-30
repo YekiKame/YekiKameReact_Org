@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./eventsidebar.module.css";
+import "./eventsidebar.module.css";
 import sportIcon from "../../../../assets/icons/sport.svg";
 import TimerIcon from "../../../../assets/icons/timer.svg";
 import LocationIcon from "../../../../assets/icons/location2.svg";

@@ -158,6 +158,10 @@
   border: 2px solid var(--lightprimaryorigin);
   color: var(--lightprimaryorigin);
 }
+.button--outline:hover{
+  background-color: var(--lightprimaryorigin);
+  color: var(--white);
+}
 
 /* حالت‌های غیرفعال */
 .button--disabled {

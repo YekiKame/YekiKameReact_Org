@@ -7,7 +7,7 @@
 }
 .main-content {
   flex: 1; /* استفاده از کل فضای باقی‌مانده */
-  background-color: var(--lightsurfacelevel-1); /* پس‌زمینه محتوای اصلی */
+  background-color: var(--lightsurfacelevel-0); /* پس‌زمینه محتوای اصلی */
   border-radius: 12px;
   padding: 16px; /* فاصله داخلی */
   box-shadow: 0 4px 8px var(--blacka-24); /* سایه برای زیبایی */
