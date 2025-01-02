@@ -43,6 +43,7 @@ const Login = () => {
       if (data?.data?.loginUser?.success) {
         const token = data.data.loginUser.token;
         sessionStorage.setItem("sessionToken", token); // ذخیره توکن در سشن
+        sessionStorage.setItem("userPhone", values.phoneNumber); //ذخیره شماره تلفن
         setMessage("ورود موفقیت‌آمیز بود!");
         setTimeout(() => navigate("/dashboard"), 1000); // هدایت به پنل کاربری
       } else {

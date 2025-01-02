@@ -86,6 +86,7 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
         if (mode === "login" && result.token) {
           // ذخیره توکن و هدایت به داشبورد
           sessionStorage.setItem("sessionToken", result.token);
+          sessionStorage.setItem("userPhone", phoneNumber); //ذخیره شماره کاربر
           navigate("/dashboard");
           onClose();
         } else if (mode === "signup") {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -13,6 +13,14 @@ import EyeIcon from "../../../assets/icons/eyedash.svg";
 import EyeSlashIcon from "../../../assets/icons/eyeslashdash.svg";
 
 const EditProfileTab = () => {
+  // 1) بررسی کنیم آیا در sessionStorage یا هر منبع دیگری شماره تلفن و توکن کاربر داریم:
+  const storedPhoneNumber = sessionStorage.getItem("userPhone") || "09123456789";
+  const storedToken = sessionStorage.getItem("sessionToken"); // اگر توکنی دارید
+
+  // پیام لاگ برای بررسی مقدار واقعی شماره و توکن
+  console.log("Debug >> storedPhoneNumber:", storedPhoneNumber);
+  console.log("Debug >> storedToken:", storedToken);
+
   const [initialValues, setInitialValues] = useState({
     fullName: "",
     phoneNumber: "",
@@ -29,23 +37,28 @@ const EditProfileTab = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        console.log("Debug >> Going to fetch user data with phone:", storedPhoneNumber);
+
         const query = `
           query {
-            getUserSession {
+            user(phone: "${storedPhoneNumber}") {
               phone
               email
               fullname
             }
           }
         `;
-
+        // اگر نیاز است هدر یا Authorization را هم بفرستید، در اینجا اضافه کنید
         const response = await axios.post(
           "http://127.0.0.1:8000/graphql/",
           { query },
           { headers: { "Content-Type": "application/json" } }
         );
 
-        const userData = response.data?.data?.getUserSession;
+        // پیام لاگ جهت دیدن پاسخ خام سرور
+        console.log("Debug >> fetchUserData response:", response.data);
+
+        const userData = response.data?.data?.user;
         if (userData) {
           setInitialValues({
             fullName: userData.fullname || "",
@@ -55,9 +68,14 @@ const EditProfileTab = () => {
             newPassword: "",
             confirmPassword: "",
           });
+        } else {
+          setMessage("کاربری با این شماره تلفن یافت نشد.");
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error(
+          "Error fetching user data (Debug):",
+          error.response?.data || error.message
+        );
         setMessage("خطایی در دریافت اطلاعات کاربر رخ داد.");
       } finally {
         setLoading(false);
@@ -65,8 +83,9 @@ const EditProfileTab = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [storedPhoneNumber]);
 
+  // Validation schema
   const validationSchema = Yup.object({
     fullName: Yup.string().optional(),
     email: Yup.string().email("ایمیل نامعتبر است").optional(),
@@ -84,10 +103,15 @@ const EditProfileTab = () => {
     ),
   });
 
+  // Submit handler
   const handleSubmit = async (values, { resetForm }) => {
     setMessage("");
+
+    // پیام لاگ برای بررسی اینکه کاربر چه چیزی وارد کرده است
+    console.log("Debug >> handleSubmit values:", values);
+
     try {
-      // Update Fullname
+      // UPDATE FULLNAME
       if (values.fullName) {
         const updateFullnameMutation = `
           mutation {
@@ -102,14 +126,42 @@ const EditProfileTab = () => {
           { query: updateFullnameMutation },
           { headers: { "Content-Type": "application/json" } }
         );
+        console.log("Debug >> updateFullname response:", fullnameResponse.data);
         const fullnameResult = fullnameResponse.data?.data?.updateFullname;
         if (!fullnameResult?.success) {
-          setMessage(fullnameResult?.message || "خطایی در به‌روزرسانی نام رخ داد.");
+          setMessage(
+            fullnameResult?.message || "خطایی در به‌روزرسانی نام رخ داد."
+          );
           return;
         }
       }
 
-      // Update Password
+      // UPDATE EMAIL
+      if (values.email) {
+        const updateEmailMutation = `
+          mutation {
+            updateEmail(phone: "${values.phoneNumber}", email: "${values.email}") {
+              success
+              message
+            }
+          }
+        `;
+        const emailResponse = await axios.post(
+          "http://127.0.0.1:8000/graphql/",
+          { query: updateEmailMutation },
+          { headers: { "Content-Type": "application/json" } }
+        );
+        console.log("Debug >> updateEmail response:", emailResponse.data);
+        const emailResult = emailResponse.data?.data?.updateEmail;
+        if (!emailResult?.success) {
+          setMessage(
+            emailResult?.message || "خطایی در به‌روزرسانی ایمیل رخ داد."
+          );
+          return;
+        }
+      }
+
+      // UPDATE PASSWORD
       if (values.oldPassword && values.newPassword) {
         const updatePasswordMutation = `
           mutation {
@@ -124,18 +176,22 @@ const EditProfileTab = () => {
           { query: updatePasswordMutation },
           { headers: { "Content-Type": "application/json" } }
         );
+        console.log("Debug >> updatePassword response:", passwordResponse.data);
         const passwordResult = passwordResponse.data?.data?.updatePassword;
         if (!passwordResult?.success) {
-          setMessage(passwordResult?.message || "خطایی در به‌روزرسانی رمز عبور رخ داد.");
+          setMessage(
+            passwordResult?.message ||
+              "خطایی در به‌روزرسانی رمز عبور رخ داد."
+          );
           return;
         }
       }
 
-      // Display success message
+      // اگر همه چیز موفق بود:
       setMessage("اطلاعات با موفقیت به‌روزرسانی شد!");
       resetForm();
     } catch (error) {
-      console.error("Error updating profile:", error.response?.data || error.message);
+      console.error("Error updating profile (Debug):", error.response?.data || error.message);
       setMessage("خطایی در ارتباط با سرور رخ داد.");
     }
   };
