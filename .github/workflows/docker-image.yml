@@ -32,46 +32,46 @@ jobs:
         docker push fivegunners/yekikame-react:latest
 
     # Step 5: Deploy to VPS
-    # - name: Deploy to VPS
-    #   uses: appleboy/ssh-action@v0.1.8
-    #   with:
-    #     host: ${{ secrets.VPS_HOST }}
-    #     username: ${{ secrets.VPS_USER }}
-    #     key: ${{ secrets.VPS_SSH_KEY }}
-    #     port: 22
-    #     script: |
-    #       cd /var/www/YekiKameReact_Org
-    #       if [ -d "YekiKameReact_Org" ]; then
-    #         echo "Project exists. Pulling latest changes..."
-    #         cd YekiKameReact_Org
-    #         git reset --hard  # Reset any local changes
-    #         git pull origin main  # Pull the latest code
-    #       else
-    #         echo "Project does not exist. Cloning repository..."
-    #         git clone https://github.com/YekiKame/YekiKameReact_Org.git YekiKameReact_Org
-    #         cd YekiKameReact_Org
-    #       fi
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: 22
+        script: |
+          cd /var/www/YekiKameReact_Org
+          if [ -d "YekiKameReact_Org" ]; then
+            echo "Project exists. Pulling latest changes..."
+            cd YekiKameReact_Org
+            git reset --hard  # Reset any local changes
+            git pull origin main  # Pull the latest code
+          else
+            echo "Project does not exist. Cloning repository..."
+            git clone https://github.com/YekiKame/YekiKameReact_Org.git YekiKameReact_Org
+            cd YekiKameReact_Org
+          fi
           
-    #       # Deploy with Docker Compose
-    #       docker-compose down
-    #       docker-compose pull
-    #       docker-compose up -d --force-recreate
+          # Deploy with Docker Compose
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d --force-recreate
 
-    - name: Deploy with sshpass
-      run: |
-        sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no root@95.217.8.192 <<EOF
-        cd /var/www/YekiKameReact_Org
-        if [ -d "YekiKameReact_Org" ]; then
-          echo "Project exists. Pulling latest changes..."
-          cd YekiKameReact_Org
-          git reset --hard
-          git pull origin main
-        else
-          echo "Project does not exist. Cloning repository..."
-          git clone https://github.com/YekiKame/YekiKameReact_Org.git YekiKameReact_Org
-          cd YekiKameReact_Org
-        fi
-        docker-compose down
-        docker-compose pull
-        docker-compose up -d --force-recreate
-        EOF
+    # - name: Deploy with sshpass
+    #   run: |
+    #     sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no root@95.217.8.192 <<EOF
+    #     cd /var/www/YekiKameReact_Org
+    #     if [ -d "YekiKameReact_Org" ]; then
+    #       echo "Project exists. Pulling latest changes..."
+    #       cd YekiKameReact_Org
+    #       git reset --hard
+    #       git pull origin main
+    #     else
+    #       echo "Project does not exist. Cloning repository..."
+    #       git clone https://github.com/YekiKame/YekiKameReact_Org.git YekiKameReact_Org
+    #       cd YekiKameReact_Org
+    #     fi
+    #     docker-compose down
+    #     docker-compose pull
+    #     docker-compose up -d --force-recreate
+    #     EOF
