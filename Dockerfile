@@ -1,4 +1,4 @@
-# Dockerfile for React Project
+# Dockerfile For React Project
 
 # Stage 1: Build the React application
 FROM node:alpine AS build
