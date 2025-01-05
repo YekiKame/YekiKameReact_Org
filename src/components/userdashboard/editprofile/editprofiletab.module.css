@@ -38,7 +38,7 @@ textarea:focus{
   border-color: var(--lightprimaryorigin);
   outline: none; /* حذف outline پیش‌فرض مرورگر */
   outline: none; /* حذف outline پیش‌فرض مرورگر */
-  box-shadow: 0 0 4px rgba(255, 165, 0, 0.8); /* افکت سایه نارنجی (اختیاری) */
+  box-shadow: 0 0 0.4rem rgba(255, 165, 0, 0.8); /* افکت سایه نارنجی (اختیاری) */
 }
 
 .input::placeholder {

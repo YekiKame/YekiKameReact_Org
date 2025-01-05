@@ -4,7 +4,6 @@ import axios from "axios";
 
 import OTPModal from "../OTPModal/otpModal.jsx";
 import styles from "./loginmodal.module.css";
- 
 
 import Button from "../../shared/button/button.jsx";
 

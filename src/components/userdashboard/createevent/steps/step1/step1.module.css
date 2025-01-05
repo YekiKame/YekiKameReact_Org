@@ -1,0 +1,68 @@
+.container {
+    margin: 0 auto;
+    padding: 0 7.2rem;
+    text-align: right;
+  }
+  
+  .title {
+    font-size: 2.4rem;
+    line-height: 3.6rem;
+    margin-bottom: 1.2rem;
+    color:var(--blacka-87);
+  }
+  
+  .description {
+    font-size: 1.4rem;
+    line-height: 3.6rem;
+    margin-bottom: 2rem;
+    color: var(--blacka-32);
+  }
+  
+  .formGroup {
+    margin-bottom: 2rem;
+  }
+  
+  .formfirstline{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .label {
+    display: block;
+    margin-bottom: 0.8rem;
+    font-size: 1.4rem;
+    color: var(--blacka-56);
+  }
+  
+  .input,
+  .select,
+  .textarea {
+    width: 100%;
+    min-width: 36rem;
+    padding: 1.2rem;
+    font-size: 1.4rem;
+    height: 5.6rem;
+    border: 0.1rem solid var(--blacka-32);
+    border-radius: 0.4rem;
+  }
+  
+  .textarea {
+    resize: none;
+    height: 8rem;
+  }
+  
+  .input:focus,
+  .select:focus,
+  .textarea:focus {
+    outline: none;
+    border-color:var(--lightprimarylight);
+    box-shadow: 0 0 0.4rem rgba(255, 165, 0, 0.8); /* افکت سایه نارنجی (اختیاری) */
+  }
+  
+  .error {
+    font-size: 1.2rem;
+    color: var(--lightsemanticerrororigin);
+    margin-top: 0.8rem;
+  }
+  

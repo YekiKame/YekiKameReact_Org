@@ -1,0 +1,22 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    margin:1.2rem;
+    padding:1.2rem;
+    background-color: var(--lightsurfacelevel-0);
+}
+.title{
+    font-size: 3.6rem;
+    line-height: 3.6rem;
+}
+.steps{
+    background-color: var(--lightsurfacelevel-0);
+}
+.navigation{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 3rem;
+    gap:2.4rem
+}

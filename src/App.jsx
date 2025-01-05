@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux"; // اضافه شده برای اتصال Redux
+import { store } from "./redux/store"; // Store فقط برای CreateEvent
 import Home from "./pages/home/Home";
 import UserDashboard from "./pages/userdashboard/UserDashboard";
 import SignUp from "./pages/signup/Signup";
@@ -7,13 +9,12 @@ import Header from "./components/common/header/Header";
 import Notfound from "./pages/notfound/Notfound";
 import Footer from "./components/common/footer/Footer";
 import Login from "./pages/login/login";
-
 import EventDetail from "./pages/eventDetail/eventDetail.jsx";
 import EventList from "./pages/eventList/eventList.jsx";
 
 const App = () => {
   return (
-    <>
+    <Provider store={store}>
       <Header />
       <Routes>
         <Route path="*" element={<Notfound />} />
@@ -25,7 +26,7 @@ const App = () => {
         <Route path="/eventList" element={<EventList />} />
       </Routes>
       <Footer />
-    </>
+    </Provider>
   );
 };
 
