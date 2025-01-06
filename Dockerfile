@@ -18,6 +18,9 @@ COPY . ./
 # Build the React application
 RUN npm run build
 
+# Verify build output
+RUN ls -l /app/build
+
 # Stage 2: Serve the application with Nginx
 FROM nginx:alpine
 
