@@ -49,7 +49,7 @@ export const HeroSection = () => {
         <form className={styles.searchForm} onSubmit={handleSearch}>
           <div className={styles.searchContainer}>
             <img
-              src="../../../assets/icons/search.svg"
+              src="./assets/icons/search.svg"
               alt="search icon"
               className={styles.searchIcon}
             />
