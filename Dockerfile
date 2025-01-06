@@ -19,7 +19,7 @@ COPY . ./
 RUN npm run build
 
 # Verify build output
-RUN ls -l /app/build
+RUN ls -l /app/dist
 
 # Stage 2: Serve the application with Nginx
 FROM nginx:alpine
@@ -28,7 +28,14 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the built files from the previous stage
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
+
 
 # Expose port 80
 EXPOSE 80
