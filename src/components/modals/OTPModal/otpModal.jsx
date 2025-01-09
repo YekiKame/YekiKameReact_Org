@@ -72,7 +72,7 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
 
     try {
       const response = await axios.post(
-        "http://95.217.8.192:8000/graphql/",
+        "http://127.0.0.1:8000/graphql/",
         { query },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -86,6 +86,7 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
         if (mode === "login" && result.token) {
           // ذخیره توکن و هدایت به داشبورد
           sessionStorage.setItem("sessionToken", result.token);
+          sessionStorage.setItem("userPhone", phoneNumber); //ذخیره شماره کاربر
           navigate("/dashboard");
           onClose();
         } else if (mode === "signup") {

@@ -24,7 +24,7 @@ const Login = () => {
   // تابع ورود کاربر
   const handleLogin = async (values, { setSubmitting }) => {
     try {
-      const response = await fetch("http://95.217.8.192:8000/graphql/", {
+      const response = await fetch("http://127.0.0.1:8000/graphql/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -43,6 +43,7 @@ const Login = () => {
       if (data?.data?.loginUser?.success) {
         const token = data.data.loginUser.token;
         sessionStorage.setItem("sessionToken", token); // ذخیره توکن در سشن
+        sessionStorage.setItem("userPhone", values.phoneNumber); //ذخیره شماره تلفن
         setMessage("ورود موفقیت‌آمیز بود!");
         setTimeout(() => navigate("/dashboard"), 1000); // هدایت به پنل کاربری
       } else {

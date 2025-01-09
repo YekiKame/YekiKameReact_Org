@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./createevent.module.css";
-import PersonUsingPhone from "../../../src/assets/images/createevent.png";
-
+import boywithphone from "../../../../assets/images/createevent.png";
 const EventSection = () => {
   return (
     <div className={styles["event-section"]}>
@@ -23,7 +22,7 @@ const EventSection = () => {
         </div>
         <div className={styles["event-image"]}>
           <img
-            src={PersonUsingPhone}
+            src={boywithphone}
             alt="Person using phone"
             className={styles["event-image"]}
           />

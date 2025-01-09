@@ -1,0 +1,75 @@
+.event-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  /* background-color: red; */
+  direction: rtl;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  max-height: 316px;
+  min-width: 470px;
+  gap: 20px;
+}
+.event-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  /* background-color: blue; */
+}
+
+.event-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* background-color: yellow; */
+}
+.event-info-image {
+  /* background-color: green; */
+}
+.enent-card-title {
+  font-size: 2rem;
+  line-height: 3.6rem;
+  direction: rtl;
+  text-align: right;
+  font-weight: bold;
+}
+.infoItem {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  align-items: center;
+  font-size: 1.2rem;
+}
+.info {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 1.6rem;
+}
+.eventTime {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  flex-direction: row;
+  gap: 0.8rem;
+}
+
+.eventTime .icon {
+  width: 2.4rem;
+}
+.infoItem .icon {
+  width: 2.4rem;
+}
+.event-info-image img {
+  width: 20rem;
+  height: 20rem;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.event-card-info-subinfo {
+  display: flex;
+  direction: rtl;
+  gap: 10px;
+}

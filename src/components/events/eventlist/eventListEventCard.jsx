@@ -1,15 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Button from "../../shared/button/button.jsx";
-import styles from "./eventlisteventcard.css";
+import styles from "./eventlisteventcard.module.css";
+import { useNavigate } from "react-router-dom";
 
-// آیکون‌ها
+import NoPhoto from "../../../assets/images/NoPhoto.jpg";
+
 import TimerIcon from "../../../assets/icons/timer.svg";
 import UserIcon from "../../../assets/icons/user2.svg";
 import LocationIcon from "../../../assets/icons/location2.svg";
 import LeadingIcon from "../../../assets/icons/leading-icon.svg";
-
+import leisureIcon from "../../../assets/icons/entertainment.svg";
+import sportIcon from "../../../assets/icons/sport.svg";
+import cultureIcon from "../../../assets/icons/art.svg";
+import educationIcon from "../../../assets/icons/education.svg";
+import gameIcon from "../../../assets/icons/education.svg";
 const EventListEventCard = ({
+  id,
   title,
   eventCategory,
   subscriberCount,
@@ -17,7 +24,26 @@ const EventListEventCard = ({
   neighborhood,
   image,
 }) => {
-  // فرمت کردن تاریخ و زمان
+  const navigate = useNavigate();
+  const categoryIcons = {
+    //   تفریحی: leisureIcon,
+    //   ورزشی: sportIcon,
+    //   فرهنگی: cultureIcon,
+    //   آموزشی: educationIcon,
+    // };
+    ENTERTAINMENT: leisureIcon,
+    SPORT: sportIcon,
+    SOCIAL: cultureIcon,
+    EDUCATION: educationIcon,
+    GAME: gameIcon,
+  };
+  const categoryNames = {
+    ENTERTAINMENT: "تفریحی",
+    SPORT: "ورزشی",
+    SOCIAL: "فرهنگی",
+    EDUCATION: "آموزشی",
+    GAME: "بازی و سرگرمی",
+  };
   const eventDate = new Date(startDate);
   const formattedDate = eventDate.toLocaleDateString("fa-IR", {
     weekday: "long",
@@ -26,68 +52,63 @@ const EventListEventCard = ({
     hour: "2-digit",
     minute: "2-digit",
   });
+  const handleJoinClick = () => {
+    navigate(`/eventdetail/${id}`);
+  };
 
   return (
-    <div className={styles.eventCard}>
-      {/* تصویر */}
-      <div className={styles.picture}>
-        <img src={image} alt="Event" className={styles.image} />
-      </div>
-
-      {/* محتوای کارت */}
-      <div className={styles.content}>
-        {/* نام رویداد */}
-        <div className={styles.eventName}>{title}</div>
-
-        {/* زمان و روز */}
-        <div className={styles.eventTime}>
-          <img src={TimerIcon} alt="زمان" className={styles.icon} />
-          <span>{`${formattedDate} ساعت ${formattedTime}`}</span>
-        </div>
-
-        {/* اطلاعات رویداد */}
-        <div className={styles.info}>
-          <div className={styles.infoItem}>
-            <img src={UserIcon} alt="اعضا" className={styles.icon} />
-            <span>{`${subscriberCount} نفر`}</span>
+    <div className={styles["event-card"]}>
+      <div className={styles["event-info"]}>
+        <div className={styles["event-info-text"]}>
+          <div className={styles["enent-card-title"]}>{title}</div>
+          <div className={styles["eventTime"]}>
+            <img src={TimerIcon} alt="زمان" className={styles["icon"]} />
+            <span>{`${formattedDate} ساعت ${formattedTime}`}</span>
           </div>
-          <div className={styles.infoItem}>
-            <img src={LocationIcon} alt="مکان" className={styles.icon} />
-            <span>{neighborhood}</span>
-          </div>
-          <div className={styles.infoItem}>
+          <div className={styles["infoItem"]}>
             <img
-              src={eventCategory.icon}
-              alt={eventCategory.name}
-              className={styles.icon}
+              src={categoryIcons[eventCategory]} // انتخاب آیکون بر اساس دسته‌بندی
+              alt={eventCategory}
+              className={styles["icon"]}
             />
-            <span>{eventCategory.name}</span>
+            <div>{categoryNames[eventCategory]}</div>
+          </div>
+          <div className={styles["event-card-info-subinfo"]}>
+            <div className={styles["infoItem"]}>
+              <img src={LocationIcon} alt="مکان" className={styles["icon"]} />
+              <span>{neighborhood}</span>
+            </div>
+            <div className={styles["infoItem"]}>
+              <img src={UserIcon} alt="اعضا" className={styles["icon"]} />
+              <span>{`${subscriberCount} نفر`}</span>
+            </div>
           </div>
         </div>
 
-        {/* دکمه عضویت */}
-        <Button
-          text={"عضو شدن"}
-          customStyles={{ width: "100%" }}
-          icon={
-            <img
-              src={LeadingIcon}
-              alt="آیکون عضویت"
-              style={{ width: "4.8rem", height: "2.4rem" }}
-            />
-          }
-        />
+        <div className={styles["event-info-image"]}>
+          <img src={image || NoPhoto} alt="Event" className={styles["image"]} />
+        </div>
       </div>
+      <Button
+        text={"عضو شدن"}
+        customStyles={{ width: "100%" }}
+        icon={
+          <img
+            src={LeadingIcon}
+            alt="آیکون عضویت"
+            style={{ width: "4.8rem", height: "2.4rem" }}
+          />
+        }
+        onClick={handleJoinClick}
+      />
     </div>
   );
 };
 
 EventListEventCard.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  eventCategory: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired,
-  }).isRequired,
+  eventCategory: PropTypes.string.isRequired,
   subscriberCount: PropTypes.number.isRequired,
   startDate: PropTypes.string.isRequired,
   neighborhood: PropTypes.string.isRequired,

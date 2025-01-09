@@ -1,0 +1,218 @@
+.page-container {
+  background-color: #eee;
+  padding: 75px 3.2rem;
+  margin: 0;
+}
+
+.about-container {
+  max-width: 120rem;
+  margin: 0 auto;
+}
+
+.introduction {
+  margin: 0 auto;
+  margin-bottom: 75px;
+  display: flex;
+  gap: 20px;
+}
+
+.introduction img {
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
+  width: 750px;
+  height: 750px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.introduction text {
+  margin: 0 auto;
+}
+
+.introduction h1 {
+  margin-bottom: 30px;
+  color: #ff7f50;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* بخش اول - معرفی */
+.intro-section {
+  margin-bottom: 4rem;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+.intro-text {
+  text-align: center;
+}
+
+/* بخش دوم - ویژگی‌ها */
+.features-section {
+  margin-bottom: 7rem;
+  text-align: center;
+}
+
+.features-section-header {
+  margin: 0 auto;
+  margin-bottom: 35px;
+  color: #ff7f50;
+}
+
+.features-section-header h2 {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.feature-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  align-items: center;
+}
+
+.feature-row.reverse {
+  direction: rtl;
+}
+
+.feature-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feature-content h2 {
+  margin-bottom: 25px;
+}
+
+.feature-image {
+  justify-self: center;
+}
+
+.feature-image img {
+  width: 200px;
+  height: 200px;
+}
+
+/* بخش سوم - تیم */
+.team-section {
+  text-align: center;
+}
+
+.team-section h2 {
+  color: #ff7f50;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.team-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background-color: #ff941a14;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.member-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.member-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .introduction img {
+    width: 600px;
+    height: 600px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .introduction img {
+    width: 500px;
+    height: 500px;
+  }
+  .feature-image img {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 992px) {
+  .introduction {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .introduction img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+  }
+
+  .text {
+    width: 100%;
+    text-align: center;
+  }
+  .feature-image img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 75px 1.6rem;
+  }
+
+  .introduction img {
+    max-width: 400px;
+  }
+
+  .feature-row {
+    grid-template-columns: 1fr;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+  .feature-image img {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  .introduction img {
+    max-width: 300px;
+  }
+  .feature-image img {
+    width: 90px;
+    height: 90px;
+  }
+}

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // برای هدایت کاربر
 import styles from "./userdashboard.module.css";
 import EditProfileTab from "../../components/userdashboard/editprofile/editProfileTab.jsx";
 import MyEventsTab from "../../components/userdashboard/myevents/myEventsTab.jsx";
@@ -16,6 +18,60 @@ import logoutIcon from "../../assets/icons/logout.svg";
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("editProfile");
+  const [userName, setUserName] = useState("نام کاربر");
+  const storedPhoneNumber = sessionStorage.getItem("userPhone");
+  const storedToken = sessionStorage.getItem("sessionToken");
+  const navigate = useNavigate(); // استفاده از useNavigate برای هدایت کاربر
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (!storedPhoneNumber) {
+        setUserName("کاربر ناشناس");
+        return;
+      }
+
+      const query = `
+        query {
+          user(phone: "${storedPhoneNumber}") {
+            fullname
+          }
+        }
+      `;
+
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8000/graphql/",
+          { query },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const userData = response.data?.data?.user;
+        if (userData && userData.fullname) {
+          setUserName(userData.fullname);
+        } else {
+          setUserName("کاربر ناشناس");
+        }
+      } catch (error) {
+        console.error("Error fetching user name:", error);
+        setUserName("خطا در واکشی نام کاربر");
+      }
+    };
+
+    fetchUserName();
+  }, [storedPhoneNumber]);
+
+  const handleLogout = () => {
+    // حذف اطلاعات از sessionStorage
+    sessionStorage.removeItem("userPhone");
+    sessionStorage.removeItem("sessionToken");
+
+    // هدایت کاربر به صفحه ورود
+    navigate("/login"); // مسیر صفحه ورود را جایگزین کنید
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -37,7 +93,6 @@ const UserDashboard = () => {
   return (
     <div className={styles.dashboardcontainer}>
       <div className={styles["profile-menu"]}>
-        {/* پروفایل */}
         <div className={styles.profile}>
           <div className={styles.name}>
             <img
@@ -46,12 +101,11 @@ const UserDashboard = () => {
               src={profileCircle}
             />
             <div className={styles.text}>
-              <div className={styles["text-wrapper"]}>نام کاربر</div>
+              <div className={styles["text-wrapper"]}>{userName}</div>
             </div>
           </div>
         </div>
 
-        {/* آیتم‌های منو */}
         <div className={styles["menu-items"]}>
           <div className={styles.items}>
             {[
@@ -91,7 +145,7 @@ const UserDashboard = () => {
 
             <div
               className={styles["profile-data-3"]}
-              onClick={() => alert("خروج از حساب")}
+              onClick={handleLogout} // متصل کردن به تابع handleLogout
             >
               <img
                 src={logoutIcon}
@@ -103,7 +157,6 @@ const UserDashboard = () => {
           </div>
         </div>
       </div>
-      {/* محتوای اصلی */}
       <main className={styles["main-content"]}>{renderContent()}</main>
     </div>
   );

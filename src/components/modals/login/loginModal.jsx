@@ -4,7 +4,6 @@ import axios from "axios";
 
 import OTPModal from "../OTPModal/otpModal.jsx";
 import styles from "./loginmodal.module.css";
- 
 
 import Button from "../../shared/button/button.jsx";
 
@@ -29,7 +28,7 @@ const LoginModal = ({ onClose }) => {
 
     try {
       const response = await axios.post(
-        "http://95.217.8.192:8000/graphql/",
+        "http://127.0.0.1:8000/graphql/",
         { query },
         { headers: { "Content-Type": "application/json" } }
       );
