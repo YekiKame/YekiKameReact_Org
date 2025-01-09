@@ -11,6 +11,8 @@ import sportIcon from "../../../../assets/icons/sport.svg";
 import cultureIcon from "../../../../assets/icons/art.svg";
 import educationIcon from "../../../../assets/icons/education.svg";
 
+import gameIcon from "../../../../assets/icons/education.svg";
+
 const Filter = () => {
   // تنظیم حالت پیش‌فرض سوئیچ تاگل به روشن
   const [activeCategory, setActiveCategory] = useState(null);
@@ -22,6 +24,7 @@ const Filter = () => {
     { id: 2, name: "فرهنگی", icon: cultureIcon },
     { id: 3, name: "آموزشی", icon: educationIcon },
     { id: 4, name: "تفریحی", icon: leisureIcon },
+    { id: 5, name: "بازی و سرگرمی", icon: gameIcon },
   ];
 
   const handleCategoryClick = (id) => {

@@ -14,7 +14,7 @@ import leisureIcon from "../../../assets/icons/entertainment.svg";
 import sportIcon from "../../../assets/icons/sport.svg";
 import cultureIcon from "../../../assets/icons/art.svg";
 import educationIcon from "../../../assets/icons/education.svg";
-
+import gameIcon from "../../../assets/icons/education.svg";
 const EventListEventCard = ({
   id,
   title,
@@ -31,10 +31,18 @@ const EventListEventCard = ({
     //   فرهنگی: cultureIcon,
     //   آموزشی: educationIcon,
     // };
-    Entertainment: leisureIcon,
-    Sport: sportIcon,
-    Social: cultureIcon,
+    ENTERTAINMENT: leisureIcon,
+    SPORT: sportIcon,
+    SOCIAL: cultureIcon,
     EDUCATION: educationIcon,
+    GAME: gameIcon,
+  };
+  const categoryNames = {
+    ENTERTAINMENT: "تفریحی",
+    SPORT: "ورزشی",
+    SOCIAL: "فرهنگی",
+    EDUCATION: "آموزشی",
+    GAME: "بازی و سرگرمی",
   };
   const eventDate = new Date(startDate);
   const formattedDate = eventDate.toLocaleDateString("fa-IR", {
@@ -63,7 +71,7 @@ const EventListEventCard = ({
               alt={eventCategory}
               className={styles["icon"]}
             />
-            <div>{eventCategory}</div>
+            <div>{categoryNames[eventCategory]}</div>
           </div>
           <div className={styles["event-card-info-subinfo"]}>
             <div className={styles["infoItem"]}>

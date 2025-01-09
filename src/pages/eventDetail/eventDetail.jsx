@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
+
 import styles from "./eventdetail.module.css";
 import SideBar from "../../components/pageComponents/eventDetail/sidebar/eventSidebar.jsx";
 import Main from "../../components/pageComponents/eventDetail/main/main.jsx";

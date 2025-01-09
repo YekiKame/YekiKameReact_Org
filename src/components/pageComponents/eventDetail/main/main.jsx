@@ -1,7 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./main.module.css";
 import img from "../../../../assets/images/eventDetailMainPicture.png";
 import RelatedEvents from "../relatedevent/relatedEvents.jsx";
+
 const Main = () => {
   return (
     <div className={styles["event-page"]}>
@@ -58,4 +60,24 @@ const Main = () => {
   );
 };
 
+Main.propTypes = {
+  event: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    aboutEvent: PropTypes.string.isRequired,
+    startDate: PropTypes.string.isRequired,
+    endDate: PropTypes.string.isRequired,
+    province: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    neighborhood: PropTypes.string.isRequired,
+    postalAddress: PropTypes.string.isRequired,
+    postalCode: PropTypes.string.isRequired,
+    registrationStartDate: PropTypes.string.isRequired,
+    registrationEndDate: PropTypes.string.isRequired,
+    fullDescription: PropTypes.string.isRequired,
+    maxSubscribers: PropTypes.number.isRequired,
+    eventOwner: PropTypes.shape({
+      phone: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 export default Main;
