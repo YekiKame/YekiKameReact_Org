@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Button from "../../shared/button/button.jsx";
 import styles from "./eventlisteventcard.module.css";
+import { useNavigate } from "react-router-dom";
+
+import NoPhoto from "../../../assets/images/NoPhoto.jpg";
 
 import TimerIcon from "../../../assets/icons/timer.svg";
 import UserIcon from "../../../assets/icons/user2.svg";
@@ -13,6 +16,7 @@ import cultureIcon from "../../../assets/icons/art.svg";
 import educationIcon from "../../../assets/icons/education.svg";
 
 const EventListEventCard = ({
+  id,
   title,
   eventCategory,
   subscriberCount,
@@ -20,13 +24,18 @@ const EventListEventCard = ({
   neighborhood,
   image,
 }) => {
+  const navigate = useNavigate();
   const categoryIcons = {
-    تفریحی: leisureIcon,
-    ورزشی: sportIcon,
-    فرهنگی: cultureIcon,
-    آموزشی: educationIcon,
+    //   تفریحی: leisureIcon,
+    //   ورزشی: sportIcon,
+    //   فرهنگی: cultureIcon,
+    //   آموزشی: educationIcon,
+    // };
+    Entertainment: leisureIcon,
+    Sport: sportIcon,
+    Social: cultureIcon,
+    EDUCATION: educationIcon,
   };
-  // فرمت کردن تاریخ و زمان
   const eventDate = new Date(startDate);
   const formattedDate = eventDate.toLocaleDateString("fa-IR", {
     weekday: "long",
@@ -35,6 +44,10 @@ const EventListEventCard = ({
     hour: "2-digit",
     minute: "2-digit",
   });
+  const handleJoinClick = () => {
+    navigate(`/eventdetail/${id}`);
+  };
+
   return (
     <div className={styles["event-card"]}>
       <div className={styles["event-info"]}>
@@ -65,7 +78,7 @@ const EventListEventCard = ({
         </div>
 
         <div className={styles["event-info-image"]}>
-          <img src={image} alt="Event" className={styles["image"]} />
+          <img src={image || NoPhoto} alt="Event" className={styles["image"]} />
         </div>
       </div>
       <Button
@@ -78,12 +91,14 @@ const EventListEventCard = ({
             style={{ width: "4.8rem", height: "2.4rem" }}
           />
         }
+        onClick={handleJoinClick}
       />
     </div>
   );
 };
 
 EventListEventCard.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   eventCategory: PropTypes.string.isRequired,
   subscriberCount: PropTypes.number.isRequired,

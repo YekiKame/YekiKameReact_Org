@@ -30,9 +30,7 @@ export const HeroSection = () => {
   };
 
   // هندلر برای کلیک روی دکمه‌های شهر پیش‌فرض
-  const handleCityClick = (city) => {
-    navigate(`/events?city=${encodeURIComponent(city)}`);
-  };
+
 
   return (
     <section className={styles.heroSection}>
