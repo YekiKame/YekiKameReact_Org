@@ -11,6 +11,9 @@ import Footer from "./components/common/footer/Footer";
 import Login from "./pages/login/login";
 import EventDetail from "./pages/eventDetail/eventDetail.jsx";
 import EventList from "./pages/eventList/eventList.jsx";
+import AboutUs from "./pages/aboutUs/aboutUs.jsx";
+// import PrivacyPolicy from "./pages/privacyPolicy/privacyPolicyAndTermsofService.jsx";
+import PrivacyPolicyAndTermsofService from "./pages/privacyPolicy/privacyPolicyAndTermsofService.jsx";
 
 const App = () => {
   return (
@@ -24,6 +27,11 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/eventDetail" element={<EventDetail />} />
         <Route path="/eventList" element={<EventList />} />
+        <Route path="/AboutUs" element={<AboutUs />} />
+        <Route
+          path="/privacy-policy"
+          element={<PrivacyPolicyAndTermsofService />}
+        />
       </Routes>
       <Footer />
     </Provider>
