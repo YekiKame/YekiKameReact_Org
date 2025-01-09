@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  react-app:
+    image: fivegunners/yekikame-react:latest # Replace with your Docker image
+    container_name: react-app
+    ports:
+      - "8080:80" # Maps port 80 on the host to port 80 in the container
+    restart: unless-stopped
