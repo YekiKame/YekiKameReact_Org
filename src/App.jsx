@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux"; // اضافه شده برای اتصال Redux
 import { store } from "./redux/store"; // Store فقط برای CreateEvent
 import Home from "./pages/home/home";
-import UserDashboard from "./pages/userdashboard/userDashboard";
+import UserDashboard from "./pages/userdashboard/UserDashboard";
 import SignUp from "./pages/signup/Signup";
 import Header from "./components/common/header/Header";
 import Notfound from "./pages/notfound/Notfound";
