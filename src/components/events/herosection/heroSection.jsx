@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./herosection.module.css";
+import SearchIcon from '../../../assets/icons/search.svg';
 
 export const HeroSection = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,11 +47,7 @@ export const HeroSection = () => {
 
         <form className={styles.searchForm} onSubmit={handleSearch}>
           <div className={styles.searchContainer}>
-            <img
-              src="/src/assets/icons/search.svg"
-              alt="search icon"
-              className={styles.searchIcon}
-            />
+<img src={SearchIcon} alt="search icon" className={styles.searchIcon} />
             <input
               type="text"
               placeholder="جستجوی شهر یا رویداد"
