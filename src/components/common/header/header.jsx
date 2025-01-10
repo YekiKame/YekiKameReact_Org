@@ -56,7 +56,7 @@ const Header = ({ isLoggedIn, city = "تهران", pageState = "home" }) => {
           <a href="/" className={`header__link ${getButtonClass("home")}`}>
             صفحه اصلی
           </a>
-          <a href="/about" className={`header__link ${getButtonClass("about")}`}>
+          <a href="/aboutUs" className={`header__link ${getButtonClass("about")}`}>
             درباره ما
           </a>
           <a href="/events" className={`header__link ${getButtonClass("events")}`}>

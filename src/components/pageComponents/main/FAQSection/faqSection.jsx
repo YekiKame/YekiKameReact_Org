@@ -36,7 +36,7 @@ const FAQSection = () => {
   return (
     <div className={styles["FAQ-section-container"]}>
       <div>
-        <h3 className={styles["FAQ-header"]}>سوالات متدوال</h3>
+        <h3 className={styles["FAQ-header"]}>سوالات متداول</h3>
       </div>
       <Accordion
         faqs={currentFaqs}
