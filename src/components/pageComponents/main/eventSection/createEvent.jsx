@@ -23,7 +23,7 @@ const EventSection = () => {
         <div className={styles["event-image"]}>
           <img
             src={boywithphone}
-            alt="Person using phone"
+            alt="Person using a phone"
             className={styles["event-image"]}
           />
         </div>
