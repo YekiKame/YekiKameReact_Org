@@ -4,7 +4,7 @@ import Button from "../../shared/button/button.jsx";
 import styles from "./eventlisteventcard.module.css";
 import { useNavigate } from "react-router-dom";
 
-import NoPhoto from "../../../assets/images/NoPhoto.jpg";
+import NoPhoto from "../../../assets/images/noPhoto.jpg";
 
 import TimerIcon from "../../../assets/icons/timer.svg";
 import UserIcon from "../../../assets/icons/user2.svg";
