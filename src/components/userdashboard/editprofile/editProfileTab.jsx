@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -13,13 +13,7 @@ import EyeIcon from "../../../assets/icons/eyedash.svg";
 import EyeSlashIcon from "../../../assets/icons/eyeslashdash.svg";
 
 const EditProfileTab = () => {
-  // 1) بررسی کنیم آیا در sessionStorage یا هر منبع دیگری شماره تلفن و توکن کاربر داریم:
   const storedPhoneNumber = sessionStorage.getItem("userPhone") || "09123456789";
-  const storedToken = sessionStorage.getItem("sessionToken"); // اگر توکنی دارید
-
-  // پیام لاگ برای بررسی مقدار واقعی شماره و توکن
-  console.log("Debug >> storedPhoneNumber:", storedPhoneNumber);
-  console.log("Debug >> storedToken:", storedToken);
 
   const [initialValues, setInitialValues] = useState({
     fullName: "",
@@ -33,12 +27,10 @@ const EditProfileTab = () => {
   const [loading, setLoading] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Fetch user data from backend
+  // Fetch user data
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        console.log("Debug >> Going to fetch user data with phone:", storedPhoneNumber);
-
         const query = `
           query {
             user(phone: "${storedPhoneNumber}") {
@@ -48,16 +40,11 @@ const EditProfileTab = () => {
             }
           }
         `;
-        // اگر نیاز است هدر یا Authorization را هم بفرستید، در اینجا اضافه کنید
         const response = await axios.post(
           "http://127.0.0.1:8000/graphql/",
           { query },
           { headers: { "Content-Type": "application/json" } }
         );
-
-        // پیام لاگ جهت دیدن پاسخ خام سرور
-        console.log("Debug >> fetchUserData response:", response.data);
-
         const userData = response.data?.data?.user;
         if (userData) {
           setInitialValues({
@@ -69,48 +56,67 @@ const EditProfileTab = () => {
             confirmPassword: "",
           });
         } else {
-          setMessage("کاربری با این شماره تلفن یافت نشد.");
+          setMessage("کاربری یافت نشد.");
         }
       } catch (error) {
-        console.error(
-          "Error fetching user data (Debug):",
-          error.response?.data || error.message
-        );
-        setMessage("خطایی در دریافت اطلاعات کاربر رخ داد.");
+        setMessage("خطا در دریافت اطلاعات کاربر.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, [storedPhoneNumber]);
 
   // Validation schema
   const validationSchema = Yup.object({
     fullName: Yup.string().optional(),
-    email: Yup.string().email("ایمیل نامعتبر است").optional(),
+    email: Yup.string()
+      .email("ایمیل نامعتبر است")
+      .optional(),
     oldPassword: Yup.string().optional(),
     newPassword: Yup.string()
-      .optional()
       .min(6, "رمز عبور باید حداقل ۶ کاراکتر باشد")
-      .when("oldPassword", {
-        is: (val) => val && val.length > 0,
-        then: Yup.string().required("لطفاً رمز عبور جدید را وارد کنید"),
-      }),
-    confirmPassword: Yup.string().oneOf(
-      [Yup.ref("newPassword"), null],
-      "تکرار رمز عبور با رمز جدید مطابقت ندارد"
-    ),
+      .optional(),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("newPassword"), null], "تکرار رمز عبور با رمز جدید مطابقت ندارد")
+      .optional(),
+  }).test("password-check", "بررسی رمز عبور", function (values) {
+    // اگر کاربر رمز فعلی را وارد کرده ولی رمز جدید را وارد نکرده
+    if (values.oldPassword && !values.newPassword) {
+      return this.createError({
+        path: "newPassword",
+        message: "لطفاً رمز عبور جدید را وارد کنید",
+      });
+    }
+    // برعکس، اگر رمز جدید را وارد کرد ولی رمز فعلی را خالی گذاشت
+    if (values.newPassword && !values.oldPassword) {
+      return this.createError({
+        path: "oldPassword",
+        message: "برای ثبت رمز عبور جدید، ابتدا رمز فعلی را وارد کنید",
+      });
+    }
+    // اگر رمز جدید وارد کرده ولی تایید رمز را خالی گذاشت
+    if (values.newPassword && !values.confirmPassword) {
+      return this.createError({
+        path: "confirmPassword",
+        message: "لطفاً تکرار رمز عبور را وارد کنید",
+      });
+    }
+    return true;
   });
 
   // Submit handler
   const handleSubmit = async (values, { resetForm }) => {
     setMessage("");
 
-    // پیام لاگ برای بررسی اینکه کاربر چه چیزی وارد کرده است
-    console.log("Debug >> handleSubmit values:", values);
-
     try {
+      // اگر کاربر رمز جدید وارد کرده اما رمز فعلی خالیست
+      // (یک چک اضافه برای امنیت؛ البته همین را در test هم داشتیم)
+      if (!values.oldPassword && values.newPassword) {
+        setMessage("رمز عبور فعلی لازم است تا رمز عبور جدید را ثبت کنید.");
+        return;
+      }
+
       // UPDATE FULLNAME
       if (values.fullName) {
         const updateFullnameMutation = `
@@ -126,12 +132,9 @@ const EditProfileTab = () => {
           { query: updateFullnameMutation },
           { headers: { "Content-Type": "application/json" } }
         );
-        console.log("Debug >> updateFullname response:", fullnameResponse.data);
         const fullnameResult = fullnameResponse.data?.data?.updateFullname;
         if (!fullnameResult?.success) {
-          setMessage(
-            fullnameResult?.message || "خطایی در به‌روزرسانی نام رخ داد."
-          );
+          setMessage(fullnameResult?.message || "خطایی در به‌روزرسانی نام رخ داد.");
           return;
         }
       }
@@ -151,12 +154,9 @@ const EditProfileTab = () => {
           { query: updateEmailMutation },
           { headers: { "Content-Type": "application/json" } }
         );
-        console.log("Debug >> updateEmail response:", emailResponse.data);
         const emailResult = emailResponse.data?.data?.updateEmail;
         if (!emailResult?.success) {
-          setMessage(
-            emailResult?.message || "خطایی در به‌روزرسانی ایمیل رخ داد."
-          );
+          setMessage(emailResult?.message || "خطایی در به‌روزرسانی ایمیل رخ داد.");
           return;
         }
       }
@@ -176,22 +176,19 @@ const EditProfileTab = () => {
           { query: updatePasswordMutation },
           { headers: { "Content-Type": "application/json" } }
         );
-        console.log("Debug >> updatePassword response:", passwordResponse.data);
         const passwordResult = passwordResponse.data?.data?.updatePassword;
         if (!passwordResult?.success) {
           setMessage(
-            passwordResult?.message ||
-              "خطایی در به‌روزرسانی رمز عبور رخ داد."
+            passwordResult?.message || "خطایی در به‌روزرسانی رمز عبور رخ داد."
           );
           return;
         }
       }
 
-      // اگر همه چیز موفق بود:
       setMessage("اطلاعات با موفقیت به‌روزرسانی شد!");
       resetForm();
     } catch (error) {
-      console.error("Error updating profile (Debug):", error.response?.data || error.message);
+      console.error("Error updating profile:", error.response?.data || error.message);
       setMessage("خطایی در ارتباط با سرور رخ داد.");
     }
   };
@@ -297,6 +294,7 @@ const EditProfileTab = () => {
               <Button
                 variant="outline"
                 text={"انصراف"}
+                type="button" // جلوگیری از submit شدن فرم
                 onClick={() => {
                   resetForm();
                   setMessage("");

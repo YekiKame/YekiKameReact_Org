@@ -66,3 +66,6 @@ textarea:focus{
     padding-left:2.9rem;
     gap:1.6rem;
 }
+.error{
+  color: var(--lightsemanticerrorlight);
+}
