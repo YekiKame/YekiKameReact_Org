@@ -19,19 +19,20 @@ const SEARCH_EVENTS_BY_CITY = gql`
   }
 `;
 
-const EventDetail = () => {
+const EventList = () => {
   const { loading, error, data } = useQuery(SEARCH_EVENTS_BY_CITY, {
     variables: { city: "تهران" },
   });
+  console.log(data);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   return (
-    <div className={`${styles["grid"]} ${styles["event-detail-container"]}`}>
+    <div className={`${styles["grid"]} ${styles["event-list-container"]}`}>
       <Main events={data.searchEventsByCity} />
       <Filter />
     </div>
   );
 };
 
-export default EventDetail;
+export default EventList;

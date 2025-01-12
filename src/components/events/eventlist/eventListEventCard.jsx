@@ -54,6 +54,7 @@ const EventListEventCard = ({
   });
   const handleJoinClick = () => {
     navigate(`/eventdetail/${id}`);
+
   };
 
   return (

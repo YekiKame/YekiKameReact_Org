@@ -1,4 +1,4 @@
-.event-detail-container {
+.event-list-container {
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: 50px;
