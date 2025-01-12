@@ -10,10 +10,10 @@ const Step4 = () => {
   const currentStep = useSelector((state) => state.createEvent.currentStep);
   const initialFormData = useSelector((state) => state.createEvent.formData);
   const dispatch = useDispatch();
-
   const [previewImage, setPreviewImage] = useState(initialFormData.image || null);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       maxSubscribers: initialFormData.maxSubscribers || "",
       fullDescription: initialFormData.fullDescription || "",
@@ -24,7 +24,7 @@ const Step4 = () => {
         .typeError("تعداد افراد باید عدد باشد")
         .min(1, "حداقل تعداد باید ۱ باشد")
         .required("تعداد افراد الزامی است"),
-     fullDescription: Yup.string(), // دیگر الزامی نیست
+      fullDescription: Yup.string(),
     }),
     onSubmit: (values) => {
       dispatch(
@@ -53,7 +53,7 @@ const Step4 = () => {
     <div className={styles.container}>
       <Stepper currentStep={currentStep} />
       <h2 className={styles.title}>جزئیات تکمیلی</h2>
-      <form onSubmit={formik.handleSubmit}>
+      <form id="step4Form" onSubmit={formik.handleSubmit}>
         <div className={styles.field}>
           <label className={styles.label}>حداکثر تعداد افراد رویداد:</label>
           <input

@@ -2,12 +2,10 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateFormData
-} from "../../../../../redux/slices/createEventSlice.js";
+import { updateFormData } from "../../../../../redux/slices/createEventSlice.js";
 import Stepper from "../../../../common/stepper/stepper.jsx";
 import styles from "./step1.module.css";
-import Button from "../../../../shared/button/button.jsx"; // برای دکمه انصراف
+import Button from "../../../../shared/button/button.jsx";
 
 const Step1 = () => {
   const currentStep = useSelector((state) => state.createEvent.currentStep);
@@ -15,6 +13,7 @@ const Step1 = () => {
   const dispatch = useDispatch();
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       title: initialFormData.title || "",
       eventCategory: initialFormData.eventCategory || "",
@@ -33,7 +32,6 @@ const Step1 = () => {
     },
   });
 
-  // برای ریست:
   const handleCancel = () => {
     formik.resetForm();
   };
@@ -44,7 +42,8 @@ const Step1 = () => {
       <h2 className={styles.title}>مشخصات پایه رویداد</h2>
       <p className={styles.description}>لطفاً موارد زیر را تکمیل کنید:</p>
 
-      <form onSubmit={formik.handleSubmit}>
+      {/* آیدی فرم را step1Form می‌گذاریم تا با requestSubmit قابل فراخوانی باشد */}
+      <form id="step1Form" onSubmit={formik.handleSubmit}>
         <div className={styles.formfirstline}>
           <div className={styles.formGroup}>
             <label className={styles.label} htmlFor="title">
@@ -77,9 +76,7 @@ const Step1 = () => {
               onBlur={formik.handleBlur}
               value={formik.values.eventCategory}
             >
-              <option value="">
-                لطفاً دسته‌بندی مورد نظر خود را انتخاب کنید
-              </option>
+              <option value="">لطفاً دسته‌بندی را انتخاب کنید</option>
               <option value="education">آموزشی</option>
               <option value="sport">ورزشی</option>
               <option value="social">فرهنگی</option>
@@ -110,10 +107,10 @@ const Step1 = () => {
           ) : null}
         </div>
 
-        {/* دکمه انصراف */}
         <Button
           text="انصراف"
           variant="outline"
+          type="button"
           onClick={handleCancel}
           style={{ marginTop: "16px" }}
         />
