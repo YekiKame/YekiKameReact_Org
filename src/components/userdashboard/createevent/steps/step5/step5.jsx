@@ -1,23 +1,20 @@
-// step5.jsx
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { prevStep } from "../../../../../redux/slices/createEventSlice.js";
 import axios from "axios";
 import styles from "./step5.module.css";
-import Stepper from "../../../../common/stepper/stepper.jsx"; // نمایش استپر
+import Stepper from "../../../../common/stepper/stepper.jsx";
+import Button from "../../../../shared/button/button.jsx";
 
 const Step5 = () => {
   const formData = useSelector((state) => state.createEvent.formData);
   const currentStep = useSelector((state) => state.createEvent.currentStep);
   const dispatch = useDispatch();
 
-  // تلفن صاحب رویداد، مثلاً از sessionStorage:
+  // تلفن صاحب رویداد
   const eventOwnerPhone = sessionStorage.getItem("userPhone") || "09123456789";
 
   const handleSubmit = async () => {
-    // بر اساس مستندات جدید:
-    // اگر از آپلود اسکالر واقعی استفاده کنید، باید با فرستادن فایل در قالب FormData باشد.
-    // اینجا ما فقط شکل نمونه را نشان می‌دهیم (بدون آپلود واقعی).
     const query = `
       mutation CreateEvent($image: Upload) {
         createEvent(
@@ -26,13 +23,21 @@ const Step5 = () => {
           aboutEvent: "${formData.aboutEvent}",
           startDate: "${formData.startDate}",
           endDate: "${formData.endDate}",
-          province: "${formData.province}",
+          province: "${formData.province}", 
           city: "${formData.city}",
           neighborhood: "${formData.neighborhood}",
           postalAddress: "${formData.postalAddress}",
           postalCode: "${formData.postalCode}",
-          registrationStartDate: "${formData.registrationStartDate}",
-          registrationEndDate: "${formData.registrationEndDate}",
+          registrationStartDate: ${
+            formData.registrationStartDate
+              ? `"${formData.registrationStartDate}"`
+              : "null"
+          },
+          registrationEndDate: ${
+            formData.registrationEndDate
+              ? `"${formData.registrationEndDate}"`
+              : "null"
+          },
           maxSubscribers: ${formData.maxSubscribers || 0},
           fullDescription: "${formData.fullDescription || ""}",
           eventOwnerPhone: "${eventOwnerPhone}",
@@ -51,19 +56,11 @@ const Step5 = () => {
         }
       }
     `;
-
     try {
-      // در عمل باید از یک روش آپلود فایل استفاده کنید، مثلاً:
-      // const formDataToSend = new FormData();
-      // formDataToSend.append("operations", JSON.stringify({ query, variables }));
-      // formDataToSend.append("map", JSON.stringify({ "0": ["variables.image"] }));
-      // formDataToSend.append("0", theFile);
-      // سپس با axios.post(..., formDataToSend, { headers: ... }) ارسال کنید.
-      // برای سادگی و حداقل تغییر، اینجا صرفاً یک پست ساده می‌گذاریم.
       const response = await axios.post("http://127.0.0.1:8000/graphql/", {
         query,
         variables: {
-          image: null, // درصورت نیاز
+          image: null,
         },
       });
       console.log("Event created:", response.data);
@@ -83,7 +80,6 @@ const Step5 = () => {
       <Stepper currentStep={currentStep} />
       <h2 className={styles.title}>تایید نهایی</h2>
       <div className={styles.details}>
-        {/* اگر تصویر ندارد، عبارت رویداد بدون تصویر */}
         {formData.image ? (
           <img src={formData.image} alt="Event" className={styles.eventImage} />
         ) : (
@@ -106,12 +102,10 @@ const Step5 = () => {
           <strong>زمان پایان:</strong> {formData.endDate}
         </p>
         <p>
-          <strong>زمان شروع ثبت‌نام:</strong>{" "}
-          {formData.registrationStartDate || "اختیاری"}
+          <strong>زمان شروع ثبت‌نام:</strong> {formData.registrationStartDate || "اختیاری"}
         </p>
         <p>
-          <strong>زمان پایان ثبت‌نام:</strong>{" "}
-          {formData.registrationEndDate || "اختیاری"}
+          <strong>زمان پایان ثبت‌نام:</strong> {formData.registrationEndDate || "اختیاری"}
         </p>
         <p>
           <strong>استان:</strong> {formData.province}
@@ -123,8 +117,7 @@ const Step5 = () => {
           <strong>محله:</strong> {formData.neighborhood}
         </p>
         <p>
-          <strong>کد پستی:</strong>{" "}
-          {formData.postalCode ? formData.postalCode : "اختیاری"}
+          <strong>کد پستی:</strong> {formData.postalCode ? formData.postalCode : "اختیاری"}
         </p>
         <p>
           <strong>آدرس:</strong> {formData.postalAddress}
@@ -133,24 +126,24 @@ const Step5 = () => {
           <strong>حداکثر افراد:</strong> {formData.maxSubscribers}
         </p>
         <p>
-          <strong>توضیحات تکمیلی:</strong>{" "}
-          {formData.fullDescription || "بدون توضیحات اضافه"}
+          <strong>توضیحات تکمیلی:</strong> {formData.fullDescription || "بدون توضیحات اضافه"}
         </p>
       </div>
       <div className={styles.buttons}>
-        {/* (13) دکمه اول: تایید نهایی و ساخت رویداد */}
-        <button onClick={handleSubmit} className={styles.submitButton}>
-          تأیید نهایی و ساخت رویداد
-        </button>
-
-        {/* دکمه دوم: اصلاح و برگشت به عقب (variant outline) */}
-        <button
+        <Button
+          text={"تأیید نهایی و ساخت رویداد"}
+          size="large"
+          variant="primary"
+          onClick={handleSubmit}
+          customStyles={{ width: "100%" }}
+        />
+        <Button
+          text={"اصلاح و برگشت به عقب"}
+          size="large"
+          variant="outline"
           onClick={handleEdit}
-          className={styles.outlineButton}
-          style={{ border: "1px solid #ccc" }}
-        >
-          اصلاح و برگشت به عقب
-        </button>
+          customStyles={{ width: "100%" }}
+        />
       </div>
     </div>
   );

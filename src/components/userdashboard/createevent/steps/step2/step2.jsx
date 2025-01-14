@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,37 +6,29 @@ import { updateFormData } from "../../../../../redux/slices/createEventSlice";
 import Stepper from "../../../../common/stepper/stepper.jsx";
 import styles from "./step2.module.css";
 
-// توابع کمکی ساده و نمایشی برای تبدیل تاریخ شمسی به میلادی:
+// تبدیل شمسی به میلادی (تمثیلی)
 const convertShamsiToGregorian = (shamsiDate) => {
-  // اینجا می‌توانید از کتابخانه JalaliMoment یا هر کتابخانه دیگر استفاده کنید
-  // یا خودتان منطق تبدیل را بنویسید.
-  // فعلاً برای نمونه، همان مقدار را برمی‌گردانیم یا یک تبدیل الکی:
   if (!shamsiDate) return "";
-  // مثلاً "۱۴۰۲/۱۰/۰۳" -> "2024-12-24"
-  return "2024-12-24"; // نمونه تمثیلی
+  return "2024-12-24"; // نمونه
 };
 
 // تبدیل اعداد فارسی در زمان به انگلیسی
 const convertPersianNumbersToEnglish = (input) => {
   if (!input) return "";
-  const persianNumbers = [
-    /۰/g,
-    /۱/g,
-    /۲/g,
-    /۳/g,
-    /۴/g,
-    /۵/g,
-    /۶/g,
-    /۷/g,
-    /۸/g,
-    /۹/g,
-  ];
-  const englishNumbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const persianNumbers = [ /۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g ];
+  const englishNumbers = [ "0","1","2","3","4","5","6","7","8","9" ];
   let str = input;
   for (let i = 0; i < 10; i++) {
     str = str.replace(persianNumbers[i], englishNumbers[i]);
   }
   return str;
+};
+
+// ساخت فرمت ISO مثلاً "2024-12-24T10:30:00+00:00"
+const toIsoString = (dateStr, timeStr) => {
+  if (!dateStr) return "";
+  const safeTime = timeStr || "00:00";
+  return dateStr + "T" + safeTime + ":00+00:00";
 };
 
 const Step2 = () => {
@@ -45,6 +37,7 @@ const Step2 = () => {
   const dispatch = useDispatch();
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       startDate: initialFormData.startDate || "",
       startTime: initialFormData.startTime || "",
@@ -56,70 +49,109 @@ const Step2 = () => {
     validationSchema: Yup.object({
       startDate: Yup.string().required("تاریخ شروع رویداد الزامی است"),
       endDate: Yup.string().required("تاریخ پایان رویداد الزامی است"),
-      // startTime, endTime, registrationStartDate, registrationEndDate اختیاری هستند
+      // اگر سرور اجباری می‌داند:
+      // registrationStartDate: Yup.string().required("تاریخ شروع ثبت‌نام الزامی است"),
+      // registrationEndDate: Yup.string().required("تاریخ پایان ثبت‌نام الزامی است"),
     }),
     onSubmit: (values) => {
-      // تبدیل تاریخ و زمان از شمسی به میلادی و فارسی به انگلیسی
+      // تبدیل تاریخ شمسی به میلادی
+      const sd = convertShamsiToGregorian(values.startDate);  // "2024-12-24"
+      const ed = convertShamsiToGregorian(values.endDate);
+      const rsd = values.registrationStartDate
+        ? convertShamsiToGregorian(values.registrationStartDate)
+        : null; // اگر خالی بود => null
+      const red = values.registrationEndDate
+        ? convertShamsiToGregorian(values.registrationEndDate)
+        : null;
+
+      // تبدیل اعداد فارسی ساعت به انگلیسی
+      const st = convertPersianNumbersToEnglish(values.startTime); // "10:30"
+      const et = convertPersianNumbersToEnglish(values.endTime);
+      
+      // فرمت ISO
+      const finalStart = toIsoString(sd, st) || null; 
+      const finalEnd = toIsoString(ed, et) || null;
+      // اگر فیلد ثبت‌نام خالی بود، می‌گذاریم null تا در مرحله 5 به‌صورت null فرستاده شود
+      const finalRegStart = rsd ? toIsoString(rsd, "00:00") : null;
+      const finalRegEnd = red ? toIsoString(red, "00:00") : null;
+
+      // این مقدار را در ریداکس ذخیره می‌کنیم
       const fixedValues = {
-        startDate: convertShamsiToGregorian(values.startDate),
-        endDate: convertShamsiToGregorian(values.endDate),
-        startTime: convertPersianNumbersToEnglish(values.startTime),
-        endTime: convertPersianNumbersToEnglish(values.endTime),
-        registrationStartDate: values.registrationStartDate
-          ? convertShamsiToGregorian(values.registrationStartDate)
-          : "",
-        registrationEndDate: values.registrationEndDate
-          ? convertShamsiToGregorian(values.registrationEndDate)
-          : "",
+        // برای نمایش مجدد به کاربر
+        startTime: st,
+        endTime: et,
+        // برای سرور
+        startDate: finalStart, // "2024-12-24T10:30:00+00:00"
+        endDate: finalEnd,
+        registrationStartDate: finalRegStart, // یا null
+        registrationEndDate: finalRegEnd,
       };
+
       dispatch(updateFormData(fixedValues));
       console.log("Form Submitted (Step2):", fixedValues);
     },
   });
 
-  // برای باز شدن مودال انتخاب زمان/تاریخ، کافی است در onFocus فراخوانی کنیم
-  const handleDateFocus = () => {
-    // نمایش پاپ‌آپ یا فراخوانی کتابخانه تاریخ شمسی
-    console.log("Show date picker modal (jalali)...");
+  // نمایش تقویم شمسی هنگام فوکوس
+  const handleDateFocus = (fieldId) => {
+    if (!window.HaDateTimePicker) return;
+    const dp = new window.HaDateTimePicker(fieldId, {
+      isSolar: true,
+      resultInSolar: true,
+      forceSetTime: false,
+      resultFormat: "{year}/{month}/{day}",
+    });
+    dp.show();
   };
 
-  const handleTimeFocus = () => {
-    // نمایش پاپ‌آپ یا فراخوانی کتابخانه انتخاب زمان فارسی
-    console.log("Show time picker modal (persian)...");
+  // نمایش انتخاب ساعت هنگام فوکوس
+  const handleTimeFocus = (fieldId) => {
+    if (!window.HaDateTimePicker) return;
+    const dp = new window.HaDateTimePicker(fieldId, {
+      isSolar: true,
+      resultInSolar: true,
+      disableTime: false,
+      resultFormat: "{t?{hour}:{minute} {ampm}}",
+    });
+    dp.show();
   };
 
   return (
     <div className={styles.container}>
       <Stepper currentStep={currentStep} />
       <h2 className={styles.title}>زمان‌بندی</h2>
-      <form onSubmit={formik.handleSubmit}>
+
+      <form id="step2Form" onSubmit={formik.handleSubmit}>
         <div className={styles.row}>
           <div className={styles.field}>
             <label className={styles.label}>تاریخ شروع رویداد:</label>
             <input
               type="text"
+              id="startDateField"
               name="startDate"
               className={styles.input}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.startDate}
-              onFocus={handleDateFocus}
+              onFocus={() => handleDateFocus("#startDateField")}
               placeholder="مثلاً ۱۴۰۲/۱۰/۰۳"
             />
             {formik.touched.startDate && formik.errors.startDate ? (
               <div className={styles.error}>{formik.errors.startDate}</div>
             ) : null}
           </div>
+
           <div className={styles.field}>
             <label className={styles.label}>زمان شروع رویداد:</label>
             <input
               type="text"
+              id="startTimeField"
               name="startTime"
               className={styles.input}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.startTime}
-              onFocus={handleTimeFocus}
+              onFocus={() => handleTimeFocus("#startTimeField")}
               placeholder="مثلاً ۱۰:۳۰"
             />
           </div>
@@ -130,28 +162,31 @@ const Step2 = () => {
             <label className={styles.label}>تاریخ پایان رویداد:</label>
             <input
               type="text"
+              id="endDateField"
               name="endDate"
               className={styles.input}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.endDate}
-              onFocus={handleDateFocus}
+              onFocus={() => handleDateFocus("#endDateField")}
               placeholder="مثلاً ۱۴۰۲/۱۰/۰۳"
             />
             {formik.touched.endDate && formik.errors.endDate ? (
               <div className={styles.error}>{formik.errors.endDate}</div>
             ) : null}
           </div>
+
           <div className={styles.field}>
             <label className={styles.label}>زمان پایان رویداد:</label>
             <input
               type="text"
+              id="endTimeField"
               name="endTime"
               className={styles.input}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.endTime}
-              onFocus={handleTimeFocus}
+              onFocus={() => handleTimeFocus("#endTimeField")}
               placeholder="مثلاً ۱۸:۰۰"
             />
           </div>
@@ -159,32 +194,30 @@ const Step2 = () => {
 
         <div className={styles.row}>
           <div className={styles.field}>
-            <label className={styles.label}>
-              تاریخ شروع ثبت‌نام (اختیاری):
-            </label>
+            <label className={styles.label}>تاریخ شروع ثبت‌نام (اختیاری):</label>
             <input
               type="text"
+              id="regStartDateField"
               name="registrationStartDate"
               className={styles.input}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.registrationStartDate}
-              onFocus={handleDateFocus}
+              onFocus={() => handleDateFocus("#regStartDateField")}
               placeholder="مثلاً ۱۴۰۲/۱۰/۰۱"
             />
           </div>
           <div className={styles.field}>
-            <label className={styles.label}>
-              تاریخ پایان ثبت‌نام (اختیاری):
-            </label>
+            <label className={styles.label}>تاریخ پایان ثبت‌نام (اختیاری):</label>
             <input
               type="text"
+              id="regEndDateField"
               name="registrationEndDate"
               className={styles.input}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.registrationEndDate}
-              onFocus={handleDateFocus}
+              onFocus={() => handleDateFocus("#regEndDateField")}
               placeholder="مثلاً ۱۴۰۲/۱۰/۰۲"
             />
           </div>

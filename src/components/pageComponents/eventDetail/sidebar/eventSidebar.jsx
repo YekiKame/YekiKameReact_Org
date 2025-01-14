@@ -5,7 +5,7 @@ import sportIcon from "../../../../assets/icons/sport.svg";
 import TimerIcon from "../../../../assets/icons/timer.svg";
 import LocationIcon from "../../../../assets/icons/location2.svg";
 
-const SideBar = () => {
+const SideBar = (event) => {
   return (
     <div className={styles["event-card"]}>
       <h1 className={styles["event-title"]}>بازی تنیس</h1>
