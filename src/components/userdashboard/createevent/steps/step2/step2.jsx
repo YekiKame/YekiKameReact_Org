@@ -6,13 +6,14 @@ import { updateFormData } from "../../../../../redux/slices/createEventSlice";
 import Stepper from "../../../../common/stepper/stepper.jsx";
 import styles from "./step2.module.css";
 
-// تبدیل شمسی به میلادی (تمثیلی)
+// (۱) تابع تمثیلی: تبدیل تاریخ شمسی به "YYYY-MM-DD"
 const convertShamsiToGregorian = (shamsiDate) => {
   if (!shamsiDate) return "";
+  // TODO: پیاده‌سازی تبدیل واقعی با کتابخانه یا منطق شمسی
   return "2024-12-24"; // نمونه
 };
 
-// تبدیل اعداد فارسی در زمان به انگلیسی
+// (۲) تبدیل اعداد فارسی در زمان به انگلیسی (مثلاً "۱۰:۳۰" -> "10:30")
 const convertPersianNumbersToEnglish = (input) => {
   if (!input) return "";
   const persianNumbers = [ /۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g ];
@@ -24,10 +25,11 @@ const convertPersianNumbersToEnglish = (input) => {
   return str;
 };
 
-// ساخت فرمت ISO مثلاً "2024-12-24T10:30:00+00:00"
+// (۳) ترکیب تاریخ و زمان در فرمت ISO8601: "YYYY-MM-DDTHH:mm:00+00:00"
 const toIsoString = (dateStr, timeStr) => {
   if (!dateStr) return "";
-  const safeTime = timeStr || "00:00";
+  const safeTime = timeStr || "00:00"; 
+  // خروجی: "2024-12-24T10:30:00+00:00"
   return dateStr + "T" + safeTime + ":00+00:00";
 };
 
@@ -49,41 +51,40 @@ const Step2 = () => {
     validationSchema: Yup.object({
       startDate: Yup.string().required("تاریخ شروع رویداد الزامی است"),
       endDate: Yup.string().required("تاریخ پایان رویداد الزامی است"),
-      // اگر سرور اجباری می‌داند:
-      // registrationStartDate: Yup.string().required("تاریخ شروع ثبت‌نام الزامی است"),
-      // registrationEndDate: Yup.string().required("تاریخ پایان ثبت‌نام الزامی است"),
+      registrationStartDate: Yup.string().required("تاریخ شروع ثبت‌نام الزامی است"),
+      registrationEndDate: Yup.string().required("تاریخ پایان ثبت‌نام الزامی است"),
     }),
     onSubmit: (values) => {
-      // تبدیل تاریخ شمسی به میلادی
-      const sd = convertShamsiToGregorian(values.startDate);  // "2024-12-24"
+      // (۱) تاریخ شمسی -> میلادی ساده:
+      const sd = convertShamsiToGregorian(values.startDate); // "2024-12-24"
       const ed = convertShamsiToGregorian(values.endDate);
       const rsd = values.registrationStartDate
         ? convertShamsiToGregorian(values.registrationStartDate)
-        : null; // اگر خالی بود => null
+        : null;
       const red = values.registrationEndDate
         ? convertShamsiToGregorian(values.registrationEndDate)
         : null;
 
-      // تبدیل اعداد فارسی ساعت به انگلیسی
+      // (۲) اعداد فارسی در زمان -> انگلیسی
       const st = convertPersianNumbersToEnglish(values.startTime); // "10:30"
       const et = convertPersianNumbersToEnglish(values.endTime);
-      
-      // فرمت ISO
-      const finalStart = toIsoString(sd, st) || null; 
-      const finalEnd = toIsoString(ed, et) || null;
-      // اگر فیلد ثبت‌نام خالی بود، می‌گذاریم null تا در مرحله 5 به‌صورت null فرستاده شود
+
+      // (۳) تولید رشته‌ی ISO
+      const finalStart = sd ? toIsoString(sd, st) : null; 
+      const finalEnd = ed ? toIsoString(ed, et) : null;
       const finalRegStart = rsd ? toIsoString(rsd, "00:00") : null;
       const finalRegEnd = red ? toIsoString(red, "00:00") : null;
 
-      // این مقدار را در ریداکس ذخیره می‌کنیم
+      // (۴) درج در Redux: هم ساعت خام را نگه می‌داریم (برای نمایش مجدد)، هم تاریخ ISO را
       const fixedValues = {
-        // برای نمایش مجدد به کاربر
+        // برای نمایش در فرم (مواقعی که کاربر برگردد)
         startTime: st,
         endTime: et,
+
         // برای سرور
-        startDate: finalStart, // "2024-12-24T10:30:00+00:00"
+        startDate: finalStart, 
         endDate: finalEnd,
-        registrationStartDate: finalRegStart, // یا null
+        registrationStartDate: finalRegStart,
         registrationEndDate: finalRegEnd,
       };
 
@@ -92,7 +93,7 @@ const Step2 = () => {
     },
   });
 
-  // نمایش تقویم شمسی هنگام فوکوس
+  // نمایش تقویم شمسی
   const handleDateFocus = (fieldId) => {
     if (!window.HaDateTimePicker) return;
     const dp = new window.HaDateTimePicker(fieldId, {
@@ -104,7 +105,7 @@ const Step2 = () => {
     dp.show();
   };
 
-  // نمایش انتخاب ساعت هنگام فوکوس
+  // نمایش انتخاب ساعت
   const handleTimeFocus = (fieldId) => {
     if (!window.HaDateTimePicker) return;
     const dp = new window.HaDateTimePicker(fieldId, {

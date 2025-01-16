@@ -5,7 +5,7 @@ import styles from "./userdashboard.module.css";
 import EditProfileTab from "../../components/userdashboard/editprofile/editProfileTab.jsx";
 import MyEventsTab from "../../components/userdashboard/myevents/myEventsTab.jsx";
 import CreateEventTab from "../../components/userdashboard/createevent/createEvent.jsx";
-import Comments from "../../components/userdashboard/comments/comments.jsx";
+import Tickets from "../../components/userdashboard/tickets/tickets.jsx";
 import Notifications from "../../components/userdashboard/notifications/notifications.jsx";
 
 import profileCircle from "../../assets/icons/profile-circle.svg";
@@ -81,12 +81,12 @@ const UserDashboard = () => {
         return <MyEventsTab />;
       case "createEvent":
         return <CreateEventTab />;
-      case "myComments":
-        return <Comments />;
+      case "myTickets":
+        return <Tickets />;
       case "notifications":
         return <Notifications />;
       default:
-        return <EditProfileTab />;
+        return <MyEventsTab />;
     }
   };
 
@@ -117,14 +117,14 @@ const UserDashboard = () => {
                 icon: addEventIcon,
               },
               {
-                id: "myComments",
-                label: "نظرات و کامنت‌ها",
-                icon: commentsIcon,
+                id: "notifications",
+                label: "اعلانات",
+                icon: notificationsIcon,
               },
               {
-                id: "notifications",
-                label: "اطلاعیه‌ها",
-                icon: notificationsIcon,
+                id: "myTickets",
+                label: "پشتیبانی و تیکت",
+                icon: commentsIcon,
               },
             ].map((tab) => (
               <div
@@ -145,7 +145,7 @@ const UserDashboard = () => {
 
             <div
               className={styles["profile-data-3"]}
-              onClick={handleLogout} // متصل کردن به تابع handleLogout
+              onClick={handleLogout}
             >
               <img
                 src={logoutIcon}

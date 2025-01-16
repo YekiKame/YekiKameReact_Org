@@ -14,7 +14,7 @@ const Step5 = () => {
   // تلفن صاحب رویداد
   const eventOwnerPhone = sessionStorage.getItem("userPhone") || "09123456789";
 
-  const handleSubmit = async () => {
+  const handleSubmit = async  () => {
     const query = `
       mutation CreateEvent($image: Upload) {
         createEvent(
@@ -28,16 +28,8 @@ const Step5 = () => {
           neighborhood: "${formData.neighborhood}",
           postalAddress: "${formData.postalAddress}",
           postalCode: "${formData.postalCode}",
-          registrationStartDate: ${
-            formData.registrationStartDate
-              ? `"${formData.registrationStartDate}"`
-              : "null"
-          },
-          registrationEndDate: ${
-            formData.registrationEndDate
-              ? `"${formData.registrationEndDate}"`
-              : "null"
-          },
+          registrationStartDate: "${formData.registrationStartDate}",
+          registrationEndDate: "${formData.registrationEndDate}",
           maxSubscribers: ${formData.maxSubscribers || 0},
           fullDescription: "${formData.fullDescription || ""}",
           eventOwnerPhone: "${eventOwnerPhone}",
