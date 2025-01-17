@@ -61,7 +61,7 @@ const Filter = ({ onFiltersChange, currentFilters }) => {
             </button>
           ))}
         </div>
-        <div className={styles["seperator-line"]}></div>
+        {/* <div className={styles["seperator-line"]}></div>
       </div>
 
       <div className={styles["filter-section"]}>
@@ -80,7 +80,7 @@ const Filter = ({ onFiltersChange, currentFilters }) => {
             className={styles["location-input"]}
             autoComplete="off"
           />
-        </div>
+        </div> */}
         <div className={styles["seperator-line"]}></div>
       </div>
 
