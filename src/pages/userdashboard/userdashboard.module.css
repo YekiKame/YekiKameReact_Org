@@ -14,85 +14,91 @@
 }
 
 .profile-menu {
-  display: flex; /* نمایش داشبورد و محتوای اصلی در کنار هم */
-  flex-direction: column; /* تب منو و محتوای تب کنار هم */
-  align-items: flex-start; /* هم‌ترازی عناصر به بالا */
-  gap: 16px; /* فاصله بین منو و محتوا */
+  display: flex; 
+  flex-direction: column; 
+  align-items: flex-start;
+  gap: 0.8rem; 
   position: relative;
-  direction: rtl; /* راست‌چین */
+  direction: rtl; 
 }
 
 .profile {
   background-color: var(--lightsurfacelevel-0);
-  border: 1px solid var(--lightsurfacelevel-2);
-  border-radius: 12px;
-  height: 105px;
-  overflow: hidden;
+  border:0.1 rem solid var(--lightsurfacelevel-0);
+  border-radius: 1.2rem;
   position: relative;
-  width: 288px;
+  width: 28.8rem;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 2.4rem;
+  height: 9.6rem;
 }
 
 .name {
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  display: inline-flex;
-  gap: 8px;
+  gap: 0.8rem;
   justify-content: flex-start;
   position: relative;
-  top: 24px;
 }
 
 .text-wrapper {
   color: var(--blacka-87);
-  text-align: left;
-  white-space: nowrap;
+  text-align: right;
   width: fit-content;
 }
 
 .vuesax-bold-profile {
-  height: 40px;
-  width: 40px;
+  height: 4rem;
+  width: 4rem;
 }
 
 .menu-items {
   background-color: var(--lightsurfacelevel-0);
-  border: 1px solid var(--lightsurfacelevel-2);
-  border-radius: 12px;
+  border: 0.1rem solid var(--lightsurfacelevel-2);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 1.2rem;
   height: auto; /* ارتفاع خودکار */
   position: relative;
-  width: 288px; /* عرض ثابت برای منوی داشبورد */
+  width: 28.8rem; /* عرض ثابت برای منوی داشبورد */
   flex-shrink: 0; /* جلوگیری از کوچک شدن */
 }
 
 .items {
-  align-items: flex-end;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  position: relative;
-  width: 240px;
+  width: 100%;
 }
 
 .profile-data {
   align-items: center;
   display: flex;
-  gap: 8px;
-  height: 57px;
+  gap: 0.8rem;
+  height: 5.6rem;
   justify-content: flex-start;
   position: relative;
-  width: 240px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+  padding-right: 0.8rem;
 }
 
 .profile-data:hover {
   background-color: var(--lightprimarya-8);
+  border-radius: 0.8rem;
 }
 
 .profile-data.active {
   background-color: var(--lightprimarya-16); /* پس‌زمینه تب فعال */
-  border-right: 4px solid var(--lightprimaryorigin); /* نشانگر تب فعال */
+  border-right: 0.6rem solid var(--lightprimaryorigin); /* نشانگر تب فعال */
   border-radius: 8px;
   color: var(--lightprimaryorigin); /* تغییر رنگ متن */
+  padding-right: 0.8rem;
 }
 
 .profile-data.active .icon-instance-node {
@@ -105,20 +111,19 @@
 
 .div {
   color: var(--blacka-87);
-  text-align: left; /* متن در سمت چپ */
+  text-align: right; /* متن در سمت چپ */
   white-space: nowrap;
   width: fit-content;
 }
 
 .icon-instance-node {
-  height: 20px !important;
-  width: 20px !important;
+  height: 2rem !important;
+  width: 2rem !important;
 }
 
 .text-wrapper-2 {
   color: var(--blacka-56);
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 1.6rem;
   white-space: nowrap;
   width: fit-content;
 }
@@ -126,24 +131,32 @@
 .profile-data-3 {
   align-items: center;
   background-color: var(--lightsemanticerrora-8);
-  border-radius: 8px;
+  justify-content: flex-start;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  padding-right: 0.8rem;
   display: flex;
   gap: 8px;
-  height: 57px;
-  justify-content: flex-start; /* تغییر برای RTL */
-  position: relative;
-  width: 240px;
-  cursor: pointer;
+  height: 5.6rem;
+  border-radius: 0.8rem;
 }
 
 .profile-data-3:hover {
-  background-color: var(--lightsemanticerrora-24);
+  background-color: var(--lightsemanticerrorlight);
+  border-radius: 0.8rem;
+  color: var(--white);
 }
 
+.profile-data-3:hover .text-wrapper-3  {
+  color: var(--white); 
+}
+.profile-data-3:hover .icon-instance-node  {
+  color: var(--white); 
+}
 .text-wrapper-3 {
-  color: var(--blacka-56);
+  color: var(--blacka-87);
   font-size: 16px;
-  font-weight: 500;
   white-space: nowrap;
   width: fit-content;
 }
