@@ -10,11 +10,11 @@ import TimerIcon from "../../../assets/icons/timer.svg";
 import UserIcon from "../../../assets/icons/user2.svg";
 import LocationIcon from "../../../assets/icons/location2.svg";
 import LeadingIcon from "../../../assets/icons/leading-icon.svg";
-import leisureIcon from "../../../assets/icons/entertainment.svg";
+import leisureIcon from "../../../assets/icons/entertainment2.svg";
 import sportIcon from "../../../assets/icons/sport.svg";
 import cultureIcon from "../../../assets/icons/art.svg";
 import educationIcon from "../../../assets/icons/education.svg";
-import gameIcon from "../../../assets/icons/education.svg";
+import gameIcon from "../../../assets/icons/entertainment.svg";
 const EventListEventCard = ({
   id,
   title,
@@ -54,7 +54,6 @@ const EventListEventCard = ({
   });
   const handleJoinClick = () => {
     navigate(`/eventdetail/${id}`);
-
   };
 
   return (

@@ -2,7 +2,7 @@
   "name": "yekikame",
   "private": true,
   "version": "0.0.0",
-  "homepage":"/",
+  "homepage": "/",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,6 +19,7 @@
     "formik": "^2.4.6",
     "graphql": "^16.10.0",
     "graphql-request": "^7.1.2",
+    "moment-jalaali": "^0.10.4",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

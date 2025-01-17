@@ -18,10 +18,16 @@
   width: 100%;
   /* max-width: 120rem; */
   min-height: 1718px;
+  min-width: 1000px;
   flex-grow: 1;
   /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); */
 }
-
+.noEvents {
+  text-align: right;
+  font-size: 3rem;
+  color: #888;
+  margin-top: 50px;
+}
 .paginationContainer {
   margin-top: 2rem;
   display: flex;

@@ -12,7 +12,7 @@ import Footer from "./components/common/footer/footer.jsx";
 import Login from "./pages/login/login.jsx";
 
 import EventDetail from "./pages/eventDetail/eventDetail.jsx";
-import EventList from "./pages/eventList/eventlist.jsx";
+import EventList from "./pages/eventList/eventList.jsx";
 import AboutUs from "./pages/aboutUs/aboutUs.jsx";
 import PrivacyPolicyAndTermsofService from "./pages/privacyPolicy/privacyPolicyAndTermsofService.jsx";
 
@@ -26,14 +26,13 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/eventdetail/:eventId" element={<EventDetail />} />
-        <Route path="/eventList" element={<EventList />} />
+        <Route path="/eventList/:city" element={<EventList />} />
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route
           path="/privacy-policy"
           element={<PrivacyPolicyAndTermsofService />}
         />
         <Route path="*" element={<Notfound />} />
-
       </Routes>
       <Footer />
     </Provider>

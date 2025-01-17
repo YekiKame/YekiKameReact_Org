@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "/global.css";
 import styles from "./featuresection.module.css";
 import FeatureCard from "./featureCard.jsx";
@@ -9,6 +10,15 @@ import StarIcon from "../../../../assets/icons/StarIcon.svg";
 import FreeIcon from "../../../../assets/icons/FreeIcon.svg";
 
 const FeaturesSection = () => {
+  const navigate = useNavigate();
+  const handleMoreClick = () => {
+    navigate("/aboutus");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className={styles["feature-section"]}>
       <div
@@ -98,7 +108,12 @@ const FeaturesSection = () => {
           <p className={styles["features-subtitle"]}>
             ما تمام سعی خود را می‌کنیم تا بهترین خدمات را به مشتریان ارائه دهیم.
           </p>
-          <button className={styles["features-button"]}>مشاهده بیشتر</button>
+          <button
+            onClick={handleMoreClick}
+            className={styles["features-button"]}
+          >
+            مشاهده بیشتر
+          </button>
         </div>
       </div>
     </div>

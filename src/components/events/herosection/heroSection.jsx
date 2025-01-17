@@ -1,14 +1,40 @@
-// HeroSection.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./herosection.module.css";
-import SearchIcon from '../../../assets/icons/search.svg';
+import SearchIcon from "../../../assets/icons/search.svg";
 
 export const HeroSection = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [cities, setCities] = useState([]);
+  const [filteredCities, setFilteredCities] = useState([]);
   const navigate = useNavigate();
 
-  // لیست ده شهر پیش‌فرض
+  useEffect(() => {
+    const fetchAllCities = async () => {
+      try {
+        const url = `https://iran-locations-api.ir/api/v1/fa/cities`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const cityNames = data.map((city) => city.name);
+        setCities(cityNames);
+      } catch (err) {
+        console.error("Error fetching cities:", err);
+      }
+    };
+    fetchAllCities();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = cities.filter((city) =>
+        city.replace(/\s/g, "").startsWith(searchTerm.replace(/\s/g, ""))
+      );
+      setFilteredCities(filtered.slice(0, 10));
+    } else {
+      setFilteredCities([]);
+    }
+  }, [searchTerm, cities]);
+
   const defaultCities = [
     "اصفهان",
     "شیراز",
@@ -22,16 +48,24 @@ export const HeroSection = () => {
     "اهواز",
   ];
 
-  // هندلر برای ارسال جستجو
+  // هندلر برای ارسال فرم (وقتی اینتر زده میشه)
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim() !== "") {
-      navigate(`/events?city=${encodeURIComponent(searchTerm.trim())}`);
+      navigate(`/eventList/${encodeURIComponent(searchTerm.trim())}`);
     }
   };
 
-  // هندلر برای کلیک روی دکمه‌های شهر پیش‌فرض
+  // هندلر برای کلیک روی شهرها
+  const handleCityClick = (city) => {
+    navigate(`/eventList/${encodeURIComponent(city)}`);
+  };
 
+  // هندلر برای تغییر متن جستجو
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+    
+  };
 
   return (
     <section className={styles.heroSection}>
@@ -47,14 +81,25 @@ export const HeroSection = () => {
 
         <form className={styles.searchForm} onSubmit={handleSearch}>
           <div className={styles.searchContainer}>
-<img src={SearchIcon} alt="search icon" className={styles.searchIcon} />
+            <img
+              src={SearchIcon}
+              alt="search icon"
+              className={styles.searchIcon}
+            />
             <input
               type="text"
-              placeholder="جستجوی شهر یا رویداد"
+              placeholder="جستجوی شهر"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleInputChange}
               className={styles.searchInput}
+              list="city-list"
+              autoComplete="off"
             />
+            <datalist id="city-list">
+              {filteredCities.map((city, index) => (
+                <option key={index} value={city} />
+              ))}
+            </datalist>
           </div>
         </form>
 
