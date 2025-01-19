@@ -5,35 +5,75 @@ import axios from "axios";
 import styles from "./step5.module.css";
 import Stepper from "../../../../common/stepper/stepper.jsx";
 import Button from "../../../../shared/button/button.jsx";
+import DateObject from "react-date-object";
+
+const isoToShamsi = (val) => {
+  if (!val) return "اختیاری";
+
+  let isoStr = "";
+  // اگر در Redux یک آبجکت { date: "...", ... } گذاشتیم:
+  if (typeof val === "object" && val.date) {
+    isoStr = val.date; 
+  } else if (typeof val === "string") {
+    isoStr = val; 
+  } else {
+    return "اختیاری";
+  }
+
+  // اکنون isoStr یک رشته‌ی ISO است
+  const dateObj = new DateObject({ date: isoStr, calendar: "persian", locale: "fa" });
+  return dateObj.format("YYYY/MM/DD HH:mm");
+};
+
+/**
+ * هنگام ارسال به سرور، اگر در Redux شیء داشتیم، باید رشته ISO خالص را بیرون بکشیم.
+ */
+const parseToIso = (val) => {
+  if (!val) return "";
+  if (typeof val === "object" && val.date) {
+    // اگر فرمت آبجکت داریم
+    return val.date;
+  }
+  if (typeof val === "string") {
+    return val; // فرض می‌کنیم خود مقدار ISO است
+  }
+  return "";
+};
 
 const Step5 = () => {
   const formData = useSelector((state) => state.createEvent.formData);
-  const currentStep = useSelector((state) => state.createEvent.currentStep);
   const dispatch = useDispatch();
 
-  // تلفن صاحب رویداد
+  // اگر کاربر لاگین کرده باشد
   const eventOwnerPhone = sessionStorage.getItem("userPhone") || "09123456789";
 
-  const handleSubmit = async  () => {
+  const handleSubmit = async () => {
+    // اگر از آبجکت استفاده می‌کنید، با parseToIso آن را به رشتهٔ ISO برمی‌گردانیم
+    const startDateIso = parseToIso(formData.startDate);
+    const endDateIso = parseToIso(formData.endDate);
+    const regStartIso = parseToIso(formData.registrationStartDate);
+    const regEndIso = parseToIso(formData.registrationEndDate);
+
+    // حالا می‌توانیم کوئری را بسازیم
     const query = `
       mutation CreateEvent($image: Upload) {
         createEvent(
           title: "${formData.title}",
           eventCategory: "${formData.eventCategory}",
           aboutEvent: "${formData.aboutEvent}",
-          startDate: "${formData.startDate}",
-          endDate: "${formData.endDate}",
-          province: "${formData.province}", 
+          startDate: "${startDateIso}",
+          endDate: "${endDateIso}",
+          province: "${formData.province}",
           city: "${formData.city}",
           neighborhood: "${formData.neighborhood}",
           postalAddress: "${formData.postalAddress}",
           postalCode: "${formData.postalCode}",
-          registrationStartDate: "${formData.registrationStartDate}",
-          registrationEndDate: "${formData.registrationEndDate}",
+          registrationStartDate: "${regStartIso}",
+          registrationEndDate: "${regEndIso}",
           maxSubscribers: ${formData.maxSubscribers || 0},
           fullDescription: "${formData.fullDescription || ""}",
           eventOwnerPhone: "${eventOwnerPhone}",
-          image: $image
+          image: $image,
         ) {
           event {
             id
@@ -64,14 +104,15 @@ const Step5 = () => {
   };
 
   const handleEdit = () => {
-    dispatch(prevStep()); // بازگشت به مرحله ۴
+    dispatch(prevStep());
   };
 
   return (
     <div className={styles.container}>
-      <Stepper currentStep={currentStep} />
+      <Stepper currentStep={useSelector((state) => state.createEvent.currentStep)} />
       <h2 className={styles.title}>تایید نهایی</h2>
       <div className={styles.details}>
+
         {formData.image ? (
           <img src={formData.image} alt="Event" className={styles.eventImage} />
         ) : (
@@ -87,18 +128,23 @@ const Step5 = () => {
         <p>
           <strong>توضیحات:</strong> {formData.aboutEvent}
         </p>
+
+        {/* نمایش شمسی + ساعت برای کاربر */}
         <p>
-          <strong>زمان شروع:</strong> {formData.startDate}
+          <strong>زمان شروع رویداد:</strong> {isoToShamsi(formData.startDate)}
         </p>
         <p>
-          <strong>زمان پایان:</strong> {formData.endDate}
+          <strong>زمان پایان رویداد:</strong> {isoToShamsi(formData.endDate)}
         </p>
         <p>
-          <strong>زمان شروع ثبت‌نام:</strong> {formData.registrationStartDate || "اختیاری"}
+          <strong>زمان شروع ثبت‌نام:</strong>{" "}
+          {isoToShamsi(formData.registrationStartDate)}
         </p>
         <p>
-          <strong>زمان پایان ثبت‌نام:</strong> {formData.registrationEndDate || "اختیاری"}
+          <strong>زمان پایان ثبت‌نام:</strong>{" "}
+          {isoToShamsi(formData.registrationEndDate)}
         </p>
+
         <p>
           <strong>استان:</strong> {formData.province}
         </p>
@@ -109,7 +155,7 @@ const Step5 = () => {
           <strong>محله:</strong> {formData.neighborhood}
         </p>
         <p>
-          <strong>کد پستی:</strong> {formData.postalCode ? formData.postalCode : "اختیاری"}
+          <strong>کد پستی:</strong> {formData.postalCode || "اختیاری"}
         </p>
         <p>
           <strong>آدرس:</strong> {formData.postalAddress}
@@ -121,6 +167,7 @@ const Step5 = () => {
           <strong>توضیحات تکمیلی:</strong> {formData.fullDescription || "بدون توضیحات اضافه"}
         </p>
       </div>
+
       <div className={styles.buttons}>
         <Button
           text={"تأیید نهایی و ساخت رویداد"}
