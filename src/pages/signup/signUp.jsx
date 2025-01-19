@@ -9,15 +9,12 @@ import styles from "./signup.module.css";
 const SignUp = () => {
   const [message, setMessage] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
-  const [userPhoneNumber, setUserPhoneNumber] = useState(""); 
-  const [sessionToken, setSessionToken] = useState(""); 
+  const [userPhoneNumber, setUserPhoneNumber] = useState("");
+  const [sessionToken, setSessionToken] = useState("");
 
   const handleModalClose = () => setModalOpen(false);
 
-  // این تابع بعد از کلیک روی دکمه "تأیید" در OTPModal فراخوانی می‌شود
   const handleModalSubmit = async (otp) => {
-    console.log("کد OTP وارد شده:", otp);
-
     const query = `
       mutation {
         verifyOtp(phone: "${userPhoneNumber}", otp: ${otp}) {
@@ -40,11 +37,13 @@ const SignUp = () => {
 
       const data = response.data;
       if (data?.data?.verifyOtp?.success) {
-        // کد OTP درست است
+        const token = data.data.verifyOtp.token;
+        sessionStorage.setItem("sessionToken", token);
+        sessionStorage.setItem("userPhone", userPhoneNumber);
         setMessage("ثبت نام شما با موفقیت انجام شد!");
-        setSessionToken(data.data.verifyOtp.token);
-        console.log("توکن دریافت‌شده:", data.data.verifyOtp.token);
-        setModalOpen(false); // بستن مودال OTP
+        setTimeout(() => {
+          window.location.href = "/dashboard"; // ریدایرکت با ریفرش صفحه
+        }, 1000);
       } else {
         setMessage("کد تأیید نادرست است. لطفاً دوباره تلاش کنید.");
       }
@@ -52,9 +51,6 @@ const SignUp = () => {
       console.error("Error verifying OTP:", error);
       setMessage("خطایی در تأیید کد رخ داده است.");
     }
-
-    // *** این فراخوانی را حذف کردیم تا اگر OTP غلط بود، مودال بسته نشود
-    // setModalOpen(false);
   };
 
   const handleSignup = async (values, { setSubmitting }) => {
@@ -70,7 +66,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "http://95.217.8.192:8000/graphql/",
+        "http://127.0.0.1:8000/graphql/",
         { query },
         {
           headers: {
@@ -80,14 +76,9 @@ const SignUp = () => {
       );
 
       const data = response.data;
-
       if (data?.data?.registerUser?.success) {
-        // در اینجا دیگر پیام موفقیت ثبت‌نام را ست نمی‌کنیم
-        // تا زمانی که کاربر OTP را درست وارد کند.
-        // setMessage("ثبت نام با موفقیت انجام شد!");
-
-        setUserPhoneNumber(values.phoneNumber); // ذخیره شماره تلفن
-        setModalOpen(true); // باز کردن مودال OTP
+        setUserPhoneNumber(values.phoneNumber);
+        setModalOpen(true);
       } else {
         setMessage("خطایی رخ داده است. لطفاً دوباره تلاش کنید.");
       }
@@ -133,6 +124,7 @@ const SignUp = () => {
           >
             {({ isSubmitting }) => (
               <Form className={styles["form"]}>
+                {/* فرم فیلدها */}
                 <label className={styles["form-label"]}>
                   لطفاً برای ثبت نام، شماره تلفن همراه خود را وارد کنید:
                 </label>
@@ -175,22 +167,11 @@ const SignUp = () => {
                   className={styles["error"]}
                 />
 
-                <div>
-                  <span className="form-subtitle">شرایط استفاده از </span>
-                  <span
-                    className="form-sublink"
-                    style={{ cursor: "pointer", color: "blue" }}
-                    onClick={() => (window.location.href = "/privacy-policy")}
-                  >
-                    خدمات و حریم خصوصی یکی کمه
-                  </span>
-                  <span className="form-subtitle"> را می‌پذیرم.</span>
-                </div>
-
                 <Button
                   text="تأیید و دریافت کد"
                   className={styles["signup-button"]}
                   disabled={isSubmitting}
+                  type="submit"
                   customStyles={{
                     width: "100%",
                     height: "56px",
@@ -199,14 +180,12 @@ const SignUp = () => {
                   }}
                 />
                 {message && <p className={styles["message"]}>{message}</p>}
-                <div style={{ height: "64px" }}></div>
               </Form>
             )}
           </Formik>
         </div>
       </div>
 
-      {/* حتماً حالت mode="signup" را پاس بدهید که در otpModal تشخیص داده شود */}
       <OTPModal
         isOpen={isModalOpen}
         onClose={handleModalClose}

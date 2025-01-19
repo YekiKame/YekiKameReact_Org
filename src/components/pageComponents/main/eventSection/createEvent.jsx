@@ -1,7 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./createevent.module.css";
 import boywithphone from "../../../../assets/images/createevent.png";
+import LoginModal from "../../../modals/login/loginModal.jsx";
 const EventSection = () => {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCreateEvent = () => {
+    const isLoggedIn =
+      sessionStorage.getItem("sessionToken") &&
+      sessionStorage.getItem("userPhone");
+
+    if (isLoggedIn) {
+      navigate("/dashboard", { state: { activeTab: "createEvent" } });
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }, 100);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
   return (
     <div className={styles["event-section"]}>
       <div
@@ -18,7 +40,12 @@ const EventSection = () => {
             افرادی که به دنبال چنین فرصتی هستن رو جذب کنی. سیستم ما طوری طراحی
             شده که بهت کمک کنه در کمترین زمان افراد مناسب رو پیدا کنی.
           </p>
-          <button className={styles["event-button"]}>ایجاد رویداد</button>
+          <button
+            className={styles["event-button"]}
+            onClick={handleCreateEvent}
+          >
+            ایجاد رویداد
+          </button>
         </div>
         <div className={styles["event-image"]}>
           <img
@@ -28,6 +55,8 @@ const EventSection = () => {
           />
         </div>
       </div>
+
+      {isModalOpen && <LoginModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };

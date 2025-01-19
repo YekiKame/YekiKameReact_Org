@@ -71,39 +71,41 @@ const OTPModal = ({ isOpen, onClose, onSubmit, phoneNumber, mode }) => {
     `;
 
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/graphql/",
-        { query },
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const response = await fetch("http://127.0.0.1:8000/graphql/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
 
+      const data = await response.json();
       const result =
-        mode === "login"
-          ? response.data?.data?.verifyLoginOtp
-          : response.data?.data?.verifyOtp;
+        mode === "login" ? data?.data?.verifyLoginOtp : data?.data?.verifyOtp;
 
       if (result?.success) {
         if (mode === "login" && result.token) {
-          // ذخیره توکن و هدایت به داشبورد
+          // ذخیره توکن و شماره تلفن
           sessionStorage.setItem("sessionToken", result.token);
-          sessionStorage.setItem("userPhone", phoneNumber); //ذخیره شماره کاربر
-          navigate("/dashboard");
-          onClose();
-        } else if (mode === "signup") {
-          // این پیام صرفاً اطلاع‌رسانی است
-          alert("شماره شما با موفقیت تأیید شد.");
-          // والد (SignUp) خودش دوباره verifyOtp را هم صدا می‌زند (onSubmit)
-          // یا می‌توانید این خط را نگه دارید تا والدش هم لاجیک دیگری انجام دهد
-          onSubmit(otpValue);
+          sessionStorage.setItem("userPhone", phoneNumber);
+          setError(""); // پاک کردن پیام‌های خطا
 
-          // بستن مودال
+          // نمایش پیام موفقیت
+          setError("ورود موفقیت‌آمیز بود!");
+
+          // ریدایرکت با تاخیر
+          setTimeout(() => {
+            onClose();
+            window.location.href = "/dashboard";
+          }, 1000);
+        } else if (mode === "signup") {
+          onSubmit(otpValue);
           onClose();
         }
       } else {
         setError("کد تأیید نادرست است. لطفاً دوباره تلاش کنید.");
       }
-    } catch (err) {
-      setError("مشکلی در ارتباط با سرور رخ داد. لطفاً دوباره تلاش کنید.");
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      setError("خطایی در تأیید کد رخ داده است.");
     }
   };
 

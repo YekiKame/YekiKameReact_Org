@@ -1,26 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
 import "./header.css";
 import Button from "../../shared/button/button.jsx";
 import SearchIcon from "../../../assets/icons/search.svg";
 import LocationIcon from "../../../assets/icons/location.svg";
-import UserIcon from "../../../assets/icons/user-square.svg";
 import LoginIcon from "../../../assets/icons/login.svg";
 import Logo from "../../../assets/icons/logo.svg";
 import LoginModal from "../../modals/login/loginModal.jsx";
+import UserDropdown from "../userDropdown/UserDropdown";
 import { useNavigate, Link } from "react-router-dom";
 
-const Header = ({ isLoggedIn, pageState = "home" }) => {
+const Header = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("تهران"); // مقدار پیش‌فرض تهران
+  const [searchTerm, setSearchTerm] = useState("تهران");
   const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+  const dropdownRef = useRef(null); // اضافه کردن ref
+  const checkLoginStatus = () => {
+    const token = sessionStorage.getItem("sessionToken");
+    const phone = sessionStorage.getItem("userPhone");
+    if (token && phone) {
+      setIsLoggedIn(true);
+      setUserName(phone);
+    } else {
+      setIsLoggedIn(false);
+      setUserName("");
+    }
+  };
 
-  // دریافت لیست شهرها از API
+  useEffect(() => {
+    checkLoginStatus();
+    window.addEventListener("storage", checkLoginStatus);
+    return () => window.removeEventListener("storage", checkLoginStatus);
+  }, []);
+
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [location]);
+
+  // اضافه کردن event listener برای کلیک خارج از دراپ‌داون
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   useEffect(() => {
     const fetchAllCities = async () => {
       try {
-        const url = `https://iran-locations-api.ir/api/v1/fa/cities`;
+        const url = "https://iran-locations-api.ir/api/v1/fa/cities";
         const res = await fetch(url);
         const data = await res.json();
         const cityNames = data.map((city) => city.name);
@@ -32,7 +69,6 @@ const Header = ({ isLoggedIn, pageState = "home" }) => {
     fetchAllCities();
   }, []);
 
-  // فیلتر کردن شهرها بر اساس متن جستجو
   useEffect(() => {
     if (searchTerm && searchTerm !== "تهران") {
       const filtered = cities.filter((city) =>
@@ -54,22 +90,8 @@ const Header = ({ isLoggedIn, pageState = "home" }) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // هندلر برای انتخاب شهر
-  const handleCitySelect = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-  };
-
-  // هندلر برای کلیک روی رویدادها
   const handleEventsClick = () => {
     navigate(`/eventList/${encodeURIComponent(searchTerm)}`);
-  };
-
-  const getButtonClass = (page) => {
-    if (pageState === page) {
-      return "header__btn--active";
-    }
-    return "header__btn--default";
   };
 
   return (
@@ -108,18 +130,15 @@ const Header = ({ isLoggedIn, pageState = "home" }) => {
         </div>
 
         <nav className="header__menu">
-          <Link to="/" className={`header__link ${getButtonClass("home")}`}>
+          <Link to="/" className="header__link">
             صفحه اصلی
           </Link>
-          <Link
-            to="/aboutUs"
-            className={`header__link ${getButtonClass("about")}`}
-          >
+          <Link to="/aboutUs" className="header__link">
             درباره ما
           </Link>
           <div
             onClick={handleEventsClick}
-            className={`header__link ${getButtonClass("events")}`}
+            className="header__link"
             style={{ cursor: "pointer" }}
           >
             رویدادها
@@ -128,25 +147,26 @@ const Header = ({ isLoggedIn, pageState = "home" }) => {
 
         <div className="header__actions">
           {isLoggedIn ? (
-            <>
-              <Button
-                className="header__btn header__btn--primary"
-                text="ثبت رویداد"
-              />
+            <div
+              ref={dropdownRef}
+              className="header__user-container"
+              style={{ position: "relative" }}
+            >
               <Button
                 className="header__btn header__btn--secondary"
-                text="پنل من"
-                icon={UserIcon}
+                text={userName}
+                onClick={() => setShowDropdown(!showDropdown)}
               />
-            </>
+              {showDropdown && (
+                <UserDropdown onClose={() => setShowDropdown(false)} />
+              )}
+            </div>
           ) : (
             <Button
               className="header__btn header__btn--primary"
               text="ورود / ثبت نام"
               onClick={openModal}
-            >
-              <img src={LoginIcon} alt="Login" className="header__icon" />
-            </Button>
+            />
           )}
         </div>
       </div>
