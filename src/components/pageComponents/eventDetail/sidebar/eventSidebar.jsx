@@ -179,6 +179,7 @@ const SideBar = ({ event }) => {
 SideBar.propTypes = {
   event: PropTypes.shape({
     title: PropTypes.string.isRequired,
+    subscriberCount: PropTypes.number.isRequired,
     image: PropTypes.string.isRequired,
     eventCategory: PropTypes.string.isRequired,
     aboutEvent: PropTypes.string.isRequired,

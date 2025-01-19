@@ -23,7 +23,7 @@ const Main = ({ event }) => {
 
         {/* شرکت کنندگان */}
         <div className={styles["participants"]}>
-          <h2 className={styles["section-title"]}>شرکت کنندگان (۳۲)</h2>
+          <h2 className={styles["section-title"]}>شرکت کنندگان ({event.subscriberCount})</h2>
         </div>
         <div>
           <h2 className={styles["section-title"]}>رویدادهای مرتبط:</h2>
@@ -38,6 +38,7 @@ const Main = ({ event }) => {
 Main.propTypes = {
   event: PropTypes.shape({
     title: PropTypes.string.isRequired,
+    subscriberCount: PropTypes.number.isRequired,
     aboutEvent: PropTypes.string.isRequired,
     startDate: PropTypes.string.isRequired,
     endDate: PropTypes.string.isRequired,

@@ -41,6 +41,7 @@ const EventDetail = () => {
                   registrationEndDate
                   fullDescription
                   maxSubscribers
+                  subscriberCount
                   eventOwner {
                     phone
                   }
