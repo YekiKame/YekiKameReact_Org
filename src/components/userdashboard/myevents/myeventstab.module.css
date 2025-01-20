@@ -1,43 +1,58 @@
 .myEventsTab {
-    padding: 1.6rem;
-    font-family: 'IRANSans', sans-serif;
-  }
-  
-  .tabs {
-    display: flex;
-    justify-content: center;
-    gap: 1.6rem;
-    margin-bottom: 1.6rem;
-  }
-  
-  .eventsContent {
-    margin-top: 2rem;
-  }
-  
-  .eventsContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
-    gap: 1.6rem;
-  }
-  
-  .noEvents {
-    text-align: center;
-    margin-top: 3.2rem;
-  }
-  
-  .noEventsImg {
-    max-width: 80rem;
-    height: 52.8rem;
-    margin-bottom: 1.6rem;
-  }
-  
-  .noEventsText {
-    font-size: 1.8rem;
-    color: #ff8800;
-  }
-  
-  .active {
-    background: #cc6d00;
-    color: white;
-  }
-  
+  padding: 2rem;
+  text-align: center;
+}
+
+.tabs {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.tab {
+  padding: 0.8rem 2rem;
+  font-size: 1.4rem;
+  border: 1px solid #ff941a;
+  border-radius: 5px;
+  background-color: transparent;
+  color: #ff8800;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab:hover {
+  background-color: rgba(255, 148, 26, 0.1);
+}
+
+.activeTab {
+  background-color: #cc6d00;
+  color: white;
+}
+
+.eventsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.noEvents {
+  margin-top: 2rem;
+}
+
+.noEventsImg {
+  width: 200px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.noEventsText {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.error {
+  color: red;
+  margin-top: 2rem;
+}

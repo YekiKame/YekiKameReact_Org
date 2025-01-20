@@ -1,59 +1,66 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./main.module.css";
-import img from "../../../../assets/images/eventDetailMainPicture.png";
+
+import defaultImage from "../../../../assets/images/eventDetailMainPicture.png";
 import RelatedEvents from "../relatedevent/relatedEvents.jsx";
 
+/**
+ * این کامپوننت اطلاعات رویداد را دریافت کرده و نمایش می‌دهد.
+ * همچنین رویدادهای مرتبط را در پایین صفحه نشان می‌دهد.
+ *
+ * @param {{ event: {...} }} props
+ */
 const Main = ({ event }) => {
-  console.log("main event sis ");
-  console.log(event);
+  // اگر event.image داشتید از آن استفاده کنید، وگرنه defaultImage
+  const mainImage = event.image || defaultImage;
+
   return (
     <div className={styles["event-page"]}>
       <div className={styles["main-content"]}>
+
         {/* تصویر بالای صفحه */}
         <div className={styles["event-image"]}>
-          <img src={img} alt="Event" className={styles["event-img"]} />
+          <img src={mainImage} alt="Event" className={styles["event-img"]} />
         </div>
 
         {/* توضیحات */}
         <div className={styles["event-description"]}>
           <h2 className={styles["section-title"]}>توضیحات</h2>
-          <p className={styles["event-text"]}>{event.fullDescription}</p>
+          <p className={styles["event-text"]}>
+            {event.fullDescription || "بدون توضیحات"}
+          </p>
         </div>
 
         {/* شرکت کنندگان */}
         <div className={styles["participants"]}>
-          <h2 className={styles["section-title"]}>شرکت کنندگان ({event.subscriberCount})</h2>
+          <h2 className={styles["section-title"]}>
+            شرکت کنندگان ({event.subscriberCount || 0})
+          </h2>
+          {/* در صورت نیاز، لیستی از کاربران یا هر کامپوننت دیگری */}
         </div>
+
+        {/* بخش رویدادهای مرتبط */}
         <div>
           <h2 className={styles["section-title"]}>رویدادهای مرتبط:</h2>
-          <RelatedEvents />
-          <button className={styles["custom-button"]}>مشاهده همه</button>
+          {/* حتماً event.id را بفرستید */}
+          <RelatedEvents eventId={event.id} />
         </div>
       </div>
     </div>
   );
 };
 
+// در صورت تمایل، PropTypes را ساده کنید یا مستقیماً حذف کنید.
+// فیلدهایی را بگذارید که واقعا در سرور وجود دارد و قصد نمایش دارید.
 Main.propTypes = {
   event: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    subscriberCount: PropTypes.number.isRequired,
-    aboutEvent: PropTypes.string.isRequired,
-    startDate: PropTypes.string.isRequired,
-    endDate: PropTypes.string.isRequired,
-    province: PropTypes.string.isRequired,
-    city: PropTypes.string.isRequired,
-    neighborhood: PropTypes.string.isRequired,
-    postalAddress: PropTypes.string.isRequired,
-    postalCode: PropTypes.string.isRequired,
-    registrationStartDate: PropTypes.string.isRequired,
-    registrationEndDate: PropTypes.string.isRequired,
-    fullDescription: PropTypes.string.isRequired,
-    maxSubscribers: PropTypes.number.isRequired,
-    eventOwner: PropTypes.shape({
-      phone: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    image: PropTypes.string,
+    subscriberCount: PropTypes.number,
+    fullDescription: PropTypes.string,
+  }),
 };
+
 export default Main;

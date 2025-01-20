@@ -68,4 +68,20 @@
     font-size: 14px;
     color: #777;
   }
-  
+  .buttonsRow{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    width: 100%;
+
+  }
+  .deleteBtn{
+    border-radius: 0.4rem;
+    border: 0.1rem solid var(--lightprimaryorigin);
+    background-color: var(--white);
+    width: 4rem;
+    height: 4rem;
+  }
+  .deleteBtn:hover{
+    background-color: var(--lightprimarya-24);
+  }

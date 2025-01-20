@@ -32,34 +32,40 @@ const createEventSlice = createSlice({
       state.currentStep = Math.max(state.currentStep - 1, 1);
     },
     updateFormData: (state, action) => {
-      // عمل ذخیره در formData
       state.formData = { ...state.formData, ...action.payload };
     },
 
-    // اگر مرحله‌ای خواستید به صورت دلخواه بپرید (با validateSteps)
     setStepIfValid: (state, action) => {
       const desiredStep = action.payload;
 
+      /**
+       * چک می‌کنیم در هر گام، کدام فیلدهای ضروری باید پر باشند.
+       */
       const validateSteps = (stepNum, formData) => {
-        // گام 1
+        // گام 1: title, eventCategory, aboutEvent
         if (stepNum >= 1) {
           if (!formData.title || !formData.eventCategory || !formData.aboutEvent) {
             return false;
           }
         }
-        // گام 2: تاریخ شروع/پایان
+        // گام 2: startDate, endDate, registrationStartDate, registrationEndDate
         if (stepNum >= 2) {
-          if (!formData.startDate || !formData.endDate) {
+          if (
+            !formData.startDate ||
+            !formData.endDate ||
+            !formData.registrationStartDate ||
+            !formData.registrationEndDate
+          ) {
             return false;
           }
         }
-        // گام 3: ... 
+        // گام 3: province, city, postalAddress
         if (stepNum >= 3) {
           if (!formData.province || !formData.city || !formData.postalAddress) {
             return false;
           }
         }
-        // گام 4:
+        // گام 4: maxSubscribers (الزامی)
         if (stepNum >= 4) {
           if (!formData.maxSubscribers) {
             return false;
@@ -68,9 +74,11 @@ const createEventSlice = createSlice({
         return true;
       };
 
+      // مثلاً اگر می‌خواهیم به step=3 برویم،
+      // باید step=1 و step=2 معتبر باشند.
       for (let i = 1; i < desiredStep; i++) {
         if (!validateSteps(i, state.formData)) {
-          return;
+          return; // اجازه نمیدهیم گام عوض شود
         }
       }
       state.currentStep = desiredStep;

@@ -6,12 +6,6 @@
   background-color: #f9f9f9;
 }
 
-/* .main-content {
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-} */
 .main-content {
   background: #fff;
   border-radius: 10px;
@@ -21,6 +15,7 @@
   min-height: 1000px;
   min-width: 960px;
 }
+
 .event-image {
   text-align: center;
   margin-bottom: 20px;
@@ -33,6 +28,7 @@
   border-radius: 10px;
   margin: 0 auto;
 }
+
 .section-title {
   font-size: 36px;
   color: #ff7a00;
@@ -46,6 +42,7 @@
   line-height: 1.8;
   margin-bottom: 24px;
 }
+
 .custom-button {
   font-family: "Arial", sans-serif;
   font-size: 24px;
