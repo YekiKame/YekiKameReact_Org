@@ -4,7 +4,7 @@ import styles from "./eventcard.module.css";
 import Button from "../../shared/button/button.jsx";
 
 // آیکون‌ها
-import NoPhoto from "../../../assets/images/NoPhoto.jpg";
+import NoPhoto from "../../../assets/images/noPhoto.jpg";
 import TimerIcon from "../../../assets/icons/timer.svg";
 import UserIcon from "../../../assets/icons/user2.svg";
 import LocationIcon from "../../../assets/icons/location2.svg";
