@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
 import Button from "../../components/shared/button/button.jsx";
-import LoginModal from "../../components/modals/login/loginModal.jsx"; // مودال ارسال کد
+import LoginModal from "../../components/modals/login/loginModal.jsx";
 
 const Login = () => {
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
 
   // اسکیمای اعتبارسنجی
   const validationSchema = Yup.object({
@@ -42,10 +40,12 @@ const Login = () => {
       const data = await response.json();
       if (data?.data?.loginUser?.success) {
         const token = data.data.loginUser.token;
-        sessionStorage.setItem("sessionToken", token); // ذخیره توکن در سشن
-        sessionStorage.setItem("userPhone", values.phoneNumber); //ذخیره شماره تلفن
+        sessionStorage.setItem("sessionToken", token);
+        sessionStorage.setItem("userPhone", values.phoneNumber);
         setMessage("ورود موفقیت‌آمیز بود!");
-        setTimeout(() => navigate("/dashboard"), 1000); // هدایت به پنل کاربری
+        setTimeout(() => {
+          window.location.href = "/dashboard"; // ریدایرکت با ریفرش صفحه
+        }, 1000);
       } else {
         setMessage("شماره تلفن یا رمز عبور اشتباه است.");
       }
@@ -64,7 +64,6 @@ const Login = () => {
             <h3 className={styles["text-head"]}>ورود به حساب کاربری</h3>
           </div>
 
-          {/* فرم با Formik */}
           <Formik
             initialValues={{ phoneNumber: "", password: "" }}
             validationSchema={validationSchema}
@@ -124,7 +123,6 @@ const Login = () => {
       </div>
       <div className={styles["login-left"]}></div>
 
-      {/* نمایش مودال ارسال کد */}
       {isModalOpen && <LoginModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );

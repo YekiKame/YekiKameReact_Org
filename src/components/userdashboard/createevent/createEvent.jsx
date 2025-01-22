@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { nextStep, prevStep } from "../../../redux/slices/createEventSlice.js";
 import Step1 from "./steps/step1/step1.jsx";
@@ -13,7 +13,9 @@ const CreateEvent = () => {
   const currentStep = useSelector((state) => state.createEvent.currentStep);
   const dispatch = useDispatch();
 
-  // رندر مرحله فعلی
+  // یک state برای رصد‌کردن اینکه stepXForm سابمیت موفق داشت یا خطا:
+  const [submitOk, setSubmitOk] = useState(false);
+
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -31,31 +33,37 @@ const CreateEvent = () => {
     }
   };
 
-  // تابع کمکی برای سابمیت فرم فعلی
+  // تابع کمکی برای submit فرم فعلی
   const handleSubmitCurrentForm = useCallback(() => {
     const formElement = document.getElementById(`step${currentStep}Form`);
     if (formElement) {
-      formElement.requestSubmit(); 
+      // ما یک eventListener موقت می‌گذاریم
+      const handleSubmitEvent = (e) => {
+        // اگر Formik خطایی داشته باشد، onSubmit معمولا اجرا نمی‌شود
+        // اما برای اطمینان، می‌توانیم اینجا "submit" رویداد خام را بررسی کنیم
+      };
+      formElement.addEventListener("submit", handleSubmitEvent);
+
+      formElement.requestSubmit();
     }
   }, [currentStep]);
 
-  // وقتی دکمه «مرحله قبل» کلیک شد
+  // مرحله قبل
   const handlePrev = () => {
     dispatch(prevStep());
   };
 
-  // وقتی دکمه «مرحله بعد» کلیک شد:
+  // مرحله بعد
   const handleNext = () => {
-    // ابتدا فرم مرحله فعلی را سابمیت می‌کنیم:
+    // سابمیت
     handleSubmitCurrentForm();
-    // سپس با اندکی تاخیر به مرحله بعد می‌رویم (تا اگر خطایی باشد، جلویش گرفته شود)
+    // بدون تاخیر (یا با تاخیر کم) move next
     setTimeout(() => {
-      // این روش ساده است ولی استاندارد کامل نیست؛
-      // در عمل اگر فرم خطا داشته باشد، Formik سابمیت را کنسل می‌کند
-      // و کاربر پیام خطا می‌بیند. بنابراین اگر کاربر فیلدها را اصلاح نکند،
-      // همچنان در همین مرحله خواهد ماند.
+      // اگر مرحله 2 مثلاً isValid باشد (فرم پر)
+      // ولی اینجا ما چک isValid را نداریم؛
+      // می‌توانید DevTools ببینید formData
       dispatch(nextStep());
-    }, 100);
+    }, 200);
   };
 
   return (
@@ -63,7 +71,6 @@ const CreateEvent = () => {
       <h1 className={styles.title}>ثبت رویداد جدید</h1>
       <div className={styles.steps}>{renderStep()}</div>
       <div className={styles.navigation}>
-        {/* دکمه مرحله قبل */}
         {currentStep > 1 && currentStep < 5 && (
           <Button
             text={"مرحله قبل"}
@@ -72,8 +79,6 @@ const CreateEvent = () => {
             variant="outline"
           />
         )}
-
-        {/* دکمه مرحله بعد */}
         {currentStep < 5 && (
           <Button
             text={"مرحله بعد"}

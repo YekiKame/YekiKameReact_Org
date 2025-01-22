@@ -35,49 +35,52 @@ const createEventSlice = createSlice({
       state.formData = { ...state.formData, ...action.payload };
     },
 
-    // مرحله جدید: تعیین مرحله فعلی به شرط تکمیل مراحل قبلی
     setStepIfValid: (state, action) => {
       const desiredStep = action.payload;
 
-      // تابع کمکی ساده برای چک‌کردن حداقل‌ها تا مرحله X
+      /**
+       * چک می‌کنیم در هر گام، کدام فیلدهای ضروری باید پر باشند.
+       */
       const validateSteps = (stepNum, formData) => {
-        // اینجا فقط به شکل ساده چک می‌کنیم فیلدهای ضروری هر مرحله پر باشند:
         // گام 1: title, eventCategory, aboutEvent
         if (stepNum >= 1) {
           if (!formData.title || !formData.eventCategory || !formData.aboutEvent) {
             return false;
           }
         }
-        // گام 2: startDate, endDate (فیلدهای اجباری)
+        // گام 2: startDate, endDate, registrationStartDate, registrationEndDate
         if (stepNum >= 2) {
-          if (!formData.startDate || !formData.endDate) {
+          if (
+            !formData.startDate ||
+            !formData.endDate ||
+            !formData.registrationStartDate ||
+            !formData.registrationEndDate
+          ) {
             return false;
           }
         }
-        // گام 3: province, city, postalAddress (بر اساس درخواست، کدپستی حذف الزام)
+        // گام 3: province, city, postalAddress
         if (stepNum >= 3) {
           if (!formData.province || !formData.city || !formData.postalAddress) {
             return false;
           }
         }
-        // گام 4: maxSubscribers (fullDescription دیگر اجباری نیست)
+        // گام 4: maxSubscribers (الزامی)
         if (stepNum >= 4) {
           if (!formData.maxSubscribers) {
             return false;
           }
         }
-        // اگر به اینجا برسیم یعنی مراحل قبل درست بوده
         return true;
       };
 
-      // ابتدا بررسی می‌کنیم که آیا مراحل قبل از desiredStep معتبر هستند یا خیر
-      // برای مثال اگر desiredStep=3 است، باید مرحله 1 و 2 پر شده باشند
+      // مثلاً اگر می‌خواهیم به step=3 برویم،
+      // باید step=1 و step=2 معتبر باشند.
       for (let i = 1; i < desiredStep; i++) {
         if (!validateSteps(i, state.formData)) {
-          return; // اگر یکی از مراحل قبلی ناقص بود، کاری نکن
+          return; // اجازه نمیدهیم گام عوض شود
         }
       }
-      // اگر اوکی بود، برو به desiredStep
       state.currentStep = desiredStep;
     },
   },

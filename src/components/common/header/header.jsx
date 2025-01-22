@@ -1,35 +1,106 @@
-import React, { useState } from "react";
-import "./header.css"; // فایل استایل برای تنظیمات CSS
-import Button from "../../shared/button/button.jsx"; // کامپوننت دکمه
-import SearchIcon from "../../../assets/icons/search.svg"; // آیکون جستجو
-import LocationIcon from "../../../assets/icons/location.svg"; // آیکون لوکیشن
-import UserIcon from "../../../assets/icons/user-square.svg"; // آیکون کاربر
+import React, { useState, useEffect, useRef } from "react";
+
+import "./header.css";
+import Button from "../../shared/button/button.jsx";
+import SearchIcon from "../../../assets/icons/search.svg";
+import LocationIcon from "../../../assets/icons/location.svg";
 import LoginIcon from "../../../assets/icons/login.svg";
 import Logo from "../../../assets/icons/logo.svg";
 import LoginModal from "../../modals/login/loginModal.jsx";
+import UserDropdown from "../userDropdown/UserDropdown";
+import { useNavigate, Link } from "react-router-dom";
 
-const Header = ({ isLoggedIn, city = "تهران", pageState = "home" }) => {
+const Header = () => {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("تهران");
+  const [cities, setCities] = useState([]);
+  const [filteredCities, setFilteredCities] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+  const dropdownRef = useRef(null); // اضافه کردن ref
+  const checkLoginStatus = () => {
+    const token = sessionStorage.getItem("sessionToken");
+    const phone = sessionStorage.getItem("userPhone");
+    if (token && phone) {
+      setIsLoggedIn(true);
+      setUserName(phone);
+    } else {
+      setIsLoggedIn(false);
+      setUserName("");
+    }
+  };
+
+  useEffect(() => {
+    checkLoginStatus();
+    window.addEventListener("storage", checkLoginStatus);
+    return () => window.removeEventListener("storage", checkLoginStatus);
+  }, []);
+
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [location]);
+
+  // اضافه کردن event listener برای کلیک خارج از دراپ‌داون
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const fetchAllCities = async () => {
+      try {
+        const url = "https://iran-locations-api.ir/api/v1/fa/cities";
+        const res = await fetch(url);
+        const data = await res.json();
+        const cityNames = data.map((city) => city.name);
+        setCities(cityNames);
+      } catch (err) {
+        console.error("Error fetching cities:", err);
+      }
+    };
+    fetchAllCities();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm && searchTerm !== "تهران") {
+      const filtered = cities.filter((city) =>
+        city.replace(/\s/g, "").startsWith(searchTerm.replace(/\s/g, ""))
+      );
+      setFilteredCities(filtered.slice(0, 10));
+    } else {
+      setFilteredCities([]);
+    }
+  }, [searchTerm, cities]);
+
+  const handleLogoClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // Handle color state change for buttons based on the page state
-  const getButtonClass = (page) => {
-    if (pageState === page) {
-      return "header__btn--active";  // Class for active button
-    }
-    return "header__btn--default";  // Default button color (non-active)
+  const handleEventsClick = () => {
+    navigate(`/eventList/${encodeURIComponent(searchTerm)}`);
   };
 
   return (
     <header className="header">
       <div className="header__container">
-        {/* لوگو */}
-        <div className="header__logo">
+        <Link to="/" className="header__logo" onClick={handleLogoClick}>
           <img src={Logo} alt="Logo" />
-        </div>
+        </Link>
 
-        {/* بخش جستجو */}
         <div className="header__search">
           <div className="header__search-event">
             <input
@@ -43,46 +114,59 @@ const Header = ({ isLoggedIn, city = "تهران", pageState = "home" }) => {
             <input
               type="text"
               placeholder="جستجوی شهر"
-              value={city}
-              readOnly
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="header__input"
+              list="header-city-list"
+              autoComplete="off"
             />
             <img src={LocationIcon} alt="Location" className="header__icon" />
+            <datalist id="header-city-list">
+              {filteredCities.map((city, index) => (
+                <option key={index} value={city} />
+              ))}
+            </datalist>
           </div>
         </div>
 
-        {/* منو */}
         <nav className="header__menu">
-          <a href="/" className={`header__link ${getButtonClass("home")}`}>
+          <Link to="/" className="header__link">
             صفحه اصلی
-          </a>
-          <a href="/aboutUs" className={`header__link ${getButtonClass("about")}`}>
+          </Link>
+          <Link to="/aboutUs" className="header__link">
             درباره ما
-          </a>
-          <a href="/events" className={`header__link ${getButtonClass("events")}`}>
+          </Link>
+          <div
+            onClick={handleEventsClick}
+            className="header__link"
+            style={{ cursor: "pointer" }}
+          >
             رویدادها
-          </a>
+          </div>
         </nav>
 
-        {/* دکمه‌ها */}
         <div className="header__actions">
           {isLoggedIn ? (
-            <>
-              <Button className="header__btn header__btn--primary" text="ثبت رویداد" />
+            <div
+              ref={dropdownRef}
+              className="header__user-container"
+              style={{ position: "relative" }}
+            >
               <Button
                 className="header__btn header__btn--secondary"
-                text="پنل من"
-                icon={UserIcon}
+                text={userName}
+                onClick={() => setShowDropdown(!showDropdown)}
               />
-            </>
+              {showDropdown && (
+                <UserDropdown onClose={() => setShowDropdown(false)} />
+              )}
+            </div>
           ) : (
             <Button
               className="header__btn header__btn--primary"
               text="ورود / ثبت نام"
               onClick={openModal}
-            >
-              <img src={LoginIcon} alt="Login" className="header__icon" />
-            </Button>
+            />
           )}
         </div>
       </div>

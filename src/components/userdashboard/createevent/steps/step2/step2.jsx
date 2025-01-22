@@ -2,224 +2,202 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { updateFormData } from "../../../../../redux/slices/createEventSlice";
+import { updateFormData } from "../../../../../redux/slices/createEventSlice.js";
 import Stepper from "../../../../common/stepper/stepper.jsx";
+import { Navigate } from "react-router-dom"; // اگر بخواهید ریدایرکت کنید
+
+import DatePicker from "react-multi-date-picker";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import DateObject from "react-date-object";
+
 import styles from "./step2.module.css";
 
-// تبدیل شمسی به میلادی (تمثیلی)
-const convertShamsiToGregorian = (shamsiDate) => {
-  if (!shamsiDate) return "";
-  return "2024-12-24"; // نمونه
-};
-
-// تبدیل اعداد فارسی در زمان به انگلیسی
-const convertPersianNumbersToEnglish = (input) => {
-  if (!input) return "";
-  const persianNumbers = [ /۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g ];
-  const englishNumbers = [ "0","1","2","3","4","5","6","7","8","9" ];
-  let str = input;
-  for (let i = 0; i < 10; i++) {
-    str = str.replace(persianNumbers[i], englishNumbers[i]);
-  }
-  return str;
-};
-
-// ساخت فرمت ISO مثلاً "2024-12-24T10:30:00+00:00"
-const toIsoString = (dateStr, timeStr) => {
-  if (!dateStr) return "";
-  const safeTime = timeStr || "00:00";
-  return dateStr + "T" + safeTime + ":00+00:00";
-};
-
 const Step2 = () => {
-  const currentStep = useSelector((state) => state.createEvent.currentStep);
-  const initialFormData = useSelector((state) => state.createEvent.formData);
+  // ابتدا می‌گیریم کل استیت اسلایس createEvent
+  const createEventState = useSelector((state) => state.createEvent);
+
+  // اگر به دلایلی اسلایس پاک شده است:
+  if (!createEventState) {
+    return <p>اطلاعات ساخت رویداد در دسترس نیست!</p>;
+    // یا می‌توانید return <Navigate to="/dashboard/create-event" />;
+  }
+
+  const { currentStep, formData } = createEventState;
   const dispatch = useDispatch();
+
+  // اگر ترجیح می‌دهید کاربر حتماً از Step1 عبور کرده باشد،
+  // بررسی کنید اگر currentStep < 2، ریدایرکت کنید یا پیغامی بدهید:
+  // if (currentStep < 2) {
+  //   return <Navigate to="/dashboard/create-event/step1" />;
+  // }
+
+  /**
+   * اگر استرینگ ورودی (ایزویی) نامعتبر باشد یا خالی، null برمی‌گردانیم تا DatePicker کرش نکند.
+   */
+  const parseToDateObject = (isoString) => {
+    if (!isoString) return null;
+    try {
+      const dateObj = new DateObject({
+        date: isoString,
+        calendar: persian,
+        locale: persian_fa,
+      });
+      return dateObj.isValid ? dateObj : null;
+    } catch (error) {
+      console.warn("Error parsing date to DateObject:", isoString, error);
+      return null;
+    }
+  };
+
+  /**
+   * تبدیل DateObject شمسی به فرمت ایزویی
+   */
+  const toIsoString = (val) => {
+    if (!val) return "";
+    return val.toDate().toISOString();
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      startDate: initialFormData.startDate || "",
-      startTime: initialFormData.startTime || "",
-      endDate: initialFormData.endDate || "",
-      endTime: initialFormData.endTime || "",
-      registrationStartDate: initialFormData.registrationStartDate || "",
-      registrationEndDate: initialFormData.registrationEndDate || "",
+      startDateTime: parseToDateObject(formData.startDate),
+      endDateTime: parseToDateObject(formData.endDate),
+      registrationStartDateTime: parseToDateObject(formData.registrationStartDate),
+      registrationEndDateTime: parseToDateObject(formData.registrationEndDate),
     },
     validationSchema: Yup.object({
-      startDate: Yup.string().required("تاریخ شروع رویداد الزامی است"),
-      endDate: Yup.string().required("تاریخ پایان رویداد الزامی است"),
-      // اگر سرور اجباری می‌داند:
-      // registrationStartDate: Yup.string().required("تاریخ شروع ثبت‌نام الزامی است"),
-      // registrationEndDate: Yup.string().required("تاریخ پایان ثبت‌نام الزامی است"),
+      startDateTime: Yup.mixed().required("تاریخ و زمان شروع رویداد الزامی است"),
+      endDateTime: Yup.mixed().required("تاریخ و زمان پایان رویداد الزامی است"),
+      registrationStartDateTime: Yup.mixed().required(
+        "تاریخ و زمان شروع ثبت‌نام الزامی است"
+      ),
+      registrationEndDateTime: Yup.mixed().required(
+        "تاریخ و زمان پایان ثبت‌نام الزامی است"
+      ),
     }),
     onSubmit: (values) => {
-      // تبدیل تاریخ شمسی به میلادی
-      const sd = convertShamsiToGregorian(values.startDate);  // "2024-12-24"
-      const ed = convertShamsiToGregorian(values.endDate);
-      const rsd = values.registrationStartDate
-        ? convertShamsiToGregorian(values.registrationStartDate)
-        : null; // اگر خالی بود => null
-      const red = values.registrationEndDate
-        ? convertShamsiToGregorian(values.registrationEndDate)
-        : null;
-
-      // تبدیل اعداد فارسی ساعت به انگلیسی
-      const st = convertPersianNumbersToEnglish(values.startTime); // "10:30"
-      const et = convertPersianNumbersToEnglish(values.endTime);
-      
-      // فرمت ISO
-      const finalStart = toIsoString(sd, st) || null; 
-      const finalEnd = toIsoString(ed, et) || null;
-      // اگر فیلد ثبت‌نام خالی بود، می‌گذاریم null تا در مرحله 5 به‌صورت null فرستاده شود
-      const finalRegStart = rsd ? toIsoString(rsd, "00:00") : null;
-      const finalRegEnd = red ? toIsoString(red, "00:00") : null;
-
-      // این مقدار را در ریداکس ذخیره می‌کنیم
-      const fixedValues = {
-        // برای نمایش مجدد به کاربر
-        startTime: st,
-        endTime: et,
-        // برای سرور
-        startDate: finalStart, // "2024-12-24T10:30:00+00:00"
-        endDate: finalEnd,
-        registrationStartDate: finalRegStart, // یا null
-        registrationEndDate: finalRegEnd,
+      const updatedData = {
+        startDate: toIsoString(values.startDateTime),
+        endDate: toIsoString(values.endDateTime),
+        registrationStartDate: toIsoString(values.registrationStartDateTime),
+        registrationEndDate: toIsoString(values.registrationEndDateTime),
       };
-
-      dispatch(updateFormData(fixedValues));
-      console.log("Form Submitted (Step2):", fixedValues);
+      dispatch(updateFormData(updatedData));
+      console.log("Form Submitted (Step2):", updatedData);
     },
   });
-
-  // نمایش تقویم شمسی هنگام فوکوس
-  const handleDateFocus = (fieldId) => {
-    if (!window.HaDateTimePicker) return;
-    const dp = new window.HaDateTimePicker(fieldId, {
-      isSolar: true,
-      resultInSolar: true,
-      forceSetTime: false,
-      resultFormat: "{year}/{month}/{day}",
-    });
-    dp.show();
-  };
-
-  // نمایش انتخاب ساعت هنگام فوکوس
-  const handleTimeFocus = (fieldId) => {
-    if (!window.HaDateTimePicker) return;
-    const dp = new window.HaDateTimePicker(fieldId, {
-      isSolar: true,
-      resultInSolar: true,
-      disableTime: false,
-      resultFormat: "{t?{hour}:{minute} {ampm}}",
-    });
-    dp.show();
-  };
 
   return (
     <div className={styles.container}>
       <Stepper currentStep={currentStep} />
-      <h2 className={styles.title}>زمان‌بندی</h2>
+      <h2 className={styles.title}>زمان‌بندی رویداد</h2>
 
       <form id="step2Form" onSubmit={formik.handleSubmit}>
+        {/* تاریخ و زمان شروع رویداد */}
         <div className={styles.row}>
           <div className={styles.field}>
-            <label className={styles.label}>تاریخ شروع رویداد:</label>
-            <input
-              type="text"
-              id="startDateField"
-              name="startDate"
-              className={styles.input}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.startDate}
-              onFocus={() => handleDateFocus("#startDateField")}
-              placeholder="مثلاً ۱۴۰۲/۱۰/۰۳"
+            <label className={styles.label}>تاریخ و زمان شروع رویداد:</label>
+            <DatePicker
+              value={
+                formik.values.startDateTime instanceof DateObject &&
+                formik.values.startDateTime.isValid
+                  ? formik.values.startDateTime
+                  : null
+              }
+              onChange={(val) => formik.setFieldValue("startDateTime", val)}
+              calendar={persian}
+              locale={persian_fa}
+              format="YYYY/MM/DD HH:mm"
+              plugins={[<TimePicker position="bottom" />]}
+              placeholder="انتخاب تاریخ و زمان"
             />
-            {formik.touched.startDate && formik.errors.startDate ? (
-              <div className={styles.error}>{formik.errors.startDate}</div>
+            {formik.touched.startDateTime && formik.errors.startDateTime ? (
+              <div className={styles.error}>{formik.errors.startDateTime}</div>
             ) : null}
-          </div>
-
-          <div className={styles.field}>
-            <label className={styles.label}>زمان شروع رویداد:</label>
-            <input
-              type="text"
-              id="startTimeField"
-              name="startTime"
-              className={styles.input}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.startTime}
-              onFocus={() => handleTimeFocus("#startTimeField")}
-              placeholder="مثلاً ۱۰:۳۰"
-            />
           </div>
         </div>
 
+        {/* تاریخ و زمان پایان رویداد */}
         <div className={styles.row}>
           <div className={styles.field}>
-            <label className={styles.label}>تاریخ پایان رویداد:</label>
-            <input
-              type="text"
-              id="endDateField"
-              name="endDate"
-              className={styles.input}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.endDate}
-              onFocus={() => handleDateFocus("#endDateField")}
-              placeholder="مثلاً ۱۴۰۲/۱۰/۰۳"
+            <label className={styles.label}>تاریخ و زمان پایان رویداد:</label>
+            <DatePicker
+              value={
+                formik.values.endDateTime instanceof DateObject &&
+                formik.values.endDateTime.isValid
+                  ? formik.values.endDateTime
+                  : null
+              }
+              onChange={(val) => formik.setFieldValue("endDateTime", val)}
+              calendar={persian}
+              locale={persian_fa}
+              format="YYYY/MM/DD HH:mm"
+              plugins={[<TimePicker position="bottom" />]}
+              placeholder="انتخاب تاریخ و زمان"
             />
-            {formik.touched.endDate && formik.errors.endDate ? (
-              <div className={styles.error}>{formik.errors.endDate}</div>
+            {formik.touched.endDateTime && formik.errors.endDateTime ? (
+              <div className={styles.error}>{formik.errors.endDateTime}</div>
             ) : null}
-          </div>
-
-          <div className={styles.field}>
-            <label className={styles.label}>زمان پایان رویداد:</label>
-            <input
-              type="text"
-              id="endTimeField"
-              name="endTime"
-              className={styles.input}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.endTime}
-              onFocus={() => handleTimeFocus("#endTimeField")}
-              placeholder="مثلاً ۱۸:۰۰"
-            />
           </div>
         </div>
 
+        {/* تاریخ و زمان شروع ثبت‌نام */}
         <div className={styles.row}>
           <div className={styles.field}>
-            <label className={styles.label}>تاریخ شروع ثبت‌نام (اختیاری):</label>
-            <input
-              type="text"
-              id="regStartDateField"
-              name="registrationStartDate"
-              className={styles.input}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.registrationStartDate}
-              onFocus={() => handleDateFocus("#regStartDateField")}
-              placeholder="مثلاً ۱۴۰۲/۱۰/۰۱"
+            <label className={styles.label}>تاریخ و زمان شروع ثبت‌نام:</label>
+            <DatePicker
+              value={
+                formik.values.registrationStartDateTime instanceof DateObject &&
+                formik.values.registrationStartDateTime.isValid
+                  ? formik.values.registrationStartDateTime
+                  : null
+              }
+              onChange={(val) =>
+                formik.setFieldValue("registrationStartDateTime", val)
+              }
+              calendar={persian}
+              locale={persian_fa}
+              format="YYYY/MM/DD HH:mm"
+              plugins={[<TimePicker position="bottom" />]}
+              placeholder="انتخاب تاریخ و زمان"
             />
+            {formik.touched.registrationStartDateTime &&
+            formik.errors.registrationStartDateTime ? (
+              <div className={styles.error}>
+                {formik.errors.registrationStartDateTime}
+              </div>
+            ) : null}
           </div>
+        </div>
+
+        {/* تاریخ و زمان پایان ثبت‌نام */}
+        <div className={styles.row}>
           <div className={styles.field}>
-            <label className={styles.label}>تاریخ پایان ثبت‌نام (اختیاری):</label>
-            <input
-              type="text"
-              id="regEndDateField"
-              name="registrationEndDate"
-              className={styles.input}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.registrationEndDate}
-              onFocus={() => handleDateFocus("#regEndDateField")}
-              placeholder="مثلاً ۱۴۰۲/۱۰/۰۲"
+            <label className={styles.label}>تاریخ و زمان پایان ثبت‌نام:</label>
+            <DatePicker
+              value={
+                formik.values.registrationEndDateTime instanceof DateObject &&
+                formik.values.registrationEndDateTime.isValid
+                  ? formik.values.registrationEndDateTime
+                  : null
+              }
+              onChange={(val) =>
+                formik.setFieldValue("registrationEndDateTime", val)
+              }
+              calendar={persian}
+              locale={persian_fa}
+              format="YYYY/MM/DD HH:mm"
+              plugins={[<TimePicker position="bottom" />]}
+              placeholder="انتخاب تاریخ و زمان"
             />
+            {formik.touched.registrationEndDateTime &&
+            formik.errors.registrationEndDateTime ? (
+              <div className={styles.error}>
+                {formik.errors.registrationEndDateTime}
+              </div>
+            ) : null}
           </div>
         </div>
       </form>

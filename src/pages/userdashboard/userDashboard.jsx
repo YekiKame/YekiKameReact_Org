@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // برای هدایت کاربر
+import { useNavigate, useLocation } from "react-router-dom"; // برای هدایت کاربر
 import styles from "./userdashboard.module.css";
 import EditProfileTab from "../../components/userdashboard/editprofile/editProfileTab.jsx";
 import MyEventsTab from "../../components/userdashboard/myevents/myEventsTab.jsx";
 import CreateEventTab from "../../components/userdashboard/createevent/createEvent.jsx";
-import Comments from "../../components/userdashboard/comments/comments.jsx";
+import Tickets from "../../components/userdashboard/tickets/tickets.jsx";
 import Notifications from "../../components/userdashboard/notifications/notifications.jsx";
 
 import profileCircle from "../../assets/icons/profile-circle.svg";
@@ -17,7 +17,10 @@ import notificationsIcon from "../../assets/icons/notification.svg";
 import logoutIcon from "../../assets/icons/logout.svg";
 
 const UserDashboard = () => {
-  const [activeTab, setActiveTab] = useState("editProfile");
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(
+    location.state?.activeTab || "editProfile"
+  );
   const [userName, setUserName] = useState("نام کاربر");
   const storedPhoneNumber = sessionStorage.getItem("userPhone");
   const storedToken = sessionStorage.getItem("sessionToken");
@@ -63,6 +66,12 @@ const UserDashboard = () => {
 
     fetchUserName();
   }, [storedPhoneNumber]);
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const handleLogout = () => {
     // حذف اطلاعات از sessionStorage
@@ -81,12 +90,12 @@ const UserDashboard = () => {
         return <MyEventsTab />;
       case "createEvent":
         return <CreateEventTab />;
-      case "myComments":
-        return <Comments />;
+      case "myTickets":
+        return <Tickets />;
       case "notifications":
         return <Notifications />;
       default:
-        return <EditProfileTab />;
+        return <MyEventsTab />;
     }
   };
 
@@ -117,14 +126,14 @@ const UserDashboard = () => {
                 icon: addEventIcon,
               },
               {
-                id: "myComments",
-                label: "نظرات و کامنت‌ها",
-                icon: commentsIcon,
+                id: "notifications",
+                label: "اعلانات",
+                icon: notificationsIcon,
               },
               {
-                id: "notifications",
-                label: "اطلاعیه‌ها",
-                icon: notificationsIcon,
+                id: "myTickets",
+                label: "پشتیبانی و تیکت",
+                icon: commentsIcon,
               },
             ].map((tab) => (
               <div
@@ -143,10 +152,7 @@ const UserDashboard = () => {
               </div>
             ))}
 
-            <div
-              className={styles["profile-data-3"]}
-              onClick={handleLogout} // متصل کردن به تابع handleLogout
-            >
+            <div className={styles["profile-data-3"]} onClick={handleLogout}>
               <img
                 src={logoutIcon}
                 className={styles["icon-instance-node"]}

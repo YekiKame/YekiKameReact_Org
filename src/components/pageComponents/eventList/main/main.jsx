@@ -15,7 +15,17 @@ const Main = ({ events }) => {
 
   const startIdx = (currentPage - 1) * EVENTS_PER_PAGE;
   const currentEvents = events.slice(startIdx, startIdx + EVENTS_PER_PAGE);
-
+  if (events.length === 0) {
+    return (
+      <div className={styles.mainContainer}>
+        <div className={styles.eventsContainer}>
+          <div className={styles.noEvents}>
+            <p>هیچ رویدادی یافت نشد</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={styles.mainContainer}>
       <div className={styles.eventsContainer}>

@@ -2,10 +2,11 @@
   "name": "yekikame",
   "private": true,
   "version": "0.0.0",
-  "homepage":"/",
+  "homepage": "/",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test": "vitest",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -22,21 +23,32 @@
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-multi-date-picker": "^4.5.2",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.0.1",
+    "redux-mock-store": "^1.5.5",
+    "swiper": "^11.2.1",
     "yup": "^1.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.6.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
+    "@vitest/coverage-istanbul": "^2.1.8",
+    "c8": "^10.1.3",
     "eslint": "^9.17.0",
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.11.0",
+    "istanbul": "^0.4.5",
+    "jsdom": "^26.0.0",
     "vite": "^5.4.11",
-    "vite-plugin-svgr": "^4.3.0"
+    "vite-plugin-svgr": "^4.3.0",
+    "vitest": "^2.1.8"
   }
 }

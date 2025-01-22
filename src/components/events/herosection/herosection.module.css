@@ -106,3 +106,36 @@
 .cityButton:hover {
   background-color: rgba(255, 148, 26, 0.16);
 }
+.searchContainer {
+  position: relative;
+  width: 100%;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 40px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  direction: rtl;
+  color: white;
+}
+
+/* برای استایل دادن به datalist در مرورگرهایی که پشتیبانی می‌کنند */
+datalist {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0 0 8px 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* برای بهبود ظاهر آپشن‌ها */
+option {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+option:hover {
+  background-color: #f5f5f5;
+}
