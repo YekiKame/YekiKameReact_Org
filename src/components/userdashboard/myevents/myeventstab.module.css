@@ -13,21 +13,22 @@
 .tab {
   padding: 0.8rem 2rem;
   font-size: 1.4rem;
-  border: 1px solid #ff941a;
+  border: 1px solid var(--lightprimaryorigin);
   border-radius: 5px;
   background-color: transparent;
-  color: #ff8800;
+  color: var(--lightprimaryorigin);
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .tab:hover {
-  background-color: rgba(255, 148, 26, 0.1);
+  background-color: var(--lightprimarya-56);
+  color:var(--white);
 }
 
 .activeTab {
-  background-color: #cc6d00;
-  color: white;
+  background-color: var(--lightprimarydark);
+  color:var(--white);
 }
 
 .eventsContainer {
@@ -42,17 +43,51 @@
 }
 
 .noEventsImg {
-  width: 200px;
-  height: auto;
+  width: 64rem;
+  height: 40rem;
   margin-bottom: 1rem;
 }
 
 .noEventsText {
-  font-size: 1.2rem;
-  color: #666;
+  font-size: 2.4rem;
+  color: var(--lightprimaryorigin);
 }
 
 .error {
-  color: red;
+  color: var(--lightsemanticerrorlight);
   margin-top: 2rem;
+}
+
+.pastEventsContainer {
+  margin-top: 2rem;
+}
+
+.eventsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.eventsTable th,
+.eventsTable td {
+  border: 1px solid #ddd;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.eventsTable th {
+  background-color:var(--lightprimarylight);
+  color: var(--white);
+}
+
+.eventsTable tr:nth-child(even) {
+  background-color: rgba(255, 148, 26, 0.08);
+}
+
+.eventsTable tr:hover {
+  background-color: rgba(255, 148, 26, 0.15);
+}
+
+.eventsTable td {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1.4rem;
 }

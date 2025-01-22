@@ -4,7 +4,7 @@ import styles from "./eventcard.module.css";
 import Button from "../../shared/button/button.jsx";
 
 // آیکون‌ها
-import NoPhoto from "../../../assets/images/NoPhoto.jpg";
+import NoPhoto from "../../../assets/images/noPhoto.jpg";
 import TimerIcon from "../../../assets/icons/timer.svg";
 import UserIcon from "../../../assets/icons/user2.svg";
 import LocationIcon from "../../../assets/icons/location2.svg";
@@ -14,7 +14,6 @@ import cultureIcon from "../../../assets/icons/art.svg";
 import educationIcon from "../../../assets/icons/education.svg";
 import gameIcon from "../../../assets/icons/entertainment.svg";
 import TrashIcon from "../../../assets/icons/trash.svg";
-import EditIcon from "../../../assets/icons/edit.svg";
 import LeadingIcon from "../../../assets/icons/leading-icon.svg";
 
 // دیکشنری برای آیکون‌های دسته‌بندی (نسخه انگلیسی)
