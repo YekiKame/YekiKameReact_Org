@@ -14,7 +14,6 @@ import cultureIcon from "../../../assets/icons/art.svg";
 import educationIcon from "../../../assets/icons/education.svg";
 import gameIcon from "../../../assets/icons/entertainment.svg";
 import TrashIcon from "../../../assets/icons/trash.svg";
-import EditIcon from "../../../assets/icons/edit.svg";
 import LeadingIcon from "../../../assets/icons/leading-icon.svg";
 
 // دیکشنری برای آیکون‌های دسته‌بندی (نسخه انگلیسی)
