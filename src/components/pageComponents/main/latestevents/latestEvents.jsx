@@ -52,7 +52,6 @@ const LatestEvents = () => {
 
   if (loading) return <p>در حال بارگذاری رویدادهای اخیر...</p>;
   if (error)   return <p className={styles.error}>{error}</p>;
-  if (!events.length) return <p className={styles.error}>هیچ رویدادی یافت نشد.</p>;
 
   // کلیک روی کارت برای رفتن به جزئیات رویداد
   const handleCardClick = (eventId) => {
