@@ -25,7 +25,7 @@ const MyEventsTab = () => {
     setError(null);
     try {
       const encodedQuery = encodeURIComponent(query);
-      const url = `http://127.0.0.1:8000/graphql/?query=${encodedQuery}`;
+      const url = `http://95.217.8.192:8000/graphql/?query=${encodedQuery}`;
       const response = await axios.get(url);
       const data = response.data?.data || {};
       return data;
