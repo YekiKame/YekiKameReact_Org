@@ -7,7 +7,7 @@ import EventCard from "../../events/eventcard/eventCard.jsx";
 import Pagination from "../../common/pagination/pagination.jsx";
 import EditEventModal from "../../modals/editEventModal/editEventModal.jsx";
 import JoinRequestsModal from "../../modals/joinRequestModal/joinRequestModal.jsx";
-import DeleteEventModal from "../../modals/deleteEventModal/deleteEventModal.jsx"; // اضافه کردن مودال حذف
+import DeleteEventModal from "../../modals/deleteEventModal/deleteEventModal.jsx";
 
 // تصاویر مربوط به وضعیت‌های مختلف
 import notCreatedImg from "/assets/images/notcreatedevent.png";
@@ -26,11 +26,11 @@ const MyEventsTab = () => {
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [joinRequestsModalOpen, setJoinRequestsModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false); // حالت باز شدن مودال حذف
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [userRole, setUserRole] = useState(null); // نقش کاربر برای ویرایش
+  const [userRole, setUserRole] = useState(null);
 
-  const navigate = useNavigate(); // استفاده از useNavigate برای هدایت
+  const navigate = useNavigate();
 
   const fetchEvents = async (query) => {
     setLoading(true);
@@ -144,7 +144,7 @@ const MyEventsTab = () => {
   };
 
   const handleEventDetailRedirect = (eventId) => {
-    navigate(`/eventDetail/${eventId}`); // هدایت به صفحه جزئیات رویداد
+    navigate(`/eventDetail/${eventId}`);
   };
 
   const renderNoEventsMessage = () => {
@@ -182,14 +182,12 @@ const MyEventsTab = () => {
             <EventCard
               key={ev.id}
               event={ev}
-              variant={activeTab === "approved" ? "joined" : "myEvents"} // استفاده از variant "joined" در تب "approved"
-              onClick={
-                activeTab === "approved"
-                  ? () => handleEventDetailRedirect(ev.id) // در تب approved به صفحه جزئیات برو
-                  : undefined
+              variant={activeTab === "approved" ? "joined" : "myEvents"}
+              onJoin={
+                activeTab === "approved" ? () => handleEventDetailRedirect(ev.id) : undefined
               }
               onEdit={() => handleEditClick(ev, "owner")}
-              onDelete={() => handleDeleteClick(ev)} // دکمه حذف
+              onDelete={() => handleDeleteClick(ev)}
               onJoinRequests={() => handleJoinRequestsClick(ev)}
             />
           ))}

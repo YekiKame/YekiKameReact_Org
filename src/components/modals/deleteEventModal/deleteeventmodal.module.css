@@ -53,10 +53,15 @@
   }
   
   .actions button:first-child {
-    background: #ccc;
+    border: 0.1rem solid var(--lightprimaryorigin);
+    color: var(--lightprimaryorigin);
+    background-color: white;
+  }
+  .actions button:first-child:hover{
+    background-color: var(--lightprimaryorigin);
     color: white;
   }
-  
+
   .actions button:last-child {
     background: #ec1313;
     color: white;
