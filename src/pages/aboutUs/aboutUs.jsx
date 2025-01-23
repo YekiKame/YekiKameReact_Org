@@ -145,7 +145,7 @@ const AboutUs = () => {
                 <img src={erfan} alt="Member 4" />
               </div>
               <h3>عرفان افتخاری</h3>
-              <p>دولوپر فرانت</p>
+              <p> دولوپر فرانت / دولوپر بک</p>
             </div>
           </div>
         </section>

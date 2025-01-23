@@ -55,7 +55,7 @@ const EventListEventCard = ({
   const handleJoinClick = () => {
     navigate(`/eventdetail/${id}`);
   };
-
+  console.log(image);
   return (
     <div className={styles["event-card"]}>
       <div className={styles["event-info"]}>

@@ -14,7 +14,6 @@ import cultureIcon from "../../../assets/icons/art.svg";
 import educationIcon from "../../../assets/icons/education.svg";
 import gameIcon from "../../../assets/icons/entertainment.svg";
 import TrashIcon from "../../../assets/icons/trash.svg";
-import EditIcon from "../../../assets/icons/edit.svg";
 import LeadingIcon from "../../../assets/icons/leading-icon.svg";
 
 // دیکشنری برای آیکون‌های دسته‌بندی (نسخه انگلیسی)
@@ -70,7 +69,10 @@ const EventCard = ({ event, variant, onJoin, onEdit, onDelete }) => {
   if (startDate) {
     const dateObj = new Date(startDate);
     weekdayFa = dateObj.toLocaleDateString("fa-IR", { weekday: "long" });
-    timeFa = dateObj.toLocaleTimeString("fa-IR", { hour: "2-digit", minute: "2-digit" });
+    timeFa = dateObj.toLocaleTimeString("fa-IR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   }
 
   // هندلرهای دکمه‌ها
@@ -88,7 +90,7 @@ const EventCard = ({ event, variant, onJoin, onEdit, onDelete }) => {
     <div className={styles.eventCard}>
       {/* عکس بالای کارت */}
       <div className={styles.picture}>
-        <img src={safeImage} alt="تصویر رویداد" className={styles.image} />
+        <img src={safeImage} alt={"تصویر رویداد"} className={styles.image} />
       </div>
 
       {/* محتوای اصلی */}

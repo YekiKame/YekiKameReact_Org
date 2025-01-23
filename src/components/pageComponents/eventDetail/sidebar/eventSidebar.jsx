@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./eventsidebar.module.css";
-
+import axios from "axios";
 import TimerIcon from "../../../../assets/icons/timer.svg";
 import LocationIcon from "../../../../assets/icons/location2.svg";
 
@@ -13,6 +13,73 @@ import gameIcon from "../../../../assets/icons/entertainment.svg";
 
 0;
 const SideBar = ({ event }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  // چک کردن امکان عضویت در رویداد
+  const canJoinEvent = () => {
+    const now = new Date();
+    const registrationEndDate = new Date(event.registrationEndDate);
+    const registrationStartDate = new Date(event.registrationStartDate);
+
+    // شرط‌های عضویت:
+    // 1. تعداد اعضا کمتر از حداکثر ظرفیت باشد
+    // 2. تاریخ فعلی قبل از پایان مهلت ثبت‌نام باشد
+    return (
+      event.subscriberCount < event.maxSubscribers &&
+      now < registrationEndDate &&
+      now >= registrationStartDate
+    );
+  };
+
+  // درخواست عضویت در رویداد
+  const handleJoinRequest = async () => {
+    setIsLoading(true);
+    setError(null);
+    setSuccessMessage(null);
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+        query: `
+          mutation RequestJoinEvent($eventId: ID!, $phone: String!) {
+            requestJoinEvent(eventId: $eventId, phone: $phone) {
+              success
+              message
+            }
+          }
+        `,
+        variables: {
+          eventId: event.id,
+          phone: event.eventOwner.phone,
+        },
+      });
+
+      const { success, message } = response.data.data.requestJoinEvent;
+
+      if (success) {
+        setSuccessMessage(message);
+      } else {
+        setError(message);
+      }
+    } catch (err) {
+      setError(err.message || "خطا در ارسال درخواست");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // متن دکمه بر اساس وضعیت
+  const getButtonText = () => {
+    if (isLoading) return "در حال ارسال درخواست...";
+    if (!canJoinEvent()) {
+      if (event.subscriberCount >= event.maxSubscribers) {
+        return "ظرفیت تکمیل شده است";
+      }
+      return "مهلت ثبت‌نام به پایان رسیده است یا هنوز شروع نشده است.";
+    }
+    return "شرکت در رویداد";
+  };
   const categoryIcons = {
     //   تفریحی: leisureIcon,
     //   ورزشی: sportIcon,
@@ -171,13 +238,34 @@ const SideBar = ({ event }) => {
           <span></span>
         </span>
       </div>
-      <button className={styles["event-button"]}>شرکت در رویداد</button>
+      {error && <p className={styles["error-message"]}>{error}</p>}
+      {successMessage && (
+        <p className={styles["success-message"]}>{successMessage}</p>
+      )}
+
+      <button
+        className={`${styles["event-button"]} ${
+          !canJoinEvent() ? styles["disabled"] : ""
+        }`}
+        onClick={handleJoinRequest}
+        disabled={!canJoinEvent() || isLoading}
+      >
+        {getButtonText()}
+      </button>
+
+      {/* نمایش اطلاعات تکمیلی */}
+      <div className={styles["event-stats"]}>
+        <span>
+          ظرفیت باقیمانده: {event.maxSubscribers - event.subscriberCount} نفر
+        </span>
+      </div>
     </div>
   );
 };
 
 SideBar.propTypes = {
   event: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     subscriberCount: PropTypes.number.isRequired,
     image: PropTypes.string.isRequired,

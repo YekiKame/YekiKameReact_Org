@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import axios from "axios";
 import "./header.css";
 import Button from "../../shared/button/button.jsx";
 import SearchIcon from "../../../assets/icons/search.svg";
@@ -8,10 +8,11 @@ import LoginIcon from "../../../assets/icons/login.svg";
 import Logo from "../../../assets/icons/logo.svg";
 import LoginModal from "../../modals/login/loginModal.jsx";
 import UserDropdown from "../userDropdown/UserDropdown";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("تهران");
   const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
@@ -20,6 +21,12 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
   const dropdownRef = useRef(null); // اضافه کردن ref
+  const [eventSearchTerm, setEventSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showEventDropdown, setShowEventDropdown] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchTimeoutRef = useRef(null);
+
   const checkLoginStatus = () => {
     const token = sessionStorage.getItem("sessionToken");
     const phone = sessionStorage.getItem("userPhone");
@@ -31,7 +38,25 @@ const Header = () => {
       setUserName("");
     }
   };
-
+  const handleHomeClick = (e) => {
+    e.preventDefault(); // جلوگیری از رفتار پیش‌فرض لینک
+    setEventSearchTerm(""); // خالی کردن جستجوی رویدادها
+    navigate("/");
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
+  useEffect(() => {
+    // چک کردن path فعلی
+    if (location.pathname.startsWith("/eventList/")) {
+      const cityFromUrl = decodeURIComponent(
+        location.pathname.split("/eventList/")[1]
+      );
+      if (cityFromUrl) {
+        setSearchTerm(cityFromUrl);
+      }
+    }
+  }, [location.pathname]); // اجرا می‌شود هر وقت path تغییر کند
   useEffect(() => {
     checkLoginStatus();
     window.addEventListener("storage", checkLoginStatus);
@@ -85,15 +110,90 @@ const Header = () => {
       top: 0,
       behavior: "smooth",
     });
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
-
+  const handleAboutusClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
   const handleEventsClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     navigate(`/eventList/${encodeURIComponent(searchTerm)}`);
+    // اضافه کردن یک تایمر کوتاه برای اطمینان از اینکه navigate اول انجام شود
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   };
 
+  const searchEvents = async (searchTerm) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+        query: `
+          query SearchEventsByTitle($title: String!) {
+            searchEventsByTitle(title: $title) {
+              id
+              title
+              eventCategory
+              aboutEvent
+              image
+              startDate
+              city
+              neighborhood
+            }
+          }
+        `,
+        variables: {
+          title: searchTerm,
+        },
+      });
+
+      const events = response.data.data.searchEventsByTitle;
+      setSearchResults(events);
+      setShowEventDropdown(true);
+    } catch (error) {
+      console.error("Error searching events:", error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // اضافه کردن useEffect برای debounce کردن جستجو
+  useEffect(() => {
+    if (eventSearchTerm.trim()) {
+      setIsSearching(true);
+      // پاک کردن تایمر قبلی
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+      // ست کردن تایمر جدید
+      searchTimeoutRef.current = setTimeout(() => {
+        searchEvents(eventSearchTerm);
+      }, 500); // تاخیر 500 میلی‌ثانیه
+    } else {
+      setSearchResults([]);
+      setShowEventDropdown(false);
+      setIsSearching(false);
+    }
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [eventSearchTerm]);
   return (
     <header className="header">
       <div className="header__container">
@@ -103,12 +203,93 @@ const Header = () => {
 
         <div className="header__search">
           <div className="header__search-event">
-            <input
-              type="text"
-              placeholder="جستجوی رویداد"
-              className="header__input"
-            />
-            <img src={SearchIcon} alt="Search" className="header__icon" />
+            <div
+              className="header__search-event-container"
+              style={{ position: "relative" }}
+            >
+              <input
+                type="text"
+                placeholder="جستجوی رویداد"
+                className="header__input"
+                value={eventSearchTerm}
+                onChange={(e) => setEventSearchTerm(e.target.value)}
+                onFocus={() => {
+                  if (searchResults.length > 0) {
+                    setShowEventDropdown(true);
+                  }
+                }}
+              />
+              <img src={SearchIcon} alt="Search" className="header__icon" />
+
+              {/* دراپ‌داون نتایج جستجو */}
+              {showEventDropdown && (
+                <div
+                  className="header__search-dropdown"
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    right: 0,
+                    backgroundColor: "white",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    maxHeight: "300px",
+                    overflowY: "auto",
+                    zIndex: 1000,
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  {isSearching ? (
+                    <div
+                      className="header__search-loading"
+                      style={{ padding: "10px", textAlign: "center" }}
+                    >
+                      در حال جستجو...
+                    </div>
+                  ) : searchResults.length > 0 ? (
+                    searchResults.map((event) => (
+                      <div
+                        key={event.id}
+                        className="header__search-item"
+                        style={{
+                          padding: "10px",
+                          borderBottom: "1px solid #eee",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          navigate(`/eventdetail/${event.id}`);
+                          setShowEventDropdown(false);
+                          setEventSearchTerm("");
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#f5f5f5";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "white";
+                        }}
+                      >
+                        <div style={{ fontWeight: "bold" }}>{event.title}</div>
+                        <div style={{ fontSize: "0.9em", color: "#666" }}>
+                          {event.city} - {event.neighborhood}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    eventSearchTerm && (
+                      <div
+                        style={{
+                          padding: "10px",
+                          textAlign: "center",
+                          color: "#666",
+                        }}
+                      >
+                        نتیجه‌ای یافت نشد
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
           </div>
           <div className="header__search-city">
             <input
@@ -130,10 +311,14 @@ const Header = () => {
         </div>
 
         <nav className="header__menu">
-          <Link to="/" className="header__link">
+          <Link to="/" className="header__link" onClick={handleHomeClick}>
             صفحه اصلی
           </Link>
-          <Link to="/aboutUs" className="header__link">
+          <Link
+            to="/aboutUs"
+            className="header__link"
+            onClick={handleAboutusClick}
+          >
             درباره ما
           </Link>
           <div
