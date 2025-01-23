@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styles from "./myeventstab.module.css";
 
 import EventCard from "../../events/eventcard/eventCard.jsx";
 import Pagination from "../../common/pagination/pagination.jsx";
+import EditEventModal from "../../modals/editEventModal/editEventModal.jsx";
+import JoinRequestsModal from "../../modals/joinRequestModal/joinRequestModal.jsx";
+import DeleteEventModal from "../../modals/deleteEventModal/deleteEventModal.jsx"; // اضافه کردن مودال حذف
 
 // تصاویر مربوط به وضعیت‌های مختلف
 import notCreatedImg from "/assets/images/notcreatedevent.png";
@@ -19,6 +23,14 @@ const MyEventsTab = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
+
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [joinRequestsModalOpen, setJoinRequestsModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false); // حالت باز شدن مودال حذف
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [userRole, setUserRole] = useState(null); // نقش کاربر برای ویرایش
+
+  const navigate = useNavigate(); // استفاده از useNavigate برای هدایت
 
   const fetchEvents = async (query) => {
     setLoading(true);
@@ -115,6 +127,26 @@ const MyEventsTab = () => {
     }
   }, [activeTab]);
 
+  const handleEditClick = (event, role) => {
+    setSelectedEvent(event);
+    setUserRole(role);
+    setEditModalOpen(true);
+  };
+
+  const handleJoinRequestsClick = (event) => {
+    setSelectedEvent(event);
+    setJoinRequestsModalOpen(true);
+  };
+
+  const handleDeleteClick = (event) => {
+    setSelectedEvent(event);
+    setDeleteModalOpen(true);
+  };
+
+  const handleEventDetailRedirect = (eventId) => {
+    navigate(`/eventDetail/${eventId}`); // هدایت به صفحه جزئیات رویداد
+  };
+
   const renderNoEventsMessage = () => {
     let imgSrc = notCreatedImg;
     let message = "شما میزبان یا ادمین هیچ رویدادی نیستید.";
@@ -131,6 +163,53 @@ const MyEventsTab = () => {
         <img src={imgSrc} alt="No Events" className={styles.noEventsImg} />
         <p className={styles.noEventsText}>{message}</p>
       </div>
+    );
+  };
+
+  const renderEvents = () => {
+    if (loading) return <p>در حال بارگذاری...</p>;
+    if (error) return <p className={styles.error}>{error}</p>;
+    if (!events.length) return renderNoEventsMessage();
+
+    const indexOfLastEvent = currentPage * eventsPerPage;
+    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+    const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
+
+    return (
+      <>
+        <div className={styles.eventsContainer}>
+          {currentEvents.map((ev) => (
+            <EventCard
+              key={ev.id}
+              event={ev}
+              variant={activeTab === "approved" ? "joined" : "myEvents"} // استفاده از variant "joined" در تب "approved"
+              onClick={
+                activeTab === "approved"
+                  ? () => handleEventDetailRedirect(ev.id) // در تب approved به صفحه جزئیات برو
+                  : undefined
+              }
+              onEdit={() => handleEditClick(ev, "owner")}
+              onDelete={() => handleDeleteClick(ev)} // دکمه حذف
+              onJoinRequests={() => handleJoinRequestsClick(ev)}
+            />
+          ))}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "2rem",
+          }}
+        >
+          <Pagination
+            totalItems={events.length}
+            itemsPerPage={eventsPerPage}
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
+      </>
     );
   };
 
@@ -174,41 +253,6 @@ const MyEventsTab = () => {
     );
   };
 
-  const renderEvents = () => {
-    if (loading) return <p>در حال بارگذاری...</p>;
-    if (error) return <p className={styles.error}>{error}</p>;
-    if (!events.length) return renderNoEventsMessage();
-
-    const indexOfLastEvent = currentPage * eventsPerPage;
-    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-    const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
-
-    return (
-      <>
-        <div className={styles.eventsContainer}>
-          {currentEvents.map((ev) => (
-            <EventCard key={ev.id} event={ev} variant={"myEvents"}/>
-          ))}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "2rem",
-          }}
-        >
-          <Pagination
-            totalItems={events.length}
-            itemsPerPage={eventsPerPage}
-            currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
-        </div>
-      </>
-    );
-  };
-
   return (
     <div className={styles.myEventsTab}>
       <div className={styles.tabs}>
@@ -234,6 +278,35 @@ const MyEventsTab = () => {
       <div className={styles.eventsContent}>
         {activeTab === "past" ? renderPastEvents() : renderEvents()}
       </div>
+
+      {editModalOpen && (
+        <EditEventModal
+          isOpen={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          eventId={selectedEvent?.id}
+          role={userRole}
+          phone={storedPhoneNumber}
+          onEventUpdated={() => fetchOwnerEvents()}
+        />
+      )}
+
+      {joinRequestsModalOpen && (
+        <JoinRequestsModal
+          isOpen={joinRequestsModalOpen}
+          onClose={() => setJoinRequestsModalOpen(false)}
+          eventId={selectedEvent?.id}
+        />
+      )}
+
+      {deleteModalOpen && (
+        <DeleteEventModal
+          isOpen={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+          eventId={selectedEvent?.id}
+          ownerPhone={storedPhoneNumber}
+          onEventDeleted={() => fetchOwnerEvents()}
+        />
+      )}
     </div>
   );
 };
