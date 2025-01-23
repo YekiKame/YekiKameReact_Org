@@ -7,13 +7,17 @@ const JoinRequestsModal = ({ isOpen, onClose, eventId }) => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [loadingStates, setLoadingStates] = useState({}); // برای نمایش loading هر دکمه
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen && eventId) {
+      fetchJoinRequests();
+    }
+  }, [isOpen, eventId]);
 
   const fetchJoinRequests = async () => {
     setLoading(true);
     setError(null);
-
     const query = `
       query {
         pendingJoinRequests(eventId: "${eventId}", ownerPhone: "${storedPhoneNumber}") {
@@ -29,7 +33,9 @@ const JoinRequestsModal = ({ isOpen, onClose, eventId }) => {
     `;
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query });
+      const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+        query,
+      });
       const result = response.data?.data?.pendingJoinRequests;
 
       if (result) {
@@ -44,8 +50,9 @@ const JoinRequestsModal = ({ isOpen, onClose, eventId }) => {
     }
   };
 
-  const handleAction = async (userId, action, role = null) => {
-    setLoading(true);
+  const handleAction = async (userId, action, role = "regular") => {
+    // فعال کردن loading برای دکمه‌های مربوط به این کاربر
+    setLoadingStates((prev) => ({ ...prev, [userId]: true }));
 
     const mutation = `
       mutation {
@@ -53,7 +60,7 @@ const JoinRequestsModal = ({ isOpen, onClose, eventId }) => {
           eventId: "${eventId}",
           userId: "${userId}",
           action: "${action}",
-          ${role ? `role: "${role}",` : ""}
+          ${action === "approve" ? `role: "${role}"` : ""}
           ownerPhone: "${storedPhoneNumber}"
         ) {
           success
@@ -63,82 +70,112 @@ const JoinRequestsModal = ({ isOpen, onClose, eventId }) => {
     `;
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query: mutation });
+      const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+        query: mutation,
+      });
       const result = response.data?.data?.reviewJoinRequest;
 
       if (result?.success) {
-        // حذف درخواست مورد نظر از لیست
-        setRequests((prev) => prev.filter((request) => request.id !== userId));
-      } else {
+        // حذف درخواست از لیست
+        setRequests((prev) =>
+          prev.filter((request) => request.user.id !== userId)
+        );
+        // نمایش پیام موفقیت
         alert(result.message);
+      } else {
+        alert(result.message || "خطایی در انجام عملیات رخ داد.");
       }
     } catch (err) {
-      alert("خطایی در انجام عملیات رخ داد.");
+      console.error("Error:", err);
+      alert("خطایی در ارتباط با سرور رخ داد.");
     } finally {
-      setLoading(false);
+      // غیرفعال کردن loading
+      setLoadingStates((prev) => ({ ...prev, [userId]: false }));
     }
   };
 
-  useEffect(() => {
-    if (isOpen) fetchJoinRequests();
-  }, [isOpen]);
+  if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <h2>درخواست‌های عضویت</h2>
-        {loading ? (
-          <p>در حال بارگذاری...</p>
-        ) : error ? (
-          <p className={styles.error}>{error}</p>
-        ) : requests.length === 0 ? (
-          <p>هیچ درخواستی یافت نشد.</p>
-        ) : (
-          <table className={styles.requestsTable}>
-            <thead>
-              <tr>
-                <th>نام کاربر</th>
-                <th>شماره تماس</th>
-                <th>تاریخ درخواست</th>
-                <th>عملیات</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((req) => (
-                <tr key={req.id}>
-                  <td>{req.user.fullname || "نام‌وجود ندارد"}</td>
-                  <td>{req.user.phone}</td>
-                  <td>{new Date(req.createdAt).toLocaleString("fa-IR")}</td>
-                  <td>
-                    <button
-                      onClick={() => handleAction(req.user.id, "approve", "admin")}
-                      className={styles.approveBtn}
-                    >
-                      پذیرش به‌عنوان ادمین
-                    </button>
-                    <button
-                      onClick={() => handleAction(req.user.id, "approve")}
-                      className={styles.approveBtn}
-                    >
-                      پذیرش عادی
-                    </button>
-                    <button
-                      onClick={() => handleAction(req.user.id, "reject")}
-                      className={styles.rejectBtn}
-                    >
-                      رد درخواست
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-        <div className={styles.actions}>
+        <div className={styles.header}>
+          <h2>درخواست‌های عضویت</h2>
           <button onClick={onClose} className={styles.closeButton}>
-            بستن
+            ×
           </button>
         </div>
+
+        {loading ? (
+          <div className={styles.loading}>در حال بارگذاری...</div>
+        ) : error ? (
+          <div className={styles.error}>{error}</div>
+        ) : requests.length === 0 ? (
+          <div className={styles.noRequests}>هیچ درخواستی یافت نشد.</div>
+        ) : (
+          <div className={styles.tableWrapper}>
+            <table className={styles.requestsTable}>
+              <thead>
+                <tr>
+                  <th>نام کاربر</th>
+                  <th>شماره تماس</th>
+                  <th>تاریخ درخواست</th>
+                  <th>عملیات</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requests.map((req) => (
+                  <tr key={req.id}>
+                    <td>{req.user.fullname || "نام وجود ندارد"}</td>
+                    <td>{req.user.phone}</td>
+                    <td>
+                      {new Date(req.createdAt).toLocaleDateString("fa-IR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </td>
+                    <td className={styles.actions}>
+                      <button
+                        onClick={() =>
+                          handleAction(req.user.id, "approve", "admin")
+                        }
+                        className={styles.adminButton}
+                        disabled={loadingStates[req.user.id]}
+                      >
+                        {loadingStates[req.user.id]
+                          ? "در حال پردازش..."
+                          : "پذیرش به‌عنوان ادمین"}
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleAction(req.user.id, "approve", "regular")
+                        }
+                        className={styles.approveButton}
+                        disabled={loadingStates[req.user.id]}
+                      >
+                        {loadingStates[req.user.id]
+                          ? "در حال پردازش..."
+                          : "پذیرش عادی"}
+                      </button>
+                      <button
+                        onClick={() => handleAction(req.user.id, "reject")}
+                        className={styles.rejectButton}
+                        disabled={loadingStates[req.user.id]}
+                      >
+                        {loadingStates[req.user.id]
+                          ? "در حال پردازش..."
+                          : "رد درخواست"}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

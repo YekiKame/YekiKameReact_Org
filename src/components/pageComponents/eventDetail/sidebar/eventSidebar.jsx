@@ -11,11 +11,14 @@ import cultureIcon from "../../../../assets/icons/art.svg";
 import educationIcon from "../../../../assets/icons/education.svg";
 import gameIcon from "../../../../assets/icons/entertainment.svg";
 
-0;
 const SideBar = ({ event }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+
+  // بررسی وضعیت لاگین کاربر
+  const userPhone = sessionStorage.getItem("userPhone");
+  const isLoggedIn = Boolean(userPhone);
 
   // چک کردن امکان عضویت در رویداد
   const canJoinEvent = () => {
@@ -23,10 +26,8 @@ const SideBar = ({ event }) => {
     const registrationEndDate = new Date(event.registrationEndDate);
     const registrationStartDate = new Date(event.registrationStartDate);
 
-    // شرط‌های عضویت:
-    // 1. تعداد اعضا کمتر از حداکثر ظرفیت باشد
-    // 2. تاریخ فعلی قبل از پایان مهلت ثبت‌نام باشد
     return (
+      isLoggedIn && // اضافه کردن شرط لاگین بودن
       event.subscriberCount < event.maxSubscribers &&
       now < registrationEndDate &&
       now >= registrationStartDate
@@ -35,6 +36,11 @@ const SideBar = ({ event }) => {
 
   // درخواست عضویت در رویداد
   const handleJoinRequest = async () => {
+    if (!isLoggedIn) {
+      setError("لطفا ابتدا وارد حساب کاربری خود شوید");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setSuccessMessage(null);
@@ -51,7 +57,7 @@ const SideBar = ({ event }) => {
         `,
         variables: {
           eventId: event.id,
-          phone: event.eventOwner.phone,
+          phone: userPhone, // استفاده از شماره تلفن کاربر لاگین شده
         },
       });
 
@@ -71,6 +77,7 @@ const SideBar = ({ event }) => {
 
   // متن دکمه بر اساس وضعیت
   const getButtonText = () => {
+    if (!isLoggedIn) return "لطفا وارد حساب کاربری خود شوید";
     if (isLoading) return "در حال ارسال درخواست...";
     if (!canJoinEvent()) {
       if (event.subscriberCount >= event.maxSubscribers) {
@@ -242,7 +249,6 @@ const SideBar = ({ event }) => {
       {successMessage && (
         <p className={styles["success-message"]}>{successMessage}</p>
       )}
-
       <button
         className={`${styles["event-button"]} ${
           !canJoinEvent() ? styles["disabled"] : ""

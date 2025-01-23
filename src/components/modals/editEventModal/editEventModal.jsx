@@ -43,7 +43,9 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
           }
         `;
 
-        const response = await axios.post("http://127.0.0.1:8000/graphql/", { query });
+        const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+          query,
+        });
         const result = response.data?.data?.eventDetails;
 
         if (result?.error) {
@@ -72,8 +74,12 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
     aboutEvent: Yup.string().required("توضیحات کوتاه الزامی است"),
     startDate: Yup.string().required("تاریخ شروع الزامی است"),
     endDate: Yup.string().required("تاریخ پایان الزامی است"),
-    registrationStartDate: Yup.string().required("تاریخ شروع ثبت‌نام الزامی است"),
-    registrationEndDate: Yup.string().required("تاریخ پایان ثبت‌نام الزامی است"),
+    registrationStartDate: Yup.string().required(
+      "تاریخ شروع ثبت‌نام الزامی است"
+    ),
+    registrationEndDate: Yup.string().required(
+      "تاریخ پایان ثبت‌نام الزامی است"
+    ),
     province: Yup.string().required("استان الزامی است"),
     city: Yup.string().required("شهر الزامی است"),
     neighborhood: Yup.string(),
@@ -93,20 +99,46 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
           eventId: "${eventId}",
           phone: "${storedPhoneNumber}",
           ${values.title ? `title: "${values.title}",` : ""}
-          ${values.eventCategory ? `eventCategory: "${values.eventCategory}",` : ""}
+          ${
+            values.eventCategory
+              ? `eventCategory: "${values.eventCategory}",`
+              : ""
+          }
           ${values.aboutEvent ? `aboutEvent: "${values.aboutEvent}",` : ""}
           ${values.startDate ? `startDate: "${values.startDate}",` : ""}
           ${values.endDate ? `endDate: "${values.endDate}",` : ""}
-          ${values.registrationStartDate ? `registrationStartDate: "${values.registrationStartDate}",` : ""}
-          ${values.registrationEndDate ? `registrationEndDate: "${values.registrationEndDate}",` : ""}
+          ${
+            values.registrationStartDate
+              ? `registrationStartDate: "${values.registrationStartDate}",`
+              : ""
+          }
+          ${
+            values.registrationEndDate
+              ? `registrationEndDate: "${values.registrationEndDate}",`
+              : ""
+          }
           ${values.province ? `province: "${values.province}",` : ""}
           ${values.city ? `city: "${values.city}",` : ""}
-          ${values.neighborhood ? `neighborhood: "${values.neighborhood}",` : ""}
-          ${values.postalAddress ? `postalAddress: "${values.postalAddress}",` : ""}
+          ${
+            values.neighborhood ? `neighborhood: "${values.neighborhood}",` : ""
+          }
+          ${
+            values.postalAddress
+              ? `postalAddress: "${values.postalAddress}",`
+              : ""
+          }
           ${values.postalCode ? `postalCode: "${values.postalCode}",` : ""}
-          ${values.maxSubscribers ? `maxSubscribers: ${values.maxSubscribers},` : ""}
+          ${
+            values.maxSubscribers
+              ? `maxSubscribers: ${values.maxSubscribers},`
+              : ""
+          }
           ${values.image ? `image: "${values.image}",` : ""}
-          ${values.fullDescription ? `fullDescription: "${values.fullDescription}"` : ""}
+          ${
+            values.fullDescription
+              ? `fullDescription: "${values.fullDescription}"`
+              : ""
+          }
         ) {
           success
           message
@@ -115,7 +147,9 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
     `;
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query: mutation });
+      const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+        query: mutation,
+      });
       const result = response.data?.data?.updateEventDetail;
 
       if (result?.success) {
@@ -155,7 +189,11 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
                 <div className={styles.fieldGroup}>
                   <label htmlFor="title">عنوان رویداد:</label>
                   <Field type="text" id="title" name="title" />
-                  <ErrorMessage name="title" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="title"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
                 <div className={styles.fieldGroup}>
                   <label htmlFor="eventCategory">دسته‌بندی:</label>
@@ -167,38 +205,78 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
                     <option value="entertainment">تفریحی</option>
                     <option value="game">بازی</option>
                   </Field>
-                  <ErrorMessage name="eventCategory" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="eventCategory"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
               </div>
               <div className={styles.fieldGroup}>
                 <label htmlFor="aboutEvent">توضیحات:</label>
                 <Field as="textarea" id="aboutEvent" name="aboutEvent" />
-                <ErrorMessage name="aboutEvent" component="div" className={styles.error} />
+                <ErrorMessage
+                  name="aboutEvent"
+                  component="div"
+                  className={styles.error}
+                />
               </div>
 
               <div className={styles.row}>
                 <div className={styles.fieldGroup}>
                   <label htmlFor="startDate">تاریخ شروع:</label>
-                  <Field type="datetime-local" id="startDate" name="startDate" />
-                  <ErrorMessage name="startDate" component="div" className={styles.error} />
+                  <Field
+                    type="datetime-local"
+                    id="startDate"
+                    name="startDate"
+                  />
+                  <ErrorMessage
+                    name="startDate"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
 
                 <div className={styles.fieldGroup}>
                   <label htmlFor="endDate">تاریخ پایان:</label>
                   <Field type="datetime-local" id="endDate" name="endDate" />
-                  <ErrorMessage name="endDate" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="endDate"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
 
                 <div className={styles.fieldGroup}>
-                  <label htmlFor="registrationStartDate">تاریخ شروع ثبت‌نام:</label>
-                  <Field type="datetime-local" id="registrationStartDate" name="registrationStartDate" />
-                  <ErrorMessage name="registrationStartDate" component="div" className={styles.error} />
+                  <label htmlFor="registrationStartDate">
+                    تاریخ شروع ثبت‌نام:
+                  </label>
+                  <Field
+                    type="datetime-local"
+                    id="registrationStartDate"
+                    name="registrationStartDate"
+                  />
+                  <ErrorMessage
+                    name="registrationStartDate"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
 
                 <div className={styles.fieldGroup}>
-                  <label htmlFor="registrationEndDate">تاریخ پایان ثبت‌نام:</label>
-                  <Field type="datetime-local" id="registrationEndDate" name="registrationEndDate" />
-                  <ErrorMessage name="registrationEndDate" component="div" className={styles.error} />
+                  <label htmlFor="registrationEndDate">
+                    تاریخ پایان ثبت‌نام:
+                  </label>
+                  <Field
+                    type="datetime-local"
+                    id="registrationEndDate"
+                    name="registrationEndDate"
+                  />
+                  <ErrorMessage
+                    name="registrationEndDate"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
               </div>
 
@@ -206,41 +284,73 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
                 <div className={styles.fieldGroup}>
                   <label htmlFor="province">استان:</label>
                   <Field type="text" id="province" name="province" />
-                  <ErrorMessage name="province" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="province"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
 
                 <div className={styles.fieldGroup}>
                   <label htmlFor="city">شهر:</label>
                   <Field type="text" id="city" name="city" />
-                  <ErrorMessage name="city" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="city"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
 
                 <div className={styles.fieldGroup}>
                   <label htmlFor="neighborhood">محله:</label>
                   <Field type="text" id="neighborhood" name="neighborhood" />
-                  <ErrorMessage name="neighborhood" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="neighborhood"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
               </div>
 
               <div className={styles.row}>
                 <div className={styles.fieldGroup}>
                   <label htmlFor="postalAddress">آدرس پستی:</label>
-                  <Field as="textarea" id="postalAddress" name="postalAddress" />
-                  <ErrorMessage name="postalAddress" component="div" className={styles.error} />
+                  <Field
+                    as="textarea"
+                    id="postalAddress"
+                    name="postalAddress"
+                  />
+                  <ErrorMessage
+                    name="postalAddress"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
 
                 <div className={styles.fieldGroup}>
                   <label htmlFor="postalCode">کد پستی:</label>
                   <Field type="text" id="postalCode" name="postalCode" />
-                  <ErrorMessage name="postalCode" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="postalCode"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
               </div>
 
               <div className={styles.row}>
                 <div className={styles.fieldGroup}>
                   <label htmlFor="maxSubscribers">حداکثر تعداد افراد:</label>
-                  <Field type="number" id="maxSubscribers" name="maxSubscribers" />
-                  <ErrorMessage name="maxSubscribers" component="div" className={styles.error} />
+                  <Field
+                    type="number"
+                    id="maxSubscribers"
+                    name="maxSubscribers"
+                  />
+                  <ErrorMessage
+                    name="maxSubscribers"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
 
                 <div className={styles.fieldGroup}>
@@ -253,20 +363,39 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
                       setFieldValue("image", event.target.files[0]?.name || "")
                     }
                   />
-                  <ErrorMessage name="image" component="div" className={styles.error} />
+                  <ErrorMessage
+                    name="image"
+                    component="div"
+                    className={styles.error}
+                  />
                 </div>
               </div>
 
               <div className={styles.fieldGroup}>
                 <label htmlFor="fullDescription">توضیحات تکمیلی:</label>
-                <Field as="textarea" id="fullDescription" name="fullDescription" />
-                <ErrorMessage name="fullDescription" component="div" className={styles.error} />
+                <Field
+                  as="textarea"
+                  id="fullDescription"
+                  name="fullDescription"
+                />
+                <ErrorMessage
+                  name="fullDescription"
+                  component="div"
+                  className={styles.error}
+                />
               </div>
 
-              {errors.general && <div className={styles.error}>{errors.general}</div>}
+              {errors.general && (
+                <div className={styles.error}>{errors.general}</div>
+              )}
 
               <div className={styles.actions}>
-                <Button text="انصراف" onClick={onClose} disabled={isSubmitting} variant="outline" />
+                <Button
+                  text="انصراف"
+                  onClick={onClose}
+                  disabled={isSubmitting}
+                  variant="outline"
+                />
                 <Button
                   text={isSubmitting ? "در حال ارسال..." : "ذخیره تغییرات"}
                   type="submit"
@@ -282,6 +411,7 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
           <JoinRequestModal
             isOpen={isJoinRequestModalOpen}
             onClose={() => setJoinRequestModalOpen(false)}
+            eventId={eventId}
           />
         )}
       </div>

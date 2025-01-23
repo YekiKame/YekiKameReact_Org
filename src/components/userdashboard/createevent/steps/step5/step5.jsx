@@ -13,15 +13,19 @@ const isoToShamsi = (val) => {
   let isoStr = "";
   // اگر در Redux یک آبجکت { date: "...", ... } گذاشتیم:
   if (typeof val === "object" && val.date) {
-    isoStr = val.date; 
+    isoStr = val.date;
   } else if (typeof val === "string") {
-    isoStr = val; 
+    isoStr = val;
   } else {
     return "اختیاری";
   }
 
   // اکنون isoStr یک رشته‌ی ISO است
-  const dateObj = new DateObject({ date: isoStr, calendar: "persian", locale: "fa" });
+  const dateObj = new DateObject({
+    date: isoStr,
+    calendar: "persian",
+    locale: "fa",
+  });
   return dateObj.format("YYYY/MM/DD HH:mm");
 };
 
@@ -89,7 +93,7 @@ const Step5 = () => {
       }
     `;
     try {
-      const response = await axios.post("http://95.217.8.192:8000/graphql/", {
+      const response = await axios.post("http://127.0.0.1:8000/graphql/", {
         query,
         variables: {
           image: null,
@@ -109,10 +113,11 @@ const Step5 = () => {
 
   return (
     <div className={styles.container}>
-      <Stepper currentStep={useSelector((state) => state.createEvent.currentStep)} />
+      <Stepper
+        currentStep={useSelector((state) => state.createEvent.currentStep)}
+      />
       <h2 className={styles.title}>تایید نهایی</h2>
       <div className={styles.details}>
-
         {formData.image ? (
           <img src={formData.image} alt="Event" className={styles.eventImage} />
         ) : (
@@ -164,7 +169,8 @@ const Step5 = () => {
           <strong>حداکثر افراد:</strong> {formData.maxSubscribers}
         </p>
         <p>
-          <strong>توضیحات تکمیلی:</strong> {formData.fullDescription || "بدون توضیحات اضافه"}
+          <strong>توضیحات تکمیلی:</strong>{" "}
+          {formData.fullDescription || "بدون توضیحات اضافه"}
         </p>
       </div>
 

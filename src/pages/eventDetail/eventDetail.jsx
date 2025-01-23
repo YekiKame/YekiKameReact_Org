@@ -12,8 +12,8 @@ const EventDetail = () => {
   console.log("Param eventId:", eventId);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError]   = useState(null);
-  const [event, setEvent]   = useState(null);
+  const [error, setError] = useState(null);
+  const [event, setEvent] = useState(null);
 
   useEffect(() => {
     // اگر به هر دلیل eventId در آدرس نبود، زودتر خطا بده
@@ -62,7 +62,9 @@ const EventDetail = () => {
         `;
 
         // درخواست را به سرور GraphQL می‌فرستیم
-        const response = await axios.post("http://95.217.8.192:8000/graphql/", { query });
+        const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+          query,
+        });
 
         console.log("API Response:", response.data);
 
@@ -92,7 +94,7 @@ const EventDetail = () => {
 
   // کنترل‌های ساده برای وضعیت بارگذاری یا خطا
   if (loading) return <p>Loading...</p>;
-  if (error)   return <p>Error: {error}</p>;
+  if (error) return <p>Error: {error}</p>;
 
   // اگر رویداد از سرور گرفته نشد
   if (!event) return <p>Event not found!</p>;
