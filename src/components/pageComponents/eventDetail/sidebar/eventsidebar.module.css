@@ -74,3 +74,26 @@
 .event-button:hover {
   background-color: #ffac4d;
 }
+.event-button.disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff0000;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.success-message {
+  color: #008000;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.event-stats {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #666;
+}

@@ -14,7 +14,9 @@
 .eventsContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  column-gap: 2rem;
+  row-gap: 2rem;
+  align-content: start;
   width: 100%;
   /* max-width: 120rem; */
   min-height: 1718px;
