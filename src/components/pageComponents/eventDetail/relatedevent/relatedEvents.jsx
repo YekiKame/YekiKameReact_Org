@@ -72,23 +72,35 @@ const RelatedEvents = ({ eventId }) => {
   }
 
   return (
-    <div className={styles.relatedEvents}>
-      <Swiper
-        modules={[Navigation]}
-        navigation
-        slidesPerView={4.2}
-        spaceBetween={24}
-        className={styles.mySwiper}
-        style={{ width: "95%", margin: "0 auto" }}
-      >
-        {events.map((ev) => (
-          <SwiperSlide key={ev.id}>
-            <div onClick={() => handleCardClick(ev.id)}>
-              <EventCard event={ev} variant="home" />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+    <div className={styles.relatedEventsWrapper}>
+      <div className={styles.navigationContainer}>
+        <div
+          className={`${styles.navigationButton} swiper-button-prev-custom`}
+        ></div>
+        <div className={styles.swiperContainer}>
+          <Swiper
+            modules={[Navigation]}
+            navigation={{
+              nextEl: ".swiper-button-next-custom",
+              prevEl: ".swiper-button-prev-custom",
+            }}
+            slidesPerView={2.5}
+            spaceBetween={8}
+            className={styles.mySwiper}
+          >
+            {events.map((ev) => (
+              <SwiperSlide key={ev.id}>
+                <div onClick={() => handleCardClick(ev.id)}>
+                  <EventCard event={ev} variant="home" />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        <div
+          className={`${styles.navigationButton} swiper-button-next-custom`}
+        ></div>
+      </div>
     </div>
   );
 };

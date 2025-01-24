@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
-// نسخهٔ جدید سوئیپر (v11 یا بالاتر)
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -12,12 +10,10 @@ import styles from "./latestevents.module.css";
 
 const LatestEvents = () => {
   const navigate = useNavigate();
-
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // فراخوانی API
   useEffect(() => {
     const fetchRecentEvents = async () => {
       setLoading(true);
@@ -52,35 +48,47 @@ const LatestEvents = () => {
     fetchRecentEvents();
   }, []);
 
-  if (loading) return <p>در حال بارگذاری رویدادهای اخیر...</p>;
-  if (error) return <p className={styles.error}>{error}</p>;
-
-  // کلیک روی کارت برای رفتن به جزئیات رویداد
   const handleCardClick = (eventId) => {
     navigate(`/eventDetail/${eventId}`);
   };
 
-  return (
-    <div className={styles.latestEvents}>
-      <h2 className={styles.title}>آخرین رویدادها</h2>
+  if (loading) return <p>در حال بارگذاری رویدادهای اخیر...</p>;
+  if (error) return <p className={styles.error}>{error}</p>;
 
-      <Swiper
-        modules={[Navigation]} // فعال‌سازی ماژول نویگیشن
-        navigation // نمایش دکمه‌های پیش‌فرض قبلی/بعدی
-        slidesPerView={4.2} // تعداد کارت‌های قابل نمایش همزمان
-        spaceBetween={24} // فاصلهٔ بین کارت‌ها
-        style={{ width: "95%", margin: "0 auto" }}
-      >
-        {events.map((ev) => (
-          <SwiperSlide key={ev.id}>
-            {/* اگر مایلید کل کارت کلیک‌خور باشد: */}
-            <div onClick={() => handleCardClick(ev.id)}>
-              {/* استفاده از EventCard با variant="home" برای داشتن دکمهٔ «عضو شدن» */}
-              <EventCard event={ev} variant="home" />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+  return (
+    <div className={styles.container}>
+      <div className={styles.latestEventsWrapper}>
+        <h2 className={styles.title}>آخرین رویدادها</h2>
+
+        <div className={styles.navigationContainer}>
+          <div
+            className={`${styles.navigationButton} swiper-button-prev-custom`}
+          ></div>
+          <div className={styles.swiperContainer}>
+            <Swiper
+              modules={[Navigation]}
+              navigation={{
+                nextEl: ".swiper-button-next-custom",
+                prevEl: ".swiper-button-prev-custom",
+              }}
+              slidesPerView={3.6}
+              spaceBetween={18}
+              className={styles.mySwiper}
+            >
+              {events.map((ev) => (
+                <SwiperSlide key={ev.id}>
+                  <div onClick={() => handleCardClick(ev.id)}>
+                    <EventCard event={ev} variant="home" />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+          <div
+            className={`${styles.navigationButton} swiper-button-next-custom`}
+          ></div>
+        </div>
+      </div>
     </div>
   );
 };

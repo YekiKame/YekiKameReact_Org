@@ -64,3 +64,74 @@
   box-sizing: border-box;
   padding: 2.4rem;
 }
+.relatedEventsWrapper {
+  width: 100%;
+  position: relative;
+  padding: 20px 0;
+}
+
+.navigationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* فاصله بین دکمه‌ها و کانتینر اصلی */
+  width: 100%;
+}
+
+.swiperContainer {
+  width: 95%;
+  max-width: 1200px; /* یا هر اندازه دلخواه */
+  overflow: hidden;
+}
+
+.navigationButton {
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+  z-index: 10;
+}
+
+/* استایل فلش‌های ناوبری */
+.navigationButton::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+/* فلش سمت راست */
+:global(.swiper-button-next-custom)::after {
+  transform: rotate(135deg);
+  margin-right: 5px;
+}
+
+/* فلش سمت چپ */
+:global(.swiper-button-prev-custom)::after {
+  transform: rotate(-45deg);
+  margin-left: 5px;
+}
+
+/* حذف فلش‌های پیش‌فرض Swiper */
+.mySwiper :global(.swiper-button-next),
+.mySwiper :global(.swiper-button-prev) {
+  display: none;
+}
+
+/* استایل‌های اضافی برای هاور و غیره */
+/* .navigationButton:hover {
+  background-color: #f5f5f5;
+} */
+
+.navigationButton:active {
+  transform: scale(0.95);
+}
