@@ -90,7 +90,13 @@ const EventCard = ({ event, variant, onJoin, onEdit, onDelete }) => {
     <div className={styles.eventCard}>
       {/* عکس بالای کارت */}
       <div className={styles.picture}>
-        <img src={safeImage} alt={"تصویر رویداد"} className={styles.image} />
+        <img
+          src={
+            event.image ? `http://127.0.0.1:8000/media/${event.image}` : NoPhoto
+          }
+          alt={"تصویر رویداد"}
+          className={styles.image}
+        />
       </div>
 
       {/* محتوای اصلی */}
