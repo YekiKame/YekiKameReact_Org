@@ -25,6 +25,9 @@
   font-size: 1.8rem;
   text-align: center;
 }
+.closeButton{
+  color: var(--lightsemanticerrororigin);
+}
 
 .requestsTable {
   width: 100%;
@@ -39,9 +42,9 @@
   text-align: center;
 }
 
-.requestsTable th {
-  background-color: #ffac4d;
-  color: white;
+.requestsTable thead tr th {
+  background-color: var(--lightprimarylight);
+  color: var(--white);
 }
 
 .approveBtn {
@@ -65,6 +68,8 @@
 
 .actions {
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .actions button {
@@ -73,7 +78,6 @@
   border-radius: 4px;
   font-size: 1.4rem;
   cursor: pointer;
-  background: #ccc;
   color: white;
 }
 .modalOverlay {
@@ -122,7 +126,7 @@
 }
 
 .error {
-  color: #f44336;
+  color:var(--lightsemanticerrororigin);
 }
 
 .tableWrapper {
@@ -164,18 +168,28 @@
 }
 
 .adminButton {
-  background-color: #2196f3;
+  background-color: var(--lightprimaryorigin);
   color: white;
+}
+.adminButton:hover{
+  background-color: var(--lightprimarylight);
 }
 
 .approveButton {
-  background-color: #4caf50;
+  background-color: var(--lightsemanticsuccessorigin);
   color: white;
 }
 
+.approveButton:hover{
+  background-color: var(--lightsemanticsuccesslight);
+}
 .rejectButton {
-  background-color: #f44336;
+  background-color: var(--lightsemanticerrororigin);
   color: white;
+}
+
+.rejectButton:hover{
+  background-color: var(--lightsemanticerrorlight);
 }
 
 .adminButton:disabled,

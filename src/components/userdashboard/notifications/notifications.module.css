@@ -2,7 +2,6 @@
   padding: 2.4rem;
   background-color: white;
   border-radius: 1.6rem;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04);
 }
 
 .title {
@@ -47,5 +46,12 @@
   font-size: 1.6rem;
   color: rgba(0, 0, 0, 0.56);
   text-align: center;
+  margin-top: 2rem;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-size: 1.6rem;
   margin-top: 2rem;
 }

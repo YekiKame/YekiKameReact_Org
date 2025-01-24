@@ -5,14 +5,12 @@ import styles from "./userdashboard.module.css";
 import EditProfileTab from "../../components/userdashboard/editprofile/editProfileTab.jsx";
 import MyEventsTab from "../../components/userdashboard/myevents/myEventsTab.jsx";
 import CreateEventTab from "../../components/userdashboard/createevent/createEvent.jsx";
-import Tickets from "../../components/userdashboard/tickets/tickets.jsx";
 import Notifications from "../../components/userdashboard/notifications/notifications.jsx";
 
 import profileCircle from "../../assets/icons/profile-circle.svg";
 import editIcon from "../../assets/icons/info.svg";
 import myEventsIcon from "../../assets/icons/events.svg";
 import addEventIcon from "../../assets/icons/newevent.svg";
-import commentsIcon from "../../assets/icons/messages.svg";
 import notificationsIcon from "../../assets/icons/notification.svg";
 import logoutIcon from "../../assets/icons/logout.svg";
 
@@ -90,8 +88,6 @@ const UserDashboard = () => {
         return <MyEventsTab />;
       case "createEvent":
         return <CreateEventTab />;
-      case "myTickets":
-        return <Tickets />;
       case "notifications":
         return <Notifications />;
       default:
@@ -129,11 +125,6 @@ const UserDashboard = () => {
                 id: "notifications",
                 label: "اعلانات",
                 icon: notificationsIcon,
-              },
-              {
-                id: "myTickets",
-                label: "پشتیبانی و تیکت",
-                icon: commentsIcon,
               },
             ].map((tab) => (
               <div
