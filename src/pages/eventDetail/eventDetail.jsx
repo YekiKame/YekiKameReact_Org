@@ -62,7 +62,7 @@ const EventDetail = () => {
         `;
 
         // درخواست را به سرور GraphQL می‌فرستیم
-        const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+        const response = await axios.post("http://95.217.8.192:8000/graphql/", {
           query,
         });
 

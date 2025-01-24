@@ -159,7 +159,7 @@ const Step5 = () => {
     try {
       const response = await axios({
         method: "post",
-        url: "http://127.0.0.1:8000/graphql/",
+        url: "http://95.217.8.192:8000/graphql/",
         data: formDataObj,
         headers: {
           "Content-Type": "multipart/form-data",

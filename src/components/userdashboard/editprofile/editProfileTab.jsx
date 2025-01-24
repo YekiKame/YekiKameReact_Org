@@ -43,7 +43,7 @@ const EditProfileTab = () => {
           }
         `;
         const response = await axios.post(
-          "http://127.0.0.1:8000/graphql/",
+          "http://95.217.8.192:8000/graphql/",
           { query },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -131,7 +131,7 @@ const EditProfileTab = () => {
           }
         `;
         const fullnameResponse = await axios.post(
-          "http://127.0.0.1:8000/graphql/",
+          "http://95.217.8.192:8000/graphql/",
           { query: updateFullnameMutation },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -155,7 +155,7 @@ const EditProfileTab = () => {
           }
         `;
         const emailResponse = await axios.post(
-          "http://127.0.0.1:8000/graphql/",
+          "http://95.217.8.192:8000/graphql/",
           { query: updateEmailMutation },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -179,7 +179,7 @@ const EditProfileTab = () => {
           }
         `;
         const passwordResponse = await axios.post(
-          "http://127.0.0.1:8000/graphql/",
+          "http://95.217.8.192:8000/graphql/",
           { query: updatePasswordMutation },
           { headers: { "Content-Type": "application/json" } }
         );

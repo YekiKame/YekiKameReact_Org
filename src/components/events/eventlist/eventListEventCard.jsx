@@ -86,7 +86,7 @@ const EventListEventCard = ({
 
         <div className={styles["event-info-image"]}>
           <img
-            src={image ? `http://127.0.0.1:8000/${image}` : NoPhoto}
+            src={image ? `http://95.217.8.192:8000/${image}` : NoPhoto}
             alt="Event"
             className={styles["image"]}
           />

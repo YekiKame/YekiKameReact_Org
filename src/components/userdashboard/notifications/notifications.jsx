@@ -22,7 +22,7 @@ const Notifications = () => {
           }
         }
       `;
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query });
+      const response = await axios.post("http://95.217.8.192:8000/graphql/", { query });
       const notices = response.data?.data?.activeNotices || [];
       setSystemNotices(notices);
     } catch (err) {
@@ -49,7 +49,7 @@ const Notifications = () => {
         }
       `;
 
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query });
+      const response = await axios.post("http://95.217.8.192:8000/graphql/", { query });
 
       if (response.data?.data) {
         const notifications = response.data.data.userNotifications || [];
@@ -78,7 +78,7 @@ const Notifications = () => {
         }
       `;
 
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query });
+      const response = await axios.post("http://95.217.8.192:8000/graphql/", { query });
       const result = response.data?.data?.markNotificationAsRead;
 
       if (result?.success) {

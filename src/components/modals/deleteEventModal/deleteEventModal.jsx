@@ -20,7 +20,7 @@ const DeleteEventModal = ({ isOpen, onClose, eventId, ownerPhone, onEventDeleted
       }
     `;
     try {
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query: mutation });
+      const response = await axios.post("http://95.217.8.192:8000/graphql/", { query: mutation });
       const result = response.data?.data?.deleteEvent;
 
       if (result.success) {
