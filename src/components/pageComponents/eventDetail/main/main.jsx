@@ -21,11 +21,7 @@ const Main = ({ event }) => {
         {/* تصویر بالای صفحه */}
         <div className={styles["event-image"]}>
           <img
-            src={
-              event.image
-                ? `http://127.0.0.1:8000/media/${event.image}`
-                : NoPhoto
-            }
+            src={event.image ? `http://127.0.0.1:8000/${event.image}` : NoPhoto}
             alt="Event"
             className={styles["event-img"]}
           />

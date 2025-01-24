@@ -52,61 +52,133 @@ const Step5 = () => {
   const eventOwnerPhone = sessionStorage.getItem("userPhone") || "09123456789";
 
   const handleSubmit = async () => {
-    // اگر از آبجکت استفاده می‌کنید، با parseToIso آن را به رشتهٔ ISO برمی‌گردانیم
     const startDateIso = parseToIso(formData.startDate);
     const endDateIso = parseToIso(formData.endDate);
     const regStartIso = parseToIso(formData.registrationStartDate);
     const regEndIso = parseToIso(formData.registrationEndDate);
 
-    // حالا می‌توانیم کوئری را بسازیم
-    const query = `
-      mutation CreateEvent($image: Upload) {
-        createEvent(
-          title: "${formData.title}",
-          eventCategory: "${formData.eventCategory}",
-          aboutEvent: "${formData.aboutEvent}",
-          startDate: "${startDateIso}",
-          endDate: "${endDateIso}",
-          province: "${formData.province}",
-          city: "${formData.city}",
-          neighborhood: "${formData.neighborhood}",
-          postalAddress: "${formData.postalAddress}",
-          postalCode: "${formData.postalCode}",
-          registrationStartDate: "${regStartIso}",
-          registrationEndDate: "${regEndIso}",
-          maxSubscribers: ${formData.maxSubscribers || 0},
-          fullDescription: "${formData.fullDescription || ""}",
-          eventOwnerPhone: "${eventOwnerPhone}",
-          image: $image,
-        ) {
-          event {
-            id
-            title
-            eventCategory
-            city
-            startDate
-            neighborhood
-            maxSubscribers
-            image
+    const formDataObj = new FormData();
+
+    // تبدیل Base64 به File
+    if (formData.image && formData.image.startsWith("data:image")) {
+      try {
+        // جدا کردن نوع و داده‌های Base64
+        const arr = formData.image.split(",");
+        const mime = arr[0].match(/:(.*?);/)[1]; // گرفتن نوع فایل
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        // ساخت File object
+        const file = new File([u8arr], "event-image.jpg", { type: mime });
+        formDataObj.append("0", file);
+
+        console.log("File created successfully:", file);
+      } catch (error) {
+        console.error("Error converting Base64 to File:", error);
+      }
+    }
+
+    // تنظیم operations برای GraphQL
+    const operations = {
+      query: `
+        mutation CreateEvent($title: String!, $eventCategory: String!, $aboutEvent: String!, 
+                            $startDate: DateTime!, $endDate: DateTime!, $province: String!, 
+                            $city: String!, $neighborhood: String, $postalAddress: String, 
+                            $postalCode: String, $registrationStartDate: DateTime!, 
+                            $registrationEndDate: DateTime!, $maxSubscribers: Int!, 
+                            $fullDescription: String, $eventOwnerPhone: String!, $image: Upload) {
+          createEvent(
+            title: $title,
+            eventCategory: $eventCategory,
+            aboutEvent: $aboutEvent,
+            startDate: $startDate,
+            endDate: $endDate,
+            province: $province,
+            city: $city,
+            neighborhood: $neighborhood,
+            postalAddress: $postalAddress,
+            postalCode: $postalCode,
+            registrationStartDate: $registrationStartDate,
+            registrationEndDate: $registrationEndDate,
+            maxSubscribers: $maxSubscribers,
+            fullDescription: $fullDescription,
+            eventOwnerPhone: $eventOwnerPhone,
+            image: $image
+          ) {
+            event {
+              id
+              title
+              eventCategory
+              city
+              startDate
+              neighborhood
+              maxSubscribers
+              image
+            }
           }
         }
-      }
-    `;
+      `,
+      variables: {
+        title: formData.title,
+        eventCategory: formData.eventCategory,
+        aboutEvent: formData.aboutEvent,
+        startDate: startDateIso,
+        endDate: endDateIso,
+        province: formData.province,
+        city: formData.city,
+        neighborhood: formData.neighborhood || "",
+        postalAddress: formData.postalAddress || "",
+        postalCode: formData.postalCode || "",
+        registrationStartDate: regStartIso,
+        registrationEndDate: regEndIso,
+        maxSubscribers: parseInt(formData.maxSubscribers) || 0,
+        fullDescription: formData.fullDescription || "",
+        eventOwnerPhone: eventOwnerPhone,
+        image: null, // این مقدار با فایل واقعی جایگزین خواهد شد
+      },
+    };
+    formDataObj.append("operations", JSON.stringify(operations));
+
+    // تنظیم map
+    const map = {
+      0: ["variables.image"],
+    };
+    formDataObj.append("map", JSON.stringify(map));
+
+    // چاپ محتویات FormData برای اطمینان
+    console.log("FormData contents:");
+    for (let pair of formDataObj.entries()) {
+      console.log(pair[0], typeof pair[1], pair[1]);
+    }
+
     try {
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", {
-        query,
-        variables: {
-          image: null,
+      const response = await axios({
+        method: "post",
+        url: "http://127.0.0.1:8000/graphql/",
+        data: formDataObj,
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
       });
+
+      console.log("Server response:", response.data);
+
+      if (response.data.errors) {
+        throw new Error(response.data.errors[0].message);
+      }
+
       console.log("Event created:", response.data);
       alert("رویداد با موفقیت ثبت شد!");
     } catch (error) {
       console.error("Error creating event:", error);
-      alert("خطا در ثبت رویداد.");
+      alert("خطا در ثبت رویداد: " + error.message);
     }
   };
-
   const handleEdit = () => {
     dispatch(prevStep());
   };

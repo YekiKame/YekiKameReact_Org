@@ -10,7 +10,9 @@ const Step4 = () => {
   const currentStep = useSelector((state) => state.createEvent.currentStep);
   const initialFormData = useSelector((state) => state.createEvent.formData);
   const dispatch = useDispatch();
-  const [previewImage, setPreviewImage] = useState(initialFormData.image || null);
+  const [previewImage, setPreviewImage] = useState(
+    initialFormData.image || null
+  );
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -40,12 +42,15 @@ const Step4 = () => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
+      // ذخیره فایل اصلی در Redux
+      formik.setFieldValue("image", file);
+
+      // نمایش پیش‌نمایش
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewImage(reader.result);
       };
       reader.readAsDataURL(file);
-      formik.setFieldValue("image", file);
     }
   };
 
@@ -75,7 +80,11 @@ const Step4 = () => {
           <div className={styles.uploadContainer}>
             <label htmlFor="imageUpload" className={styles.uploadBox}>
               {previewImage ? (
-                <img src={previewImage} alt="Preview" className={styles.previewImage} />
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className={styles.previewImage}
+                />
               ) : (
                 <div className={styles.uploadPlaceholder}>
                   <span>بارگذاری تصویر</span>
