@@ -41,7 +41,9 @@ const RelatedEvents = ({ eventId }) => {
         }
       `;
       try {
-        const response = await axios.post("http://95.217.8.192:8000/graphql/", { query });
+        const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+          query,
+        });
         const data = response.data?.data;
         const relEvts = data?.relatedEvents || [];
         setEvents(relEvts);
@@ -62,8 +64,9 @@ const RelatedEvents = ({ eventId }) => {
   };
 
   if (!eventId) return null; // یا یک متن ساده
-  if (loading) return <p className={styles.loading}>در حال بارگذاری رویدادهای مرتبط...</p>;
-  if (error)   return <p className={styles.error}>{error}</p>;
+  if (loading)
+    return <p className={styles.loading}>در حال بارگذاری رویدادهای مرتبط...</p>;
+  if (error) return <p className={styles.error}>{error}</p>;
   if (!events.length) {
     return <p className={styles.error}>هیچ رویداد مرتبطی یافت نشد.</p>;
   }

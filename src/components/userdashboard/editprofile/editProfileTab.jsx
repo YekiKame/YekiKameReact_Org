@@ -14,7 +14,8 @@ import EyeIcon from "../../../assets/icons/eyedash.svg";
 import EyeSlashIcon from "../../../assets/icons/eyeslashdash.svg";
 
 const EditProfileTab = () => {
-  const storedPhoneNumber = sessionStorage.getItem("userPhone") || "09123456789";
+  const storedPhoneNumber =
+    sessionStorage.getItem("userPhone") || "09123456789";
 
   const [initialValues, setInitialValues] = useState({
     fullName: "",
@@ -42,7 +43,7 @@ const EditProfileTab = () => {
           }
         `;
         const response = await axios.post(
-          "http://95.217.8.192:8000/graphql/",
+          "http://127.0.0.1:8000/graphql/",
           { query },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -71,15 +72,16 @@ const EditProfileTab = () => {
   // Validation schema
   const validationSchema = Yup.object({
     fullName: Yup.string().optional(),
-    email: Yup.string()
-      .email("ایمیل نامعتبر است")
-      .optional(),
+    email: Yup.string().email("ایمیل نامعتبر است").optional(),
     oldPassword: Yup.string().optional(),
     newPassword: Yup.string()
       .min(6, "رمز عبور باید حداقل ۶ کاراکتر باشد")
       .optional(),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("newPassword"), null], "تکرار رمز عبور با رمز جدید مطابقت ندارد")
+      .oneOf(
+        [Yup.ref("newPassword"), null],
+        "تکرار رمز عبور با رمز جدید مطابقت ندارد"
+      )
       .optional(),
   }).test("password-check", "بررسی رمز عبور", function (values) {
     // اگر کاربر رمز فعلی را وارد کرده ولی رمز جدید را وارد نکرده
@@ -129,13 +131,15 @@ const EditProfileTab = () => {
           }
         `;
         const fullnameResponse = await axios.post(
-          "http://95.217.8.192:8000/graphql/",
+          "http://127.0.0.1:8000/graphql/",
           { query: updateFullnameMutation },
           { headers: { "Content-Type": "application/json" } }
         );
         const fullnameResult = fullnameResponse.data?.data?.updateFullname;
         if (!fullnameResult?.success) {
-          setMessage(fullnameResult?.message || "خطایی در به‌روزرسانی نام رخ داد.");
+          setMessage(
+            fullnameResult?.message || "خطایی در به‌روزرسانی نام رخ داد."
+          );
           return;
         }
       }
@@ -151,13 +155,15 @@ const EditProfileTab = () => {
           }
         `;
         const emailResponse = await axios.post(
-          "http://95.217.8.192:8000/graphql/",
+          "http://127.0.0.1:8000/graphql/",
           { query: updateEmailMutation },
           { headers: { "Content-Type": "application/json" } }
         );
         const emailResult = emailResponse.data?.data?.updateEmail;
         if (!emailResult?.success) {
-          setMessage(emailResult?.message || "خطایی در به‌روزرسانی ایمیل رخ داد.");
+          setMessage(
+            emailResult?.message || "خطایی در به‌روزرسانی ایمیل رخ داد."
+          );
           return;
         }
       }
@@ -173,7 +179,7 @@ const EditProfileTab = () => {
           }
         `;
         const passwordResponse = await axios.post(
-          "http://95.217.8.192:8000/graphql/",
+          "http://127.0.0.1:8000/graphql/",
           { query: updatePasswordMutation },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -189,7 +195,10 @@ const EditProfileTab = () => {
       setMessage("اطلاعات با موفقیت به‌روزرسانی شد!");
       resetForm();
     } catch (error) {
-      console.error("Error updating profile:", error.response?.data || error.message);
+      console.error(
+        "Error updating profile:",
+        error.response?.data || error.message
+      );
       setMessage("خطایی در ارتباط با سرور رخ داد.");
     }
   };
@@ -217,7 +226,11 @@ const EditProfileTab = () => {
                 className={styles["input"]}
               />
               <img src={UserIcon} alt="User Icon" className={styles["icon"]} />
-              <ErrorMessage name="fullName" component="div" className={styles["error"]} />
+              <ErrorMessage
+                name="fullName"
+                component="div"
+                className={styles["error"]}
+              />
             </div>
 
             <div className={styles["field-container"]}>
@@ -228,7 +241,11 @@ const EditProfileTab = () => {
                 className={styles["input"]}
                 disabled
               />
-              <img src={PhoneIcon} alt="Phone Icon" className={styles["icon"]} />
+              <img
+                src={PhoneIcon}
+                alt="Phone Icon"
+                className={styles["icon"]}
+              />
             </div>
 
             <div className={styles["field-container"]}>
@@ -238,8 +255,16 @@ const EditProfileTab = () => {
                 placeholder="ایمیل (اختیاری)"
                 className={styles["input"]}
               />
-              <img src={EmailIcon} alt="Email Icon" className={styles["icon"]} />
-              <ErrorMessage name="email" component="div" className={styles["error"]} />
+              <img
+                src={EmailIcon}
+                alt="Email Icon"
+                className={styles["icon"]}
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className={styles["error"]}
+              />
             </div>
 
             <div className={styles["field-container"]}>
@@ -255,7 +280,11 @@ const EditProfileTab = () => {
                 className={styles["icon"]}
                 onClick={() => setShowPassword(!showPassword)}
               />
-              <ErrorMessage name="oldPassword" component="div" className={styles["error"]} />
+              <ErrorMessage
+                name="oldPassword"
+                component="div"
+                className={styles["error"]}
+              />
             </div>
 
             <div className={styles["field-container"]}>
@@ -271,7 +300,11 @@ const EditProfileTab = () => {
                 className={styles["icon"]}
                 onClick={() => setShowPassword(!showPassword)}
               />
-              <ErrorMessage name="newPassword" component="div" className={styles["error"]} />
+              <ErrorMessage
+                name="newPassword"
+                component="div"
+                className={styles["error"]}
+              />
             </div>
 
             <div className={styles["field-container"]}>
@@ -287,7 +320,11 @@ const EditProfileTab = () => {
                 className={styles["icon"]}
                 onClick={() => setShowPassword(!showPassword)}
               />
-              <ErrorMessage name="confirmPassword" component="div" className={styles["error"]} />
+              <ErrorMessage
+                name="confirmPassword"
+                component="div"
+                className={styles["error"]}
+              />
             </div>
 
             <div className={styles["buttoncontainer"]}>

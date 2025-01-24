@@ -36,7 +36,9 @@ const LatestEvents = () => {
         }
       `;
       try {
-        const response = await axios.post("http://95.217.8.192:8000/graphql/", { query });
+        const response = await axios.post("http://127.0.0.1:8000/graphql/", {
+          query,
+        });
         const data = response.data?.data;
         const recEvents = data?.recentEvents || [];
         setEvents(recEvents);
@@ -51,7 +53,7 @@ const LatestEvents = () => {
   }, []);
 
   if (loading) return <p>در حال بارگذاری رویدادهای اخیر...</p>;
-  if (error)   return <p className={styles.error}>{error}</p>;
+  if (error) return <p className={styles.error}>{error}</p>;
 
   // کلیک روی کارت برای رفتن به جزئیات رویداد
   const handleCardClick = (eventId) => {
@@ -63,10 +65,10 @@ const LatestEvents = () => {
       <h2 className={styles.title}>آخرین رویدادها</h2>
 
       <Swiper
-        modules={[Navigation]}   // فعال‌سازی ماژول نویگیشن
-        navigation              // نمایش دکمه‌های پیش‌فرض قبلی/بعدی
-        slidesPerView={4.2}     // تعداد کارت‌های قابل نمایش همزمان
-        spaceBetween={24}       // فاصلهٔ بین کارت‌ها
+        modules={[Navigation]} // فعال‌سازی ماژول نویگیشن
+        navigation // نمایش دکمه‌های پیش‌فرض قبلی/بعدی
+        slidesPerView={4.2} // تعداد کارت‌های قابل نمایش همزمان
+        spaceBetween={24} // فاصلهٔ بین کارت‌ها
         style={{ width: "95%", margin: "0 auto" }}
       >
         {events.map((ev) => (
