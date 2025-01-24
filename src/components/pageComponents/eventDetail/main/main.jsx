@@ -4,7 +4,7 @@ import styles from "./main.module.css";
 
 import defaultImage from "../../../../assets/images/eventDetailMainPicture.png";
 import RelatedEvents from "../relatedevent/relatedEvents.jsx";
-
+import NoPhoto from "../../../../assets/images/noPhoto.jpg";
 /**
  * این کامپوننت اطلاعات رویداد را دریافت کرده و نمایش می‌دهد.
  * همچنین رویدادهای مرتبط را در پایین صفحه نشان می‌دهد.
@@ -18,10 +18,13 @@ const Main = ({ event }) => {
   return (
     <div className={styles["event-page"]}>
       <div className={styles["main-content"]}>
-
         {/* تصویر بالای صفحه */}
         <div className={styles["event-image"]}>
-          <img src={mainImage} alt="Event" className={styles["event-img"]} />
+          <img
+            src={event.image ? `http://127.0.0.1:8000/${event.image}` : NoPhoto}
+            alt="Event"
+            className={styles["event-img"]}
+          />
         </div>
 
         {/* توضیحات */}
