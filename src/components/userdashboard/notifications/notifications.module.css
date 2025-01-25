@@ -1,32 +1,43 @@
 .container {
-  padding: 2.4rem;
+  padding: 1.6rem;
   background-color: white;
   border-radius: 1.6rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .title {
-  font-size: 3.2rem;
+  font-size: 2.4rem;
   font-weight: 500;
   color: #353535;
   margin-bottom: 1.6rem;
+  text-align: center;
 }
 
 /* Tabs */
 .tabs {
   display: flex;
-  gap: 2.2rem;
+  gap: 1.2rem;
   margin-bottom: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .tab {
-  padding: 0.4rem 1.6rem;
-  font-size: 1.6rem;
+  padding: 0.4rem 1.2rem;
+  font-size: 1.4rem;
   font-weight: 400;
-  border: 1px solid rgba(255, 148, 26, 0.56);
+  border: 1px solid var(--lightprimarya-56);
   border-radius: 0.4rem;
   background-color: rgba(255, 255, 255, 0);
-  color: #ff8800;
+  color: var(--lightprimaryorigin);
   cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.tab:hover {
+  background-color: var(--lightprimarylight);
+  color: var(--white);
 }
 
 .activeTab {
@@ -43,7 +54,7 @@
 
 /* Empty State */
 .emptyState {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   color: rgba(0, 0, 0, 0.56);
   text-align: center;
   margin-top: 2rem;
@@ -52,6 +63,60 @@
 .error {
   color: red;
   text-align: center;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   margin-top: 2rem;
+}
+
+/* Responsive Styles */
+@media (min-width: 600px) {
+  .container {
+    padding: 2.4rem;
+  }
+
+  .title {
+    font-size: 3.2rem;
+  }
+
+  .tabs {
+    gap: 2.2rem;
+  }
+
+  .tab {
+    padding: 0.4rem 1.6rem;
+    font-size: 1.6rem;
+  }
+
+  .emptyState,
+  .error {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .tabs {
+    justify-content: flex-start;
+  }
+
+  .notificationsList {
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 3.2rem;
+  }
+
+  .title {
+    font-size: 3.6rem;
+  }
+
+  .tab {
+    font-size: 1.8rem;
+  }
+
+  .emptyState,
+  .error {
+    font-size: 1.8rem;
+  }
 }

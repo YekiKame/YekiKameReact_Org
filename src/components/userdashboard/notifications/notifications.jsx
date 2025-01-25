@@ -5,7 +5,7 @@ import styles from "./notifications.module.css";
 
 const Notifications = () => {
   const storedPhoneNumber = sessionStorage.getItem("userPhone") || "09123456789";
-  const [activeTab, setActiveTab] = useState("events"); // تغییر تب پیش‌فرض به "events"
+  const [activeTab, setActiveTab] = useState("events");
   const [systemNotices, setSystemNotices] = useState([]);
   const [eventNotices, setEventNotices] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,12 +22,15 @@ const Notifications = () => {
           }
         }
       `;
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query });
-      const notices = response.data?.data?.activeNotices || [];
-      setSystemNotices(notices);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/graphql/",
+        { query },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      setSystemNotices(response.data?.data?.activeNotices || []);
     } catch (err) {
-      console.error("خطایی در دریافت اعلان‌های سیستمی:", err);
-      setError("خطایی در دریافت اعلان‌های سیستمی رخ داد.");
+      console.error("خطای دریافت اعلان‌های سیستمی:", err);
+      setError("خطا در دریافت اعلان‌های سیستمی");
     }
   };
 
@@ -35,138 +38,143 @@ const Notifications = () => {
   const fetchEventNotices = async () => {
     try {
       setLoading(true);
-
       const query = `
         query {
           userNotifications(phone: "${storedPhoneNumber}") {
+            eventId
             eventTitle
             statusMessage
+            createdAt
             role
             isApproved
-            createdAt
-            id
+            userEventRoleId
           }
         }
       `;
-
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query });
-
-      if (response.data?.data) {
-        const notifications = response.data.data.userNotifications || [];
-        setEventNotices(notifications);
-      } else {
-        console.error("پاسخ غیرمنتظره:", response.data);
-        setError("خطا در دریافت داده‌های اعلان‌های رویداد.");
-      }
+      const response = await axios.post(
+        "http://127.0.0.1:8000/graphql/",
+        { query },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      setEventNotices(response.data?.data?.userNotifications || []);
     } catch (err) {
-      console.error("خطایی در دریافت اعلان‌های رویداد:", err.response?.data || err.message);
-      setError("خطایی در دریافت اعلان‌های رویداد رخ داد.");
+      console.error("خطای دریافت اعلان‌های رویداد:", err.response?.data || err.message);
+      setError("خطا در دریافت اعلان‌های رویداد");
     } finally {
       setLoading(false);
     }
   };
 
   // حذف اعلان رویداد
-  const handleDeleteNotification = async (notificationId) => {
+  const handleDeleteNotification = async (userEventRoleId) => {
     try {
       const query = `
-        mutation {
-          markNotificationAsRead(userEventRoleId: "${notificationId}", phone: "${storedPhoneNumber}") {
-            success
-            message
-          }
+        query {
+          markNotificationAsRead(userEventRoleId: "${userEventRoleId}", phone: "${storedPhoneNumber}")
         }
       `;
-
-      const response = await axios.post("http://127.0.0.1:8000/graphql/", { query });
+      const response = await axios.post(
+        "http://127.0.0.1:8000/graphql/",
+        { query },
+        { headers: { "Content-Type": "application/json" } }
+      );
       const result = response.data?.data?.markNotificationAsRead;
 
-      if (result?.success) {
-        // حذف اعلان از لیست
+      if (result) {
+        // حذف اعلان از لیست در صورت موفقیت
         setEventNotices((prev) =>
-          prev.filter((notice) => notice.id !== notificationId)
+          prev.filter((notice) => notice.userEventRoleId !== userEventRoleId)
         );
       } else {
-        console.error("Failed to delete notification:", result.message);
+        console.error("Failed to delete notification: Response was false");
       }
     } catch (err) {
-      console.error("خطایی در حذف اعلان:", err);
+      console.error("خطای حذف اعلان:", err.response?.data || err.message);
     }
   };
 
-  // گرفتن اعلان‌ها هنگام بارگذاری کامپوننت
+  // دریافت داده‌ها هنگام بارگذاری
   useEffect(() => {
     fetchSystemNotices();
     fetchEventNotices();
   }, []);
 
-  // نمایش پیام خالی
+  // پیام خالی
   const renderEmptyState = (message) => (
     <div className={styles.emptyState}>{message}</div>
   );
 
+  // رندر اعلان‌ها
+  const renderNotifications = () => {
+    if (loading) return <p>در حال بارگذاری...</p>;
+    if (error) return <p className={styles.error}>{error}</p>;
+
+    const notices = activeTab === "events" ? eventNotices : systemNotices;
+
+    if (notices.length === 0) {
+      return renderEmptyState(
+        activeTab === "events"
+          ? "هیچ اعلان رویدادی موجود نیست."
+          : "هیچ پیام سیستمی موجود نیست."
+      );
+    }
+
+    return notices.map((notice) => (
+      <NotificationCard
+        key={notice.userEventRoleId || notice.title}
+        type={
+          activeTab === "events"
+            ? notice.isApproved
+              ? "accepted"
+              : "rejected"
+            : "admin"
+        }
+        title={notice.eventTitle || notice.title || "بدون عنوان"}
+        description={notice.statusMessage || notice.content}
+        date={
+          activeTab === "events"
+            ? new Date(notice.createdAt).toLocaleDateString("fa-IR")
+            : "--"
+        }
+        time={
+          activeTab === "events"
+            ? new Date(notice.createdAt).toLocaleTimeString("fa-IR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "--"
+        }
+        {...(activeTab === "events" && {
+          buttonText: "مشاهده جزئیات رویداد",
+          eventId: notice.eventId,
+          onDelete: () => handleDeleteNotification(notice.userEventRoleId),
+        })}
+      />
+    ));
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>اعلانات</h1>
-
-      {/* تب‌ها */}
       <div className={styles.tabs}>
         <button
-          className={`${styles.tab} ${activeTab === "events" ? styles.activeTab : ""}`}
+          className={`${styles.tab} ${
+            activeTab === "events" ? styles.activeTab : ""
+          }`}
           onClick={() => setActiveTab("events")}
         >
           اعلانات رویدادها ({eventNotices.length})
         </button>
         <button
-          className={`${styles.tab} ${activeTab === "system" ? styles.activeTab : ""}`}
+          className={`${styles.tab} ${
+            activeTab === "system" ? styles.activeTab : ""
+          }`}
           onClick={() => setActiveTab("system")}
         >
           پیام‌های سیستمی ({systemNotices.length})
         </button>
       </div>
-
-      {/* لیست اعلان‌ها */}
-      <div className={styles.notificationsList}>
-        {loading ? (
-          <p>در حال بارگذاری...</p>
-        ) : error ? (
-          <p className={styles.error}>{error}</p>
-        ) : activeTab === "events" ? (
-          eventNotices.length > 0 ? (
-            eventNotices.map((notice) => (
-              <NotificationCard
-                key={notice.id}
-                type={notice.isApproved ? "accepted" : "rejected"}
-                title={notice.eventTitle}
-                description={notice.statusMessage}
-                date={new Date(notice.createdAt).toLocaleDateString("fa-IR")}
-                time={new Date(notice.createdAt).toLocaleTimeString("fa-IR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-                buttonText="مشاهده جزئیات رویداد"
-                eventId={notice.id}
-                onDelete={() => handleDeleteNotification(notice.id)}
-              />
-            ))
-          ) : (
-            renderEmptyState("هیچ اعلان رویدادی موجود نیست.")
-          )
-        ) : systemNotices.length > 0 ? (
-          systemNotices.map((notice, index) => (
-            <NotificationCard
-              key={index}
-              type="admin"
-              title={notice.title || "بدون عنوان"}
-              description={notice.content}
-              date="--"
-              time="--"
-            />
-          ))
-        ) : (
-          renderEmptyState("هیچ پیام سیستمی موجود نیست.")
-        )}
-      </div>
+      <div className={styles.notificationsList}>{renderNotifications()}</div>
     </div>
   );
 };
