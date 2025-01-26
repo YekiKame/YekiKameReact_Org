@@ -77,7 +77,8 @@ const UserDashboard = () => {
     sessionStorage.removeItem("sessionToken");
 
     // هدایت کاربر به صفحه ورود
-    navigate("/login"); // مسیر صفحه ورود را جایگزین کنید
+    navigate("/login");
+    window.location.reload();
   };
 
   const renderContent = () => {
