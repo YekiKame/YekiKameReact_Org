@@ -17,7 +17,7 @@ import logoutIcon from "../../assets/icons/logout.svg";
 const UserDashboard = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(
-    location.state?.activeTab || "editProfile"
+    location.state?.activeTab || "myEvents"
   );
   const [userName, setUserName] = useState("نام کاربر");
   const storedPhoneNumber = sessionStorage.getItem("userPhone");

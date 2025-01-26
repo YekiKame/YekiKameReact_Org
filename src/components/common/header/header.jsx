@@ -8,7 +8,7 @@ import LoginIcon from "../../../assets/icons/login.svg";
 import Logo from "../../../assets/icons/logo.svg";
 import LoginModal from "../../modals/login/loginModal.jsx";
 import UserDropdown from "../userDropdown/UserDropdown";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate, Link, useLocation, data } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();

@@ -10,6 +10,7 @@
   line-height: 4.8rem;
   margin-bottom: 4.8rem;
   direction: rtl; /* اضافه کردن جهت راست به چپ */
+  text-align: center;
 }
 
 .carousel {

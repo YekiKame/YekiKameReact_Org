@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import { prevStep } from "../../../../../redux/slices/createEventSlice.js";
 import axios from "axios";
 import styles from "./step5.module.css";
@@ -45,9 +46,36 @@ const parseToIso = (val) => {
 };
 
 const Step5 = () => {
+  const categoryNames = {
+    entertainment: "تفریحی",
+    sport: "ورزشی",
+    social: "فرهنگی",
+    education: "آموزشی",
+    game: "بازی و سرگرمی",
+  };
+  const formatDate = (dateString) => {
+    if (!dateString) return "اختیاری";
+
+    const date = new Date(dateString);
+    const persianDate = date.toLocaleDateString("fa-IR", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+    const weekDay = date.toLocaleDateString("fa-IR", {
+      weekday: "long",
+    });
+    const time = date.toLocaleTimeString("fa-IR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    return `${persianDate}، ${weekDay} ساعت ${time}`;
+  };
   const formData = useSelector((state) => state.createEvent.formData);
   const dispatch = useDispatch();
-
+  const location = useLocation();
+  const navigate = useNavigate();
   // اگر کاربر لاگین کرده باشد
   const eventOwnerPhone = sessionStorage.getItem("userPhone") || "09123456789";
 
@@ -78,6 +106,11 @@ const Step5 = () => {
         formDataObj.append("0", file);
 
         console.log("File created successfully:", file);
+        navigate(".", {
+          replace: true,
+          state: { activeTab: "MyEvents" },
+        });
+        window.location.reload();
       } catch (error) {
         console.error("Error converting Base64 to File:", error);
       }
@@ -200,26 +233,28 @@ const Step5 = () => {
           <strong>عنوان رویداد:</strong> {formData.title}
         </p>
         <p>
-          <strong>دسته‌بندی:</strong> {formData.eventCategory}
+          <strong>دسته‌بندی:</strong> {categoryNames[formData.eventCategory]}
         </p>
         <p>
           <strong>توضیحات:</strong> {formData.aboutEvent}
         </p>
 
-        {/* نمایش شمسی + ساعت برای کاربر */}
+        {/* Updated date displays */}
         <p>
-          <strong>زمان شروع رویداد:</strong> {isoToShamsi(formData.startDate)}
+          <strong>زمان شروع رویداد:</strong>{" "}
+          {formatDate(parseToIso(formData.startDate))}
         </p>
         <p>
-          <strong>زمان پایان رویداد:</strong> {isoToShamsi(formData.endDate)}
+          <strong>زمان پایان رویداد:</strong>{" "}
+          {formatDate(parseToIso(formData.endDate))}
         </p>
         <p>
           <strong>زمان شروع ثبت‌نام:</strong>{" "}
-          {isoToShamsi(formData.registrationStartDate)}
+          {formatDate(parseToIso(formData.registrationStartDate))}
         </p>
         <p>
           <strong>زمان پایان ثبت‌نام:</strong>{" "}
-          {isoToShamsi(formData.registrationEndDate)}
+          {formatDate(parseToIso(formData.registrationEndDate))}
         </p>
 
         <p>
