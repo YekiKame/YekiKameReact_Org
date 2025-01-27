@@ -13,78 +13,131 @@
 
 .modalContent {
   background: white;
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 8px;
   width: 95%;
   max-width: 1200px;
-  overflow-y: auto;
-  max-height: 90%;
+  max-height: 90vh;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  /* 
+    Overflow auto allows form scrolling,
+    but we add extra bottom padding so content
+    doesn't hide behind the sticky buttons.
+  */
+  overflow-y: auto;
+  padding-bottom: 6rem; 
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.title{
-  font-size: 2.4rem;
+
+.title {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
+
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .fieldGroup {
-  flex: 1 1 calc(25% - 0.5rem); /* Adjust to fit 4 fields per row */
-  min-width: 150px;
+  flex: 1 1 200px; /* responsive columns */
+  min-width: 200px;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.5rem;
+}
+
+/* Make sure text is easy to read */
+.fieldGroup label {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.fieldGroup input,
+.fieldGroup select,
+.fieldGroup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-sizing: border-box;
 }
 
 .fieldGroup textarea {
-  resize: none;
-  height: 4rem;
-}
-
-.fieldGroup label {
-  font-size: 0.9rem;
-  color: #333;
-}
-
-.fieldGroup
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 0.5rem;
-  font-size: 0.9rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  resize: vertical; 
+  min-height: 100px;
+  height: auto;
 }
 
 .error {
-  color:var(--lightsemanticerrororigin);
-  font-size: 0.8rem;
+  color: var(--lightsemanticerrororigin);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
 }
 
+/* 
+  Position sticky so these two buttons remain 
+  at the bottom of the modal, no matter how you scroll.
+*/
 .actions {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  background: #fff;
   display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+  z-index: 1001;
 }
 
 .actions button {
   flex: 1;
+  min-width: 200px;
   padding: 0.8rem;
   font-size: 1rem;
-}
-
-.actions button:last-child {
-  color: white;
+  transition: opacity 0.3s ease;
 }
 
 .actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+  .modalContent {
+    width: 98%;
+    padding: 1rem;
+    max-height: 95vh;
+    padding-bottom: 8rem; /* a bit more bottom padding on mobile */
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .fieldGroup {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    padding-bottom: 1rem;
+  }
+
+  .actions button {
+    width: 100%;
+    min-width: auto;
+  }
 }

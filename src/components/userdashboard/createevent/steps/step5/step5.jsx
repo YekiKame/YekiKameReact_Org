@@ -7,6 +7,7 @@ import styles from "./step5.module.css";
 import Stepper from "../../../../common/stepper/stepper.jsx";
 import Button from "../../../../shared/button/button.jsx";
 import DateObject from "react-date-object";
+import NoPhoto from "../../../../../assets/images/noPhoto.jpg"; // اضافه کردن تصویر پیش‌فرض
 
 const isoToShamsi = (val) => {
   if (!val) return "اختیاری";
@@ -84,38 +85,31 @@ const Step5 = () => {
     const endDateIso = parseToIso(formData.endDate);
     const regStartIso = parseToIso(formData.registrationStartDate);
     const regEndIso = parseToIso(formData.registrationEndDate);
-
+  
     const formDataObj = new FormData();
-
-    // تبدیل Base64 به File
+  
+    // اگر کاربر عکسی آپلود کرده باشد
     if (formData.image && formData.image.startsWith("data:image")) {
       try {
         // جدا کردن نوع و داده‌های Base64
         const arr = formData.image.split(",");
-        const mime = arr[0].match(/:(.*?);/)[1]; // گرفتن نوع فایل
+        const mime = arr[0].match(/:(.*?);/)[1];
         const bstr = atob(arr[1]);
         let n = bstr.length;
         const u8arr = new Uint8Array(n);
-
+  
         while (n--) {
           u8arr[n] = bstr.charCodeAt(n);
         }
-
+  
         // ساخت File object
         const file = new File([u8arr], "event-image.jpg", { type: mime });
         formDataObj.append("0", file);
-
-        console.log("File created successfully:", file);
-        navigate(".", {
-          replace: true,
-          state: { activeTab: "MyEvents" },
-        });
-        window.location.reload();
       } catch (error) {
         console.error("Error converting Base64 to File:", error);
       }
     }
-
+  
     // تنظیم operations برای GraphQL
     const operations = {
       query: `
@@ -172,23 +166,19 @@ const Step5 = () => {
         maxSubscribers: parseInt(formData.maxSubscribers) || 0,
         fullDescription: formData.fullDescription || "",
         eventOwnerPhone: eventOwnerPhone,
-        image: null, // این مقدار با فایل واقعی جایگزین خواهد شد
+        image: formData.image ? null : null, // اگر عکسی نبود، null ارسال می‌شود
       },
     };
     formDataObj.append("operations", JSON.stringify(operations));
-
-    // تنظیم map
-    const map = {
-      0: ["variables.image"],
-    };
-    formDataObj.append("map", JSON.stringify(map));
-
-    // چاپ محتویات FormData برای اطمینان
-    console.log("FormData contents:");
-    for (let pair of formDataObj.entries()) {
-      console.log(pair[0], typeof pair[1], pair[1]);
+  
+    // تنظیم map (فقط اگر عکس وجود داشته باشد)
+    if (formData.image) {
+      const map = {
+        0: ["variables.image"],
+      };
+      formDataObj.append("map", JSON.stringify(map));
     }
-
+  
     try {
       const response = await axios({
         method: "post",
@@ -198,20 +188,26 @@ const Step5 = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
+  
       console.log("Server response:", response.data);
-
+  
       if (response.data.errors) {
         throw new Error(response.data.errors[0].message);
       }
-
-      console.log("Event created:", response.data);
+  
       alert("رویداد با موفقیت ثبت شد!");
+      navigate(".", {
+        replace: true,
+        state: { activeTab: "MyEvents" },
+      });
+      window.location.reload();
     } catch (error) {
       console.error("Error creating event:", error);
       alert("خطا در ثبت رویداد: " + error.message);
     }
   };
+  
+
   const handleEdit = () => {
     dispatch(prevStep());
   };

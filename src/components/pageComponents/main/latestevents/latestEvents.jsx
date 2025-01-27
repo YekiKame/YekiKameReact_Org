@@ -48,6 +48,7 @@ const LatestEvents = () => {
     fetchRecentEvents();
   }, []);
 
+  // تابع ناوبری به صفحه‌ی جزییات
   const handleCardClick = (eventId) => {
     navigate(`/eventDetail/${eventId}`);
   };
@@ -64,6 +65,7 @@ const LatestEvents = () => {
           <div
             className={`${styles.navigationButton} swiper-button-prev-custom`}
           ></div>
+
           <div className={styles.swiperContainer}>
             <Swiper
               modules={[Navigation]}
@@ -77,13 +79,19 @@ const LatestEvents = () => {
             >
               {events.map((ev) => (
                 <SwiperSlide key={ev.id}>
-                  <div onClick={() => handleCardClick(ev.id)}>
-                    <EventCard event={ev} variant="home" />
-                  </div>
+                  {/* از این به بعد کل کارت کلیک‌پذیر نیست. 
+                      تنها دکمه‌ای که در خود EventCard داریم، 
+                      از prop onJoin استفاده می‌کند */}
+                  <EventCard
+                    event={ev}
+                    variant="home"
+                    onJoin={() => handleCardClick(ev.id)}
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
           </div>
+
           <div
             className={`${styles.navigationButton} swiper-button-next-custom`}
           ></div>

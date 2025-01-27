@@ -81,7 +81,6 @@ const Notifications = () => {
       const result = response.data?.data?.markNotificationAsRead;
 
       if (result) {
-        // حذف اعلان از لیست در صورت موفقیت
         setEventNotices((prev) =>
           prev.filter((notice) => notice.userEventRoleId !== userEventRoleId)
         );

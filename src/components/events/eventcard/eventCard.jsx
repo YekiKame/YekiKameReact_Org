@@ -16,7 +16,7 @@ import gameIcon from "../../../assets/icons/entertainment.svg";
 import TrashIcon from "../../../assets/icons/trash.svg";
 import LeadingIcon from "../../../assets/icons/leading-icon.svg";
 
-// دیکشنری برای آیکون‌های دسته‌بندی (نسخه انگلیسی)
+// دیکشنری برای آیکون‌های دسته‌بندی
 const categoryIcons = {
   ENTERTAINMENT: leisureIcon,
   SPORT: sportIcon,
@@ -24,7 +24,6 @@ const categoryIcons = {
   EDUCATION: educationIcon,
   GAME: gameIcon,
 };
-// نام فارسی دسته‌بندی
 const categoryNames = {
   ENTERTAINMENT: "تفریحی",
   SPORT: "ورزشی",
@@ -37,7 +36,7 @@ const categoryNames = {
  * props:
  *   event: {id, title, eventCategory, subscriberCount, startDate, neighborhood, image}
  *   variant: "home" | "joined" | "myEvents"
- *   onJoin?: func  (وقتی مثلاً در حالت home/joined خواستید عمل «عضو شدن» یا «مشاهده جزییات» کنید)
+ *   onJoin?: func  (در حالت home/joined برای «مشاهده جزئیات» یا ... استفاده می‌شود)
  *   onEdit?: func  (حالت myEvents)
  *   onDelete?: func
  */
@@ -53,17 +52,16 @@ const EventCard = ({ event, variant, onJoin, onEdit, onDelete }) => {
     image,
   } = event || {};
 
-  // اگر خالی باشد
   const safeTitle = title || "بدون نام";
   const safeCategory = eventCategory || "ENTERTAINMENT";
-  const safeImage = image || NoPhoto; // عکس پیشفرض
+  const safeImage = image || NoPhoto;
   const safeNeighborhood = neighborhood || "نامشخص";
   const safeCount = subscriberCount ?? 0;
 
   const categoryFa = categoryNames[safeCategory] || "سایر";
   const categoryIcon = categoryIcons[safeCategory] || leisureIcon;
 
-  // فرمت تاریخ/ساعت
+  // فرمت تاریخ شمسی
   let weekdayFa = "نامشخص";
   let timeFa = "--:--";
   if (startDate) {
@@ -75,7 +73,7 @@ const EventCard = ({ event, variant, onJoin, onEdit, onDelete }) => {
     });
   }
 
-  // هندلرهای دکمه‌ها
+  // تابع فراخوانی propهای دریافتی
   const handleDeleteClick = () => {
     if (typeof onDelete === "function") onDelete(id);
   };
@@ -91,7 +89,7 @@ const EventCard = ({ event, variant, onJoin, onEdit, onDelete }) => {
       {/* عکس بالای کارت */}
       <div className={styles.picture}>
         <img
-          src={event.image ? `http://127.0.0.1:8000/${event.image}` : NoPhoto}
+          src={image ? `http://127.0.0.1:8000/${image}` : NoPhoto}
           alt={"تصویر رویداد"}
           className={styles.image}
         />
