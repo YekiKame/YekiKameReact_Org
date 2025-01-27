@@ -2,38 +2,51 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./herosection.module.css";
 import SearchIcon from "../../../assets/icons/search.svg";
+import { iranCities } from "../../../assets/iran/cities";
 
 export const HeroSection = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [cities, setCities] = useState([]);
+  // const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchAllCities = async () => {
-      try {
-        const url = `https://iran-locations-api.ir/api/v1/fa/cities`;
-        const res = await fetch(url);
-        const data = await res.json();
-        const cityNames = data.map((city) => city.name);
-        setCities(cityNames);
-      } catch (err) {
-        console.error("Error fetching cities:", err);
-      }
-    };
-    fetchAllCities();
-  }, []);
+  // useEffect(() => {
+  //   const fetchAllCities = async () => {
+  //     try {
+  //       const url = `https://iran-locations-api.ir/api/v1/fa/cities`;
+  //       const res = await fetch(url);
+  //       const data = await res.json();
+  //       const cityNames = data.map((city) => city.name);
+  //       setCities(cityNames);
+  //     } catch (err) {
+  //       console.error("Error fetching cities:", err);
+  //     }
+  //   };
+  //   fetchAllCities();
+  // }, []);
 
+  // useEffect(() => {
+  //   if (searchTerm) {
+  //     const filtered = cities.filter((city) =>
+  //       city.replace(/\s/g, "").startsWith(searchTerm.replace(/\s/g, ""))
+  //     );
+  //     setFilteredCities(filtered.slice(0, 10));
+  //   } else {
+  //     setFilteredCities([]);
+  //   }
+  // }, [searchTerm, cities]);
   useEffect(() => {
-    if (searchTerm) {
-      const filtered = cities.filter((city) =>
-        city.replace(/\s/g, "").startsWith(searchTerm.replace(/\s/g, ""))
-      );
+    if (searchTerm && searchTerm !== "تهران") {
+      const filtered = iranCities
+        .filter((city) =>
+          city.name.replace(/\s/g, "").startsWith(searchTerm.replace(/\s/g, ""))
+        )
+        .map((city) => city.name); // فقط نام شهرها رو می‌گیریم
       setFilteredCities(filtered.slice(0, 10));
     } else {
       setFilteredCities([]);
     }
-  }, [searchTerm, cities]);
+  }, [searchTerm]);
 
   const defaultCities = [
     "اصفهان",
@@ -64,7 +77,6 @@ export const HeroSection = () => {
   // هندلر برای تغییر متن جستجو
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
-    
   };
 
   return (

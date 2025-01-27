@@ -5,40 +5,46 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateFormData } from "../../../../../redux/slices/createEventSlice";
 import Stepper from "../../../../common/stepper/stepper.jsx";
 import styles from "./step3.module.css";
-
+import { iranStates } from "../../../../../assets/iran/states.js";
+import { iranCitiesbyId } from "../../../../../assets/iran/iranCitiesbyId.js";
 const Step3 = () => {
   const currentStep = useSelector((state) => state.createEvent.currentStep);
   const initialFormData = useSelector((state) => state.createEvent.formData);
   const dispatch = useDispatch();
 
-  const [states, setStates] = useState([]); // آرایه‌ی استان‌ها (id, name, ...)
-  const [cities, setCities] = useState([]); // آرایه‌ی شهرهای استان انتخابی
+  // const [states, setStates] = useState([]); // آرایه‌ی استان‌ها (id, name, ...)
+  // const [cities, setCities] = useState([]); // آرایه‌ی شهرهای استان انتخابی
+  const [states] = useState(iranStates);
+  const [cities, setCities] = useState([]);
+  const [provinceSelectId, setProvinceSelectId] = useState(null);
+  const [citySelectId, setCitySelectId] = useState(null);
+  // // گرفتن فهرست استان‌ها
+  // useEffect(() => {
+  //   const fetchStates = async () => {
+  //     try {
+  //       const res = await fetch(
+  //         "https://iran-locations-api.ir/api/v1/fa/states"
+  //       );
+  //       const data = await res.json();
+  //       setStates(data); // [{ id:1, name:"...", ...}, ...]
+  //     } catch (err) {
+  //       console.error("Error fetching states:", err);
+  //     }
+  //   };
+  //   fetchStates();
+  // }, []);
 
-  // گرفتن فهرست استان‌ها
-  useEffect(() => {
-    const fetchStates = async () => {
-      try {
-        const res = await fetch("https://iran-locations-api.ir/api/v1/fa/states");
-        const data = await res.json();
-        setStates(data); // [{ id:1, name:"...", ...}, ...]
-      } catch (err) {
-        console.error("Error fetching states:", err);
-      }
-    };
-    fetchStates();
-  }, []);
-
-  // گرفتن شهرهای یک استان با id
-  const fetchCitiesByStateId = async (stateId) => {
-    try {
-      const url = `https://iran-locations-api.ir/api/v1/fa/cities?state_id=${stateId}`;
-      const res = await fetch(url);
-      const data = await res.json(); // [{id:1, name:"تبریز", state_id:1,...}, ...]
-      setCities(data);
-    } catch (err) {
-      console.error("Error fetching cities:", err);
-    }
-  };
+  // // گرفتن شهرهای یک استان با id
+  // const fetchCitiesByStateId = async (stateId) => {
+  //   try {
+  //     const url = `https://iran-locations-api.ir/api/v1/fa/cities?state_id=${stateId}`;
+  //     const res = await fetch(url);
+  //     const data = await res.json(); // [{id:1, name:"تبریز", state_id:1,...}, ...]
+  //     setCities(data);
+  //   } catch (err) {
+  //     console.error("Error fetching cities:", err);
+  //   }
+  // };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -53,9 +59,15 @@ const Step3 = () => {
     validationSchema: Yup.object({
       province: Yup.string().required("استان محل رویداد الزامی است"),
       city: Yup.string().required("شهر محل رویداد الزامی است"),
-      postalCode: Yup.string().matches(/^[0-9]{10}$/, "کد پستی باید ۱۰ رقم باشد"),
+      postalCode: Yup.string().matches(
+        /^[0-9]{10}$/,
+        "کد پستی باید ۱۰ رقم باشد"
+      ),
       postalAddress: Yup.string().required("آدرس پستی الزامی است"),
-      neighborhood: Yup.string().matches(/^[آ-ی\s]+$/, "نام محله باید فارسی باشد"),
+      neighborhood: Yup.string().matches(
+        /^[آ-ی\s]+$/,
+        "نام محله باید فارسی باشد"
+      ),
     }),
     onSubmit: (values) => {
       dispatch(updateFormData(values));
@@ -63,61 +75,101 @@ const Step3 = () => {
     },
   });
 
-  // هنگام تغییر مقدار provinceSelectId، شهرها را گرفته و نام استان را ست می‌کنیم
-  const [provinceSelectId, setProvinceSelectId] = useState(null); 
-  const [citySelectId, setCitySelectId] = useState(null);
+  // // هنگام تغییر مقدار provinceSelectId، شهرها را گرفته و نام استان را ست می‌کنیم
+  // const [provinceSelectId, setProvinceSelectId] = useState(null);
+  // const [citySelectId, setCitySelectId] = useState(null);
 
-  // وقتی کاربر از دراپ‌داون استان، یکی را انتخاب کرد:
+  // // وقتی کاربر از دراپ‌داون استان، یکی را انتخاب کرد:
+  // const handleProvinceChange = (e) => {
+  //   const selectedId = e.target.value; // id استان
+  //   setProvinceSelectId(selectedId);
+  //   // همچنین شهر را خالی کنیم
+  //   setCitySelectId(null);
+  //   setCities([]);
+
+  //   // در عین حال، اگر کاربر "انتخاب کنید" را انتخاب کرد (value="")
+  //   if (!selectedId) {
+  //     formik.setFieldValue("province", "");
+  //     formik.setFieldValue("city", "");
+  //     return;
+  //   }
+  //   // تابع واکشی
+  //   fetchCitiesByStateId(selectedId);
+
+  //   // پیدا کردن name استان در states
+  //   const stObj = states.find((st) => String(st.id) === String(selectedId));
+  //   if (stObj) {
+  //     formik.setFieldValue("province", stObj.name);
+  //   } else {
+  //     formik.setFieldValue("province", "");
+  //   }
+  //   // city را هم خالی می‌کنیم
+  //   formik.setFieldValue("city", "");
+  // };
+
+  // const handleCityChange = (e) => {
+  //   const cId = e.target.value;
+  //   setCitySelectId(cId);
+  //   if (!cId) {
+  //     formik.setFieldValue("city", "");
+  //     return;
+  //   }
+  //   // پیدا کردن نام شهر
+  //   const cObj = cities.find((ct) => String(ct.id) === String(cId));
+  //   if (cObj) {
+  //     formik.setFieldValue("city", cObj.name);
+  //   } else {
+  //     formik.setFieldValue("city", "");
+  //   }
+  // };
+
+  // // اگر کاربر مستقیم فرم را mount کرد ولی در استیت چیزی بود:
+  // useEffect(() => {
+  //   // اگر در استیت قبلا province پر بود، باید id استان را بیابیم
+  //   // چرا که province فقط نام را دارد.
+  //   // ولی این موضوع کمی پیچیده است. شاید ساده‌تر باشد province را خالی بگذاریم.
+  //   // اینجا برای سادگی از آن صرف نظر می‌کنیم
+  // }, [states]);
+
   const handleProvinceChange = (e) => {
-    const selectedId = e.target.value; // id استان
+    const selectedId = e.target.value;
     setProvinceSelectId(selectedId);
-    // همچنین شهر را خالی کنیم
     setCitySelectId(null);
-    setCities([]);
 
-    // در عین حال، اگر کاربر "انتخاب کنید" را انتخاب کرد (value="")
     if (!selectedId) {
       formik.setFieldValue("province", "");
       formik.setFieldValue("city", "");
+      setCities([]);
       return;
     }
-    // تابع واکشی
-    fetchCitiesByStateId(selectedId);
 
-    // پیدا کردن name استان در states
-    const stObj = states.find((st) => String(st.id) === String(selectedId));
-    if (stObj) {
-      formik.setFieldValue("province", stObj.name);
-    } else {
-      formik.setFieldValue("province", "");
+    // پیدا کردن استان انتخاب شده
+    const selectedState = states.find(
+      (st) => String(st.id) === String(selectedId)
+    );
+    if (selectedState) {
+      formik.setFieldValue("province", selectedState.name);
+      // گرفتن شهرهای استان از دیتای هاردکد شده
+      const stateCities = iranCitiesbyId[selectedId] || [];
+      setCities(stateCities);
     }
-    // city را هم خالی می‌کنیم
     formik.setFieldValue("city", "");
   };
 
   const handleCityChange = (e) => {
     const cId = e.target.value;
     setCitySelectId(cId);
+
     if (!cId) {
       formik.setFieldValue("city", "");
       return;
     }
-    // پیدا کردن نام شهر
-    const cObj = cities.find((ct) => String(ct.id) === String(cId));
-    if (cObj) {
-      formik.setFieldValue("city", cObj.name);
-    } else {
-      formik.setFieldValue("city", "");
+
+    const selectedCity = cities.find((ct) => String(ct.id) === String(cId));
+    if (selectedCity) {
+      formik.setFieldValue("city", selectedCity.name);
     }
   };
-
-  // اگر کاربر مستقیم فرم را mount کرد ولی در استیت چیزی بود:
-  useEffect(() => {
-    // اگر در استیت قبلا province پر بود، باید id استان را بیابیم
-    // چرا که province فقط نام را دارد. 
-    // ولی این موضوع کمی پیچیده است. شاید ساده‌تر باشد province را خالی بگذاریم.
-    // اینجا برای سادگی از آن صرف نظر می‌کنیم
-  }, [states]);
 
   return (
     <div className={styles.container}>
@@ -132,7 +184,7 @@ const Step3 = () => {
               className={styles.input}
               onChange={handleProvinceChange}
               onBlur={formik.handleBlur}
-              // value = provinceSelectId (شناسه استان)، اما اگر کاربر از قبل استانی داشت (فقط name!) 
+              // value = provinceSelectId (شناسه استان)، اما اگر کاربر از قبل استانی داشت (فقط name!)
               // برای سادگی value را با id مستقیما ست می‌کنیم (پیشرفته‌تر باید name->id تبدیل شود)
               value={provinceSelectId || ""}
             >

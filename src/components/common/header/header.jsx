@@ -9,12 +9,13 @@ import Logo from "../../../assets/icons/logo.svg";
 import LoginModal from "../../modals/login/loginModal.jsx";
 import UserDropdown from "../userDropdown/UserDropdown";
 import { useNavigate, Link, useLocation, data } from "react-router-dom";
+import { iranCities } from "../../../assets/iran/cities";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("تهران");
-  const [cities, setCities] = useState([]);
+  // const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -79,31 +80,33 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    const fetchAllCities = async () => {
-      try {
-        const url = "https://iran-locations-api.ir/api/v1/fa/cities";
-        const res = await fetch(url);
-        const data = await res.json();
-        const cityNames = data.map((city) => city.name);
-        setCities(cityNames);
-      } catch (err) {
-        console.error("Error fetching cities:", err);
-      }
-    };
-    fetchAllCities();
-  }, []);
+  // useEffect(() => {
+  //   const fetchAllCities = async () => {
+  //     try {
+  //       const url = "https://iran-locations-api.ir/api/v1/fa/cities";
+  //       const res = await fetch(url);
+  //       const data = await res.json();
+  //       const cityNames = data.map((city) => city.name);
+  //       setCities(cityNames);
+  //     } catch (err) {
+  //       console.error("Error fetching cities:", err);
+  //     }
+  //   };
+  //   fetchAllCities();
+  // }, []);
 
   useEffect(() => {
     if (searchTerm && searchTerm !== "تهران") {
-      const filtered = cities.filter((city) =>
-        city.replace(/\s/g, "").startsWith(searchTerm.replace(/\s/g, ""))
-      );
+      const filtered = iranCities
+        .filter((city) =>
+          city.name.replace(/\s/g, "").startsWith(searchTerm.replace(/\s/g, ""))
+        )
+        .map((city) => city.name); // فقط نام شهرها رو می‌گیریم
       setFilteredCities(filtered.slice(0, 10));
     } else {
       setFilteredCities([]);
     }
-  }, [searchTerm, cities]);
+  }, [searchTerm]);
 
   const handleLogoClick = () => {
     window.scrollTo({
