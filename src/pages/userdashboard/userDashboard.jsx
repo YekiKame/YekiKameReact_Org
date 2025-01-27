@@ -17,7 +17,7 @@ import logoutIcon from "../../assets/icons/logout.svg";
 const UserDashboard = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(
-    location.state?.activeTab || "editProfile"
+    location.state?.activeTab || "myEvents"
   );
   const [userName, setUserName] = useState("نام کاربر");
   const storedPhoneNumber = sessionStorage.getItem("userPhone");
@@ -77,7 +77,8 @@ const UserDashboard = () => {
     sessionStorage.removeItem("sessionToken");
 
     // هدایت کاربر به صفحه ورود
-    navigate("/login"); // مسیر صفحه ورود را جایگزین کنید
+    navigate("/login");
+    window.location.reload();
   };
 
   const renderContent = () => {

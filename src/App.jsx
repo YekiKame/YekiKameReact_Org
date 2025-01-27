@@ -12,6 +12,7 @@ import Login from "./pages/login/login.jsx";
 import EventDetail from "./pages/eventDetail/eventDetail.jsx";
 import EventList from "./pages/eventList/eventList.jsx";
 import AboutUs from "./pages/aboutUs/aboutUs.jsx";
+import ProtectedRoute from "./components/protectedRoute.jsx";
 import PrivacyPolicyAndTermsofService from "./pages/privacyPolicy/privacyPolicyAndTermsofService.jsx";
 
 const App = () => {
@@ -20,7 +21,14 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<UserDashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/eventdetail/:eventId" element={<EventDetail />} />
