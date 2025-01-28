@@ -9,29 +9,72 @@ import EditEventModal from "../../modals/editEventModal/editEventModal.jsx";
 import JoinRequestsModal from "../../modals/joinRequestModal/joinRequestModal.jsx";
 import DeleteEventModal from "../../modals/deleteEventModal/deleteEventModal.jsx";
 
-// تصاویر مربوط به وضعیت‌های مختلف
+// تصاویر برای شرایط خالی
 import notCreatedImg from "/assets/images/notcreatedevent.png";
 import notJoinedImg from "/assets/images/eventnotjoined.jpg";
 import notPassedImg from "/assets/images/eventsnotpassed.png";
 
+// دیکشنری تبدیل دسته‌بندی انگلیسی به فارسی (فقط برای تب سوم)
+const categoryNames = {
+  ENTERTAINMENT: "تفریحی",
+  SPORT: "ورزشی",
+  SOCIAL: "فرهنگی",
+  EDUCATION: "آموزشی",
+  GAME: "بازی و سرگرمی",
+};
+
+// دیکشنری تبدیل نقش انگلیسی به فارسی (فقط برای تب سوم)
+const roleNames = {
+  owner: "مالک",
+  admin: "ادمین",
+  regular: "کاربر عادی",
+};
+
+// تابع کمکی برای فرمت تاریخ شمسی (فقط برای تب سوم - past)
+const formatDateToPersian = (dateString) => {
+  if (!dateString) return "اختیاری";
+  const date = new Date(dateString);
+  const persianDate = date.toLocaleDateString("fa-IR", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+  const weekDay = date.toLocaleDateString("fa-IR", {
+    weekday: "long",
+  });
+  const time = date.toLocaleTimeString("fa-IR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `${persianDate}، ${weekDay} ساعت ${time}`;
+};
+
 const MyEventsTab = () => {
   const storedPhoneNumber = sessionStorage.getItem("userPhone") || "09123456789";
+  const navigate = useNavigate();
 
+  // تب فعال
   const [activeTab, setActiveTab] = useState("owner");
+
+  // لیست رویدادها
   const [events, setEvents] = useState([]);
+
+  // وضعیت بارگذاری و خطا
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // صفحه فعلی و تعداد آیتم‌ها در هر صفحه (برای owner و approved)
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
 
+  // کنترل مودال‌ها و رویداد انتخاب‌شده
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [joinRequestsModalOpen, setJoinRequestsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [userRole, setUserRole] = useState(null);
 
-  const navigate = useNavigate();
-
+  // تابع مشترک برای فرستادن query
   const fetchEvents = async (query) => {
     setLoading(true);
     setError(null);
@@ -50,6 +93,7 @@ const MyEventsTab = () => {
     }
   };
 
+  // رویدادهای مالک + ادمین
   const fetchOwnerEvents = async () => {
     const query = `
       query {
@@ -79,6 +123,7 @@ const MyEventsTab = () => {
     setEvents([...ownerEvents, ...adminEvents]);
   };
 
+  // رویدادهایی که شرکت می‌کنم
   const fetchApprovedEvents = async () => {
     const query = `
       query {
@@ -97,6 +142,7 @@ const MyEventsTab = () => {
     setEvents(data.userEvents || []);
   };
 
+  // رویدادهایی که شرکت کرده‌ام (گذشته)
   const fetchPastEvents = async () => {
     const query = `
       query {
@@ -116,8 +162,9 @@ const MyEventsTab = () => {
     setEvents(data.pastEvents || []);
   };
 
+  // هنگام تغییر تب
   useEffect(() => {
-    setCurrentPage(1);
+    setCurrentPage(1); // هر بار تب تغییر می‌کند، صفحه را به ۱ برمی‌گردانیم
     if (activeTab === "owner") {
       fetchOwnerEvents();
     } else if (activeTab === "approved") {
@@ -127,6 +174,7 @@ const MyEventsTab = () => {
     }
   }, [activeTab]);
 
+  // متدهای هندل کلیک در کارت
   const handleEditClick = (event, role) => {
     setSelectedEvent(event);
     setUserRole(role);
@@ -147,6 +195,7 @@ const MyEventsTab = () => {
     navigate(`/eventDetail/${eventId}`);
   };
 
+  // نمایش وقتی رویدادی نداریم
   const renderNoEventsMessage = () => {
     let imgSrc = notCreatedImg;
     let message = "شما میزبان یا ادمین هیچ رویدادی نیستید.";
@@ -166,11 +215,16 @@ const MyEventsTab = () => {
     );
   };
 
+  // رندر تب owner + approved (بدون تبدیل تاریخ/دسته‌بندی)
   const renderEvents = () => {
     if (loading) return <p>در حال بارگذاری...</p>;
     if (error) return <p className={styles.error}>{error}</p>;
     if (!events.length) return renderNoEventsMessage();
 
+    // محاسبه تعداد صفحات
+    const totalPages = Math.ceil(events.length / eventsPerPage);
+
+    // رویدادهای صفحه فعلی
     const indexOfLastEvent = currentPage * eventsPerPage;
     const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
     const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
@@ -181,10 +235,12 @@ const MyEventsTab = () => {
           {currentEvents.map((ev) => (
             <EventCard
               key={ev.id}
-              event={ev}
+              event={ev} // داده‌ها را همان‌طور که آمده ارسال می‌کنیم
               variant={activeTab === "approved" ? "joined" : "myEvents"}
               onJoin={
-                activeTab === "approved" ? () => handleEventDetailRedirect(ev.id) : undefined
+                activeTab === "approved"
+                  ? () => handleEventDetailRedirect(ev.id)
+                  : undefined
               }
               onEdit={() => handleEditClick(ev, "owner")}
               onDelete={() => handleDeleteClick(ev)}
@@ -192,29 +248,25 @@ const MyEventsTab = () => {
             />
           ))}
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "2rem",
-          }}
-        >
-          <Pagination
-            totalItems={events.length}
-            itemsPerPage={eventsPerPage}
-            currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
-        </div>
+
+        {/* اگر بیشتر از یک صفحه داریم، Pagination را نشان بده */}
+        {totalPages > 1 && (
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </div>
+        )}
       </>
     );
   };
 
+  // رندر تب past (تاریخ و دسته‌بندی را به فرمت شمسی/فارسی تبدیل می‌کنیم)
   const renderPastEvents = () => {
     if (loading) return <p>در حال بارگذاری...</p>;
     if (error) return <p className={styles.error}>{error}</p>;
-
     if (!events.length) return renderNoEventsMessage();
 
     return (
@@ -224,7 +276,7 @@ const MyEventsTab = () => {
             <tr>
               <th>ردیف</th>
               <th>عنوان رویداد</th>
-              <th>دسته بندی</th>
+              <th>دسته‌بندی</th>
               <th>شهر</th>
               <th>محله</th>
               <th>تاریخ شروع</th>
@@ -233,16 +285,16 @@ const MyEventsTab = () => {
             </tr>
           </thead>
           <tbody>
-            {events.map((event, index) => (
-              <tr key={event.id}>
+            {events.map((ev, index) => (
+              <tr key={ev.id}>
                 <td>{index + 1}</td>
-                <td>{event.title}</td>
-                <td>{event.eventCategory}</td>
-                <td>{event.city}</td>
-                <td>{event.neighborhood}</td>
-                <td>{event.startDate}</td>
-                <td>{event.endDate}</td>
-                <td>{event.role}</td>
+                <td>{ev.title}</td>
+                <td>{categoryNames[ev.eventCategory] || ev.eventCategory}</td>
+                <td>{ev.city}</td>
+                <td>{ev.neighborhood}</td>
+                <td>{formatDateToPersian(ev.startDate)}</td>
+                <td>{formatDateToPersian(ev.endDate)}</td>
+                <td>{roleNames[ev.role] || ev.role}</td>
               </tr>
             ))}
           </tbody>
@@ -273,10 +325,12 @@ const MyEventsTab = () => {
           رویدادهایی که شرکت کرده‌ام
         </button>
       </div>
+
       <div className={styles.eventsContent}>
         {activeTab === "past" ? renderPastEvents() : renderEvents()}
       </div>
 
+      {/* مودال‌های ویرایش، درخواست عضویت، حذف */}
       {editModalOpen && (
         <EditEventModal
           isOpen={editModalOpen}
@@ -284,7 +338,11 @@ const MyEventsTab = () => {
           eventId={selectedEvent?.id}
           role={userRole}
           phone={storedPhoneNumber}
-          onEventUpdated={() => fetchOwnerEvents()}
+          onEventUpdated={() => {
+            if (activeTab === "owner") {
+              fetchOwnerEvents();
+            }
+          }}
         />
       )}
 
@@ -302,7 +360,11 @@ const MyEventsTab = () => {
           onClose={() => setDeleteModalOpen(false)}
           eventId={selectedEvent?.id}
           ownerPhone={storedPhoneNumber}
-          onEventDeleted={() => fetchOwnerEvents()}
+          onEventDeleted={() => {
+            if (activeTab === "owner") {
+              fetchOwnerEvents();
+            }
+          }}
         />
       )}
     </div>

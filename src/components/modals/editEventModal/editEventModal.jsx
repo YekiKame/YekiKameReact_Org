@@ -88,7 +88,7 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
     maxSubscribers: Yup.number()
       .typeError("حداکثر تعداد افراد باید یک عدد باشد")
       .min(1, "حداقل یک نفر باید وارد شود"),
-    image: Yup.mixed(),
+    image: Yup.mixed().nullable(),
     fullDescription: Yup.string(),
   });
 
@@ -133,7 +133,7 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
               ? `maxSubscribers: ${values.maxSubscribers},`
               : ""
           }
-          ${values.image ? `image: "${values.image}",` : ""}
+          ${values.image ? `image: "${values.image}",` : "image: null,"}
           ${
             values.fullDescription
               ? `fullDescription: "${values.fullDescription}"`
@@ -168,13 +168,13 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
+        <h2 className={styles.title}>ویرایش جزئیات رویداد</h2>
         <Button
           text="مشاهده درخواست‌های عضویت در رویداد"
           onClick={() => setJoinRequestModalOpen(true)}
           variant="large"
+          customStyles={{width:"40rem", textAlign:"center" , alignSelf:"center"}}
         />
-
-        <h2 className={styles.title}>ویرایش جزئیات رویداد</h2>
 
         <Formik
           initialValues={initialValues}
@@ -360,7 +360,7 @@ const EditEventModal = ({ isOpen, onClose, eventId, onEventUpdated }) => {
                     id="image"
                     name="image"
                     onChange={(event) =>
-                      setFieldValue("image", event.target.files[0]?.name || "")
+                      setFieldValue("image", event.target.files[0]?.name || null)
                     }
                   />
                   <ErrorMessage

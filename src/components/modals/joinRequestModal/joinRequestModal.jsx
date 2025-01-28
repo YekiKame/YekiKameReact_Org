@@ -80,8 +80,15 @@ const JoinRequestsModal = ({ isOpen, onClose, eventId }) => {
         setRequests((prev) =>
           prev.filter((request) => request.user.id !== userId)
         );
-        // نمایش پیام موفقیت
-        alert(result.message);
+
+        // نمایش پیام مناسب بر اساس action و role
+        if (action === "approve" && role === "admin") {
+          alert("کاربر مورد نظر به عنوان ادمین شناخته شد.");
+        } else if (action === "approve" && role === "regular") {
+          alert("درخواست کاربر مربوطه پذیرفته شد.");
+        } else if (action === "reject") {
+          alert("درخواست کاربر مدنظر رد شد.");
+        }
       } else {
         alert(result.message || "خطایی در انجام عملیات رخ داد.");
       }

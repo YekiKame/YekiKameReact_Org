@@ -1,7 +1,7 @@
 
 .footer {
-    background-color: #ff6600;
-    color: #fff;
+    background-color: var(--lightprimarya-32);
+    color:var(--lightprimarydark);
     padding: 20px;
     text-align: center;
   }
@@ -25,15 +25,17 @@
   /* متن توضیحات */
   .footer__description {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 2.4;
     max-width: 600px;
     margin: 0;
+    color: var(--lightsecondarydark);
   }
   
   /* آیکون‌های شبکه‌های اجتماعی */
   .footer__social-icons {
     display: flex;
     gap: 20px;
+    color: #fff;
   }
   
   .footer__social-icons img {
@@ -53,13 +55,13 @@
   }
   
   .footer__link {
-    color: #fff;
+    color:var(--lightsecondarylight);
     text-decoration: none;
     font-size: 14px;
     transition: color 0.3s ease;
   }
   
   .footer__link:hover {
-    color: #ffe5b4;
+    color: var(--lightprimaryorigin);
   }
   
